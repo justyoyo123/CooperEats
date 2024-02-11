@@ -10,7 +10,7 @@ public class JwtConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        String jwkSetUri = "https://your-issuer-uri/.well-known/jwks.json"; // Adjust this to your JWK Set URI
+        String jwkSetUri = "https://your-issuer-uri/.well-known/jwks.json";
         return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
 }
