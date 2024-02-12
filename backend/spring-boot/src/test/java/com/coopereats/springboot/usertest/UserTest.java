@@ -1,8 +1,8 @@
 package com.coopereats.springboot.usertest;
 
-import com.coopereats.springboot.users.Users;
-import com.coopereats.springboot.users.UserService;
-import com.coopereats.springboot.users.UserRepository;
+import com.coopereats.springboot.user.User;
+import com.coopereats.springboot.user.UserService;
+import com.coopereats.springboot.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ public class UserTest {
     @Transactional
     public void testAddUser() {
         // Given
-        Users user = new Users();
+        User user = new User();
         user.setUserName("john_doe");
         user.setPassword("password");
         user.setEmail("john.doe@example.com");
@@ -40,7 +40,7 @@ public class UserTest {
         user.setPhoneNumber("1234567890");
 
         // When
-        Users savedUser = userService.createUser(user);
+        User savedUser = userService.createUser(user);
 
         // Then
         assertThat(savedUser).isNotNull();

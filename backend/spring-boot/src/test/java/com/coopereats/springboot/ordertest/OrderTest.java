@@ -53,6 +53,5 @@ public class OrderTest {
         assertThat(savedOrder.getTotalPrice()).isEqualTo(100.0);
         assertThat(savedOrder.getProducts()).containsEntry(1L, 2);
         assertThat(savedOrder.getPaymentStatus()).isEqualTo("PAID");
-        // Additional assertions as needed
     }
 }
