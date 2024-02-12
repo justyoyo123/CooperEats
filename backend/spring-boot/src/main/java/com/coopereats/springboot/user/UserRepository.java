@@ -1,6 +1,5 @@
-package com.coopereats.springboot.users;
+package com.coopereats.springboot.user;
 
-import com.coopereats.springboot.users.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }

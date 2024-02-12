@@ -1,4 +1,4 @@
-package com.coopereats.springboot.users;
+package com.coopereats.springboot.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,23 +17,23 @@ public class UserService {
     }
 
     // Method to add a new user
-    public Users createUser(Users user) {
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
     // Method to get all users
-    public List<Users> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     // Method to find a user by ID
-    public Optional<Users> getUserById(Long id) {
+    public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
 
     // Method to update a user
-    public Users updateUser(Long id, Users userDetails) {
-        Users user = userRepository.findById(id)
+    public User updateUser(Long id, User userDetails) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id " + id));
         user.setUserName(userDetails.getUserName());
         user.setPassword(userDetails.getPassword());
