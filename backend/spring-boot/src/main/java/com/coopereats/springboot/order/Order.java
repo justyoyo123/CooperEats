@@ -1,40 +1,42 @@
 package com.coopereats.springboot.order;
 
+import com.coopereats.springboot.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@Table(name="ORDERS")
+@Table(name = "ORDERS")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ORDER_ID")
+    @Column(name = "ORDER_ID")
     private long orderId;
 
-    @Column(name="USER_ID")
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
+    private User user;
 
-    @Column(name="ORDER_DATE")
+    @Column(name = "ORDER_DATE")
     private LocalDateTime orderDate;
 
-    @Column(name="PICKUP_TIME")
+    @Column(name = "PICKUP_TIME")
     private LocalDateTime pickupTime;
 
-    @Column(name="TOTAL_PRICE")
+    @Column(name = "TOTAL_PRICE")
     private double totalPrice;
 
-    @Column(name="Payment_STATUS")
+    @Column(name = "PAYMENT_STATUS")
     private String paymentStatus;
 
     @ElementCollection
     @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
-    @MapKeyColumn(name = "product_id") // Column for the map key (product ID).
-    @Column(name = "quantity") // Column for the map value (quantity of the product).
+    @MapKeyColumn(name = "product_id")
+    @Column(name = "quantity")
     private Map<Long, Integer> products = new HashMap<>();
 
-    //getters and setters
+    // Getters and Setters
     public long getOrderId() {
         return orderId;
     }
@@ -43,12 +45,12 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public LocalDateTime getOrderDate() {

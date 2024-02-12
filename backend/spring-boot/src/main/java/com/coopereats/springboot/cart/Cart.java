@@ -1,28 +1,29 @@
 package com.coopereats.springboot.cart;
 
+import com.coopereats.springboot.user.User;
 import jakarta.persistence.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@Table(name="CART")
+@Table(name = "CART")
 public class Cart {
 
     @Id
-    @Column(name="CART_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CART_ID")
     private long cartId;
 
-    @Column(name="USER_ID")
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
+    private User user;
 
     @ElementCollection
-    @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
+    @CollectionTable(name = "cart_items", joinColumns = @JoinColumn(name = "cart_id"))
     @MapKeyColumn(name = "product_id") // Column for the map key (product ID).
     @Column(name = "quantity") // Column for the map value (quantity of the product).
     private Map<Long, Integer> products = new HashMap<>();
-
 
     public long getCartId() {
         return cartId;
@@ -31,12 +32,13 @@ public class Cart {
     public void setCartId(long cartId) {
         this.cartId = cartId;
     }
-    public long getUserId() {
-        return userId;
+
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Map<Long, Integer> getProducts() {
@@ -46,5 +48,4 @@ public class Cart {
     public void setProducts(Map<Long, Integer> products) {
         this.products = products;
     }
-
 }
