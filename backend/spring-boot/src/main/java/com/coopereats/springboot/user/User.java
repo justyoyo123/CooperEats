@@ -1,10 +1,10 @@
-package com.coopereats.springboot.users;
+package com.coopereats.springboot.user;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="USERS")
-public class Users {
+public class User {
 
     @Id
     @Column(name="USER_ID")
