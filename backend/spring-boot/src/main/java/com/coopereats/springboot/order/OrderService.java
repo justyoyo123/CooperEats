@@ -1,5 +1,7 @@
 package com.coopereats.springboot.order;
 
+import com.coopereats.springboot.user.User;
+import com.coopereats.springboot.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,31 +13,35 @@ import java.util.Optional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public Order createOrder(Order order) {
-        // Additional logic before saving could be added here
+    public Order createOrder(Order order, Long userId) {
+        // Fetch User entity and set it to the order before saving
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+        order.setUser(user); // Set the user to the order
         return orderRepository.save(order);
     }
 
     @Transactional
-    public Order updateOrder(long orderId, Order updatedOrder) {
+    public Order updateOrder(long orderId, Order updatedOrderDetails) {
         // Check if the order exists before updating
-        Order order = orderRepository.findById(orderId)
+        Order existingOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalStateException("Order with ID " + orderId + " does not exist."));
-        // Update fields
-        order.setUserId(updatedOrder.getUserId());
-        order.setOrderDate(updatedOrder.getOrderDate());
-        order.setPickupTime(updatedOrder.getPickupTime());
-        order.setTotalPrice(updatedOrder.getTotalPrice());
-        order.setPaymentStatus(updatedOrder.getPaymentStatus());
-        order.setProducts(updatedOrder.getProducts());
-        return orderRepository.save(order);
+        // Update the order details
+        existingOrder.setOrderDate(updatedOrderDetails.getOrderDate());
+        existingOrder.setPickupTime(updatedOrderDetails.getPickupTime());
+        existingOrder.setTotalPrice(updatedOrderDetails.getTotalPrice());
+        existingOrder.setPaymentStatus(updatedOrderDetails.getPaymentStatus());
+        existingOrder.setProducts(updatedOrderDetails.getProducts());
+        return orderRepository.save(existingOrder);
     }
 
     public Optional<Order> findOrderById(long orderId) {
