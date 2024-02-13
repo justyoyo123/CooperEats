@@ -19,19 +19,33 @@ public class CartService {
     }
 
     @Transactional
-    public Cart createOrUpdateCart(Cart cart, Long userId) {
+    public Cart createCart(Cart cart, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
         cart.setUser(user);
-
-        Cart existingCart = cartRepository.findByUser(user);
-        if (existingCart != null) {
-            // If an existing cart is found, update its details
-            cart.setCartId(existingCart.getCartId());
-            // Combine products from both carts, prioritizing the new cart's products
-            existingCart.getProducts().forEach((productId, quantity) -> cart.getProducts().merge(productId, quantity, Integer::sum));
-        }
         return cartRepository.save(cart);
+    }
+
+
+    @Transactional
+    public Cart updateCart(Long cartId, Cart cartDetails, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+
+        Cart existingCart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalStateException("Cart with ID " + cartId + " does not exist."));
+
+        if (!existingCart.getUser().equals(user)) {
+            throw new IllegalStateException("Cart does not belong to the user.");
+        }
+
+        // Update cart details here
+        // For example, updating products might look like this:
+        existingCart.getProducts().clear(); // Clear existing items
+        existingCart.getProducts().putAll(cartDetails.getProducts()); // Add new items
+        // Optionally, update other details of the cart as necessary
+
+        return cartRepository.save(existingCart);
     }
 
     public Cart getCartById(long id) {
