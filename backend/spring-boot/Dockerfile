@@ -4,7 +4,7 @@ WORKDIR /project
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:latest
-COPY --from=build /project/target/coopereats-0.0.1-SNAPSHOT.jar /app/coopereats.jar
+COPY --from=build /project/target/spring-boot-0.0.1-SNAPSHOT.jar /app/coopereats.jar
 COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
