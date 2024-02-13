@@ -16,12 +16,11 @@ services:
 
   app:
     build: .
-    image: coopereats
     container_name: coopereats-app
     depends_on: 
         - db
     environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://coopereats-db:5432/coopereats
+        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/coopereats
         SPRING_DATASOURCE_USERNAME: postgres
         SPRING_DATASOURCE_PASSWORD: dbpass
     expose:

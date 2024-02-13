@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Use this script to test if a given TCP host/port are available
+#Source: https://github.com/vishnubob/wait-for-it. Using this so that springboot does not try to start up before database is ready when docker composing
 
 WAITFORIT_cmdname=${0##*/}
 
