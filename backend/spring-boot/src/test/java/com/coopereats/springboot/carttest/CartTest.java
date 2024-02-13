@@ -5,7 +5,6 @@ import com.coopereats.springboot.cart.CartRepository;
 import com.coopereats.springboot.cart.CartService;
 import com.coopereats.springboot.user.UserRepository;
 import com.coopereats.springboot.user.User;
-import com.coopereats.springboot.user.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +63,7 @@ public class CartTest {
         }});
 
         // When
-        Cart savedCart = cartService.createOrUpdateCart(cart, testUser.getUserId());
+        Cart savedCart = cartService.createCart(cart, testUser.getUserId());
 
         // Then
         assertThat(savedCart).isNotNull();
