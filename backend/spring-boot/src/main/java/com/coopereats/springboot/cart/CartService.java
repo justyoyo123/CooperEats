@@ -43,33 +43,6 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-//    @Transactional
-//    public Cart createCart(Cart cart, Long userId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
-//        cart.setUser(user);
-//        return cartRepository.save(cart);
-//    }
-//
-//    @Transactional
-//    public Cart updateCart(Long cartId, Cart cartDetails, Long userId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
-//
-//        Cart existingCart = cartRepository.findById(cartId)
-//                .orElseThrow(() -> new IllegalStateException("Cart with ID " + cartId + " does not exist."));
-//
-//        if (!existingCart.getUser().equals(user)) {
-//            throw new IllegalStateException("Cart does not belong to the user.");
-//        }
-//
-//        // Update cart details here
-//        existingCart.getProducts().clear(); // Clear existing items
-//        existingCart.getProducts().putAll(cartDetails.getProducts()); // Add new items
-//
-//        return cartRepository.save(existingCart);
-//    }
-
     public Cart getCartById(long id) {
         return cartRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Cart with ID " + id + " does not exist."));

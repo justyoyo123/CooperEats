@@ -10,4 +10,4 @@ RUN chmod +x /wait-for-it.sh
 
 EXPOSE 8080
 
-ENTRYPOINT ["/wait-for-it.sh", "-t","60","db:5432" , "--", "java", "-jar", "/app/coopereats.jar"]
+ENTRYPOINT ["/wait-for-it.sh", "-t","120","db:5432" , "--", "java", "-jar", "/app/coopereats.jar"]
