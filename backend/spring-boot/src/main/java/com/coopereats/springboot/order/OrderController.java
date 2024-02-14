@@ -62,4 +62,17 @@ public class OrderController {
         orderService.deleteOrder(orderId);
         return ResponseEntity.ok().build();
     }
+
+    // Create an order from a cart
+    @PostMapping("/placeOrder/{userId}")
+    public ResponseEntity<Order> createOrderFromCart(@PathVariable Long userId) {
+        try {
+            // Create an order from the cart
+            Order order = orderService.createOrderFromCart(userId);
+
+            return ResponseEntity.ok(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null); // Return a bad request status
+        }
+    }
 }

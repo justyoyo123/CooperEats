@@ -63,7 +63,7 @@ public class CartTest {
         }});
 
         // When
-        Cart savedCart = cartService.createCart(cart, testUser.getUserId());
+        Cart savedCart = cartService.createOrUpdateCart(cart, testUser.getUserId());
 
         // Then
         assertThat(savedCart).isNotNull();

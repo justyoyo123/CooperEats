@@ -18,14 +18,14 @@ public class CartController {
     // Create a cart
     @PostMapping("/user/{userId}")
     public ResponseEntity<Cart> createOrUpdateCart(@RequestBody Cart cart, @PathVariable Long userId) {
-        Cart updatedCart = cartService.createCart(cart, userId);
+        Cart updatedCart = cartService.createOrUpdateCart(cart, userId);
         return ResponseEntity.ok(updatedCart);
     }
     // update an existing cart
     @PutMapping("/{id}/user/{userId}")
-    public ResponseEntity<Cart> updateCart(@PathVariable Long id, @PathVariable Long userId, @RequestBody Cart cartDetails) {
+    public ResponseEntity<Cart> updateCart(@PathVariable Long userId, @RequestBody Cart cartDetails) {
         try {
-            Cart updatedCart = cartService.updateCart(id, cartDetails, userId);
+            Cart updatedCart = cartService.createOrUpdateCart(cartDetails, userId);
             return ResponseEntity.ok(updatedCart);
         } catch (IllegalStateException e) {
             // Handle specific cases like cart not found or cart not belonging to the user

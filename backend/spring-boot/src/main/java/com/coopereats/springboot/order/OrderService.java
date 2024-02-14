@@ -2,10 +2,14 @@ package com.coopereats.springboot.order;
 
 import com.coopereats.springboot.user.User;
 import com.coopereats.springboot.user.UserRepository;
+import com.coopereats.springboot.cart.CartRepository;
+import com.coopereats.springboot.cart.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +18,9 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     public OrderService(OrderRepository orderRepository, UserRepository userRepository) {
@@ -65,5 +72,29 @@ public class OrderService {
     // Method to get user's order history by user ID
     public List<Order> getUserOrderHistory(Long userId) {
         return orderRepository.findByUserUserId(userId);
+    }
+
+    @Transactional
+    public Order createOrderFromCart(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+        Cart cart = cartRepository.findByUser(user);
+
+        // create new order
+        Order order = new Order();
+        order.setOrderDate(LocalDateTime.now());
+        order.setPickupTime(LocalDateTime.now());
+        order.setTotalPrice(cart.getTotalPrice());
+        order.setPaymentStatus("PAID");
+        order.setProducts(new HashMap<>(cart.getProducts())); // Clone the products from the cart
+
+        Order savedOrder = createOrder(order, userId);
+
+        // Clear the cart after creating the order
+        cart.clearProducts();
+        cart.setPaymentStatus("");
+        cart.setTotalPrice(0.0);
+        cartRepository.save(cart);
+
+        return savedOrder;
     }
 }

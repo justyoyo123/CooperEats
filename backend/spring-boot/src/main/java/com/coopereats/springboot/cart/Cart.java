@@ -3,6 +3,7 @@ package com.coopereats.springboot.cart;
 import com.coopereats.springboot.user.User;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,12 @@ public class Cart {
     @OneToOne
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     private User user;
+
+    @Column(name = "TOTAL_PRICE")
+    private double totalPrice;
+
+    @Column(name = "PAYMENT_STATUS")
+    private String paymentStatus;
 
     @ElementCollection
     @CollectionTable(name = "cart_items", joinColumns = @JoinColumn(name = "cart_id"))
@@ -48,4 +55,25 @@ public class Cart {
     public void setProducts(Map<Long, Integer> products) {
         this.products = products;
     }
+
+    public void clearProducts() {
+        this.products.clear();
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
 }
