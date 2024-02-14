@@ -61,4 +61,9 @@ public class OrderService {
         }
         orderRepository.deleteById(orderId);
     }
+
+    // Method to get user's order history by user ID
+    public List<Order> getUserOrderHistory(Long userId) {
+        return orderRepository.findByUserUserId(userId);
+    }
 }

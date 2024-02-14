@@ -40,10 +40,8 @@ public class CartService {
         }
 
         // Update cart details here
-        // For example, updating products might look like this:
         existingCart.getProducts().clear(); // Clear existing items
         existingCart.getProducts().putAll(cartDetails.getProducts()); // Add new items
-        // Optionally, update other details of the cart as necessary
 
         return cartRepository.save(existingCart);
     }

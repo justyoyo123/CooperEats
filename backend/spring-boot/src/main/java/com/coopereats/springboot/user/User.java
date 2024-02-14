@@ -1,6 +1,10 @@
 package com.coopereats.springboot.user;
 
 import jakarta.persistence.*;
+import com.coopereats.springboot.order.Order;
+import java.util.ArrayList;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="USERS")
@@ -26,6 +30,9 @@ public class User {
     @Column(name="PHONE_NUMBER")
     private String phoneNumber;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Order> orders = new ArrayList<>();
 
     public long getUserId() {
         return userId;
@@ -73,6 +80,14 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
 }
