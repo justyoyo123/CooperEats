@@ -40,9 +40,19 @@ public class OrderController {
     }
 
     // Get all orders
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderService.findAllOrders();
+        return ResponseEntity.ok(orders);
+    }
+
+    // Get all orders for a specific user ie order history
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
+        List<Order> orders = orderService.getUserOrderHistory(userId);
+        if (orders.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(orders);
     }
 
