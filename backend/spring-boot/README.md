@@ -1,4 +1,5 @@
 # How to Start up Spring Boot Application Locally
+**I recommend using this method for general testing since it loads faster than the docker compose method**
 
 Use this command to create a local docker container running Postgres:
 
@@ -17,7 +18,7 @@ When done setting up, you can use Postman/python scripts to send HTTP requests a
 - User-related: `http://localhost:8080/api/users`
 - Order-related: `http://localhost:8080/api/orders`
 - Cart-related: `http://localhost:8080/api/carts`
-- Payment info related: `http://localhost:8080/api/payment`
+- Payment info related: `http://localhost:8080/api/payments`
 
 # How to Start up Spring Boot Application Using Docker Compose
 
@@ -39,7 +40,7 @@ After setup, you can use Postman/python scripts to send HTTP requests at these U
 - User-related: `http://localhost:8080/api/users`
 - Order-related: `http://localhost:8080/api/orders`
 - Cart-related: `http://localhost:8080/api/carts`
-- Payment info related: `http://localhost:8080/api/payment`
+- Payment info related: `http://localhost:8080/api/payments`
 
 # GitHub Commands
 
