@@ -22,7 +22,7 @@ When done setting up, you can use Postman/python scripts to send HTTP requests a
 
 # How to Start up Spring Boot Application Using Docker Compose
 
-**Make sure no local docker container is running on port 5432 before proceeding.**
+**Make sure no local docker container is running on port 5432 before proceeding (ie run `docker kill lil-postgres` if you are switching from running locally to docker compose)**
 
 In the `application.properties` file at `CooperEats/backend/spring-boot/src/main/resources`, ensure the two lines under "FOR DOCKER COMPOSE" are uncommented and the two lines under "FOR LOCAL" are commented.
 
