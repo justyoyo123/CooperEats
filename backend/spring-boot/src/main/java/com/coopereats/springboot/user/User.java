@@ -10,6 +10,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name="USERS")
 public class User {
 
+    public enum Role {
+        USER,
+        ADMIN
+    }
+
     @Id
     @Column(name="USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +34,10 @@ public class User {
 
     @Column(name="PHONE_NUMBER")
     private String phoneNumber;
+
+    @Column(name = "ROLE")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -88,6 +97,14 @@ public class User {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
 }
