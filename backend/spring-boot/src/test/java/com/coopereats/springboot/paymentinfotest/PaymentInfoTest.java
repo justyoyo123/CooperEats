@@ -52,13 +52,13 @@ public class PaymentInfoTest {
     public void testAddPaymentInfo() {
         // Given
         PaymentInfo paymentInfo = new PaymentInfo();
-        paymentInfo.setUser(testUser); // Use the test user's ID as the primary key
         paymentInfo.setBillingAddress("123 Test Street");
         paymentInfo.setPhoneNumber("9876543210");
         paymentInfo.setPaymentMethodId("pm_123456789");
 
         // When
-        PaymentInfo savedPaymentInfo = paymentInfoService.savePaymentInfo(paymentInfo);
+        // Use the testUser's ID when adding payment info
+        PaymentInfo savedPaymentInfo = paymentInfoService.addPaymentInfo(testUser.getUserId(), paymentInfo);
 
         // Then
         assertThat(savedPaymentInfo).isNotNull();
@@ -67,4 +67,5 @@ public class PaymentInfoTest {
         assertThat(savedPaymentInfo.getPhoneNumber()).isEqualTo("9876543210");
         assertThat(savedPaymentInfo.getPaymentMethodId()).isEqualTo("pm_123456789");
     }
+
 }

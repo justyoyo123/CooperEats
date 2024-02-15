@@ -1,5 +1,6 @@
 package com.coopereats.springboot.paymentinfo;
 
+import com.coopereats.springboot.cart.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,19 +16,18 @@ public class PaymentInfoController {
         this.paymentInfoService = paymentInfoService;
     }
 
-    // Add payment info
-    @PostMapping
-    public ResponseEntity<PaymentInfo> addPaymentInfo(@RequestBody PaymentInfo paymentInfo) {
-        PaymentInfo savedPaymentInfo = paymentInfoService.savePaymentInfo(paymentInfo);
+    // Add payment info for a specific user
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<PaymentInfo> addPaymentInfo(@PathVariable Long userId, @RequestBody PaymentInfo paymentInfo) {
+        PaymentInfo savedPaymentInfo = paymentInfoService.addPaymentInfo(userId, paymentInfo);
         return ResponseEntity.ok(savedPaymentInfo);
     }
 
     // Get payment info by user ID
     @GetMapping("/{userId}")
     public ResponseEntity<PaymentInfo> getPaymentInfoByUserId(@PathVariable Long userId) {
-        return paymentInfoService.getPaymentInfoByUserId(userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        PaymentInfo paymentInfo = paymentInfoService.getPaymentInfoByUserId(userId);
+        return ResponseEntity.ok(paymentInfo);
     }
 
     // Delete payment info by user ID
