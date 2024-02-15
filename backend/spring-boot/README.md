@@ -41,3 +41,7 @@ After setup, you can use Postman/python scripts to send HTTP requests at these U
 - Order-related: `http://localhost:8080/api/orders`
 - Cart-related: `http://localhost:8080/api/carts`
 - Payment info related: `http://localhost:8080/api/payments`
+
+
+# General Info
+If you want to persist the database information meaning even if you close the application, you want the old data to be there when you boot it back up, change inside `application.properties` the `spring.jpa.hibernate.ddl-auto` line to `update`. If you want to reset the database every time you boot up the application, change it to `create`.

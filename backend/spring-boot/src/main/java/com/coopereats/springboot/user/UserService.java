@@ -17,8 +17,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Method to add a new user
+    // Method to add a new user and define if admin or regular user
     public User createUser(User user) {
+        if ("frankie@cooper.edu".equals(user.getEmail())) {
+            user.setRole(User.Role.ADMIN);
+        }
+        else {
+            user.setRole(User.Role.USER);
+        }
         return userRepository.save(user);
     }
 
