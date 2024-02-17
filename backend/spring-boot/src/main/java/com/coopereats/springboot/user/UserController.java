@@ -1,4 +1,5 @@
 package com.coopereats.springboot.user;
+import com.coopereats.springboot.exceptions.CustomException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new CustomException("User not found with id " + id));
     }
 
     // Update a user by ID
