@@ -1,5 +1,7 @@
 package com.coopereats.springboot.user;
+
 import com.coopereats.springboot.exceptions.CustomException;
+import com.coopereats.springboot.dto.user.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +13,9 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+    //private final UserService userService;
+    @Autowired
+    UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -58,5 +62,10 @@ public class UserController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/signup")
+    public SignUpResponseDto Signup(@RequestBody SignupDto signupDto) throws CustomException {
+        return userService.signUp(signupDto);
     }
 }

@@ -6,11 +6,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import com.coopereats.springboot.exceptions.CustomException;
+import com.coopereats.springboot.dto.user.*;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    //private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -53,5 +61,45 @@ public class UserService {
     // Method to delete a user
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public SignUpResponseDto signUp(SignupDto signupDto)  throws CustomException {
+        // Check to see if the current email address has already been registered.
+        if (Objects.nonNull(userRepository.findByEmail(signupDto.getEmail()))) {
+            // If the email address has been registered then throw an exception.
+            throw new CustomException("User already exists");
+        }
+        // first encrypt the password
+        String encryptedPassword = signupDto.getPassword();
+        try {
+            encryptedPassword = hashPassword(signupDto.getPassword());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+
+        User user = new User(signupDto.getFirstName(), signupDto.getLastName(), signupDto.getEmail(), encryptedPassword );
+        try {
+            // save the User
+            userRepository.save(user);
+            // success in creating
+            return new SignUpResponseDto("success", "user created successfully");
+        } catch (Exception e) {
+            // handle signup error
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(password.getBytes());
+        byte[] digest = md.digest();
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : digest) {
+            String hex = Integer.toHexString(0xff & b);
+            if(hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString().toUpperCase();
     }
 }
