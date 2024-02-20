@@ -64,11 +64,11 @@ public class OrderController {
     }
 
     // Create an order from a cart
-    @PostMapping("/placeOrder/{userId}")
-    public ResponseEntity<Order> createOrderFromCart(@PathVariable Long userId) {
+    @PostMapping("/placeOrder")
+    public ResponseEntity<Order> createOrderFromRequest(@RequestBody OrderCreationRequest orderRequest) {
         try {
             // Create an order from the cart
-            Order order = orderService.createOrderFromCart(userId);
+            Order order = orderService.createOrderFromRequest(orderRequest.getUserId(), orderRequest.getPaymentToken());
 
             return ResponseEntity.ok(order);
         } catch (RuntimeException e) {

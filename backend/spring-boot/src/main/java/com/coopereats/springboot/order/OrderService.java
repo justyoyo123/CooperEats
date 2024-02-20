@@ -4,6 +4,7 @@ import com.coopereats.springboot.user.User;
 import com.coopereats.springboot.user.UserRepository;
 import com.coopereats.springboot.cart.CartRepository;
 import com.coopereats.springboot.cart.Cart;
+import com.coopereats.springboot.paymentsystem.PaymentProcessingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
+    private final PaymentProcessingService paymentProcessingService;
+
     @Autowired
     private CartRepository cartRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, PaymentProcessingService paymentProcessingService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.paymentProcessingService = paymentProcessingService;
     }
 
     @Transactional
@@ -75,10 +79,16 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrderFromCart(Long userId) {
+    public Order createOrderFromRequest(Long userId, String paymentToken) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
         Cart cart = cartRepository.findByUser(user);
 
+        // Process payment first
+        boolean paymentSuccessful = paymentProcessingService.processPayment(paymentToken, cart.getTotalPrice());
+
+        if (!paymentSuccessful) {
+            throw new RuntimeException("Payment failed");
+        }
         // create new order
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());

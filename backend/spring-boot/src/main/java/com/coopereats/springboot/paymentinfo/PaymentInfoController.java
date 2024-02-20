@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/api/paymentinfo")
 public class PaymentInfoController {
 
     private final PaymentInfoService paymentInfoService;
