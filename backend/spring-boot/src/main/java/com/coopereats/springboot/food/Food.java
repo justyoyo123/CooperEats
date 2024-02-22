@@ -1,5 +1,8 @@
 package com.coopereats.springboot.food;
 
+import com.coopereats.springboot.cart.Cart;
+import java.util.HashSet;
+import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
@@ -25,6 +28,9 @@ public class Food {
 
     @Column(name = "QUANTITY", nullable = false)
     private int quantity;
+    
+    @ManyToMany(mappedBy = "foods")
+    private Set<Cart> carts = new HashSet<>();
 
     // Constructors, Getters, and Setters
     public Food() {
@@ -76,5 +82,13 @@ public class Food {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+    
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
     }
 }
