@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
@@ -19,7 +21,7 @@ public class CartController {
     @PostMapping("/user/{userId}")
     public ResponseEntity<Cart> createOrUpdateCart(@RequestBody Cart cart, @PathVariable Long userId) {
         Cart updatedCart = cartService.createOrUpdateCart(cart, userId);
-        return ResponseEntity.ok(updatedCart);
+        return ResponseEntity.ok().build();
     }
     // update an existing cart
     @PutMapping("/{id}/user/{userId}")
@@ -38,16 +40,18 @@ public class CartController {
 
     // Get a cart by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Cart> getCartById(@PathVariable Long id) {
+    public ResponseEntity<Map<Long, Integer>> getCartById(@PathVariable Long id) {
         Cart cart = cartService.getCartById(id);
-        return ResponseEntity.ok(cart);
+        Map<Long, Integer> products = cart.getProducts();
+        return ResponseEntity.ok(products);
     }
 
     // Get a cart by user ID
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Cart> getCartByUserId(@PathVariable Long userId) {
+    public ResponseEntity<Map<Long, Integer>> getCartByUserId(@PathVariable Long userId) {
         Cart cart = cartService.getCartByUser(userId);
-        return ResponseEntity.ok(cart);
+        Map<Long, Integer> products = cart.getProducts();
+        return ResponseEntity.ok(products);
     }
 
     // Delete a cart by ID
