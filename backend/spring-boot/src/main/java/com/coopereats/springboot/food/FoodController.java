@@ -1,5 +1,7 @@
 package com.coopereats.springboot.food;
 
+import com.coopereats.springboot.user.User;
+import com.coopereats.springboot.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +14,24 @@ public class FoodController {
 
     private final FoodService foodService;
 
+    private final UserRepository userRepository;
+
     @Autowired
-    public FoodController(FoodService foodService) {
+    public FoodController(FoodService foodService, UserRepository userRepository) {
         this.foodService = foodService;
+        this.userRepository = userRepository;
     }
 
-    @PostMapping
-    public ResponseEntity<Food> createFood(@RequestBody Food food) {
-        Food savedFood = foodService.saveOrUpdateFood(food);
-        return ResponseEntity.ok(savedFood);
+    @PostMapping("/{userId}")
+    public ResponseEntity<Food> createFood(@RequestBody Food food, @PathVariable Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        if ("ADMIN".equals(user.getRole().toString())) {
+            Food savedFood = foodService.saveOrUpdateFood(food);
+            return ResponseEntity.ok(savedFood);
+        } else {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/{id}")
@@ -41,6 +52,4 @@ public class FoodController {
         foodService.deleteFood(id);
         return ResponseEntity.ok().build();
     }
-
-    // Additional endpoints or methods can be added as needed
 }

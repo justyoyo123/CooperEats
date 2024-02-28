@@ -3,11 +3,20 @@ package com.coopereats.springboot.food;
 import com.coopereats.springboot.cart.Cart;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.coopereats.springboot.user.User;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "FOOD")
 public class Food {
+
+    public enum Category {
+        APPETIZER,
+        MAIN_COURSE,
+        DESSERT,
+        DRINK
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +40,10 @@ public class Food {
     
     @ManyToMany(mappedBy = "foods")
     private Set<Cart> carts = new HashSet<>();
+
+    @Column(name = "CATEGORY")
+    @Enumerated(EnumType.STRING)
+    private Food.Category Category;
 
     // Constructors, Getters, and Setters
     public Food() {
@@ -90,5 +103,13 @@ public class Food {
 
     public void setCarts(Set<Cart> carts) {
         this.carts = carts;
+    }
+
+    public Food.Category getCategory() {
+        return Category;
+    }
+
+    public void setCategory(Food.Category Category) {
+        this.Category = Category;
     }
 }
