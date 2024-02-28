@@ -30,10 +30,10 @@ public class PaymentInfoController {
         return ResponseEntity.ok(paymentInfo);
     }
 
-    // Delete payment info by user ID
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deletePaymentInfo(@PathVariable Long userId) {
-        paymentInfoService.deletePaymentInfo(userId);
+    // Delete payment info by payment ID
+    @DeleteMapping("/{paymentId}")
+    public ResponseEntity<Void> deletePaymentInfo(@PathVariable Long paymentId) {
+        paymentInfoService.deletePaymentInfo(paymentId);
         return ResponseEntity.ok().build();
     }
 
