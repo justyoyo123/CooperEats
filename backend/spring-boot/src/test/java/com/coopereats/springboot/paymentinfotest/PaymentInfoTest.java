@@ -56,4 +56,3 @@ public class PaymentInfoTest {
         assertThat(savedPaymentInfo.getPaymentMethodId()).isEqualTo("pm_123456789");
     }
 }
-has context menu
