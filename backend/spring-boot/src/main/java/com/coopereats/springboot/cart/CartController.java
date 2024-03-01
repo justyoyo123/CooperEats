@@ -1,5 +1,6 @@
 package com.coopereats.springboot.cart;
 
+import com.coopereats.springboot.food.Food;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +17,33 @@ public class CartController {
     }
 
     // Create a cart
+//    @PostMapping("/user/{userId}")
+//    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody Cart cart, @PathVariable Long userId) {
+//        Cart updatedCart = cartService.createOrUpdateCart(cart, userId);
+//        return ResponseEntity.ok(updatedCart);
+//    }
+//    @PostMapping("/user/{userId}")
+//    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody Long foodId, @RequestBody Integer quantity, @PathVariable Long userId) {
+//        Cart updatedCart = cartService.createOrUpdateCart(foodId, quantity, userId);
+//        return ResponseEntity.ok(updatedCart);
+//    }
+//    @PostMapping("/user/{userId}")
+//    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody CartUpdateRequest request, @PathVariable Long userId) {
+//        Cart updatedCart = cartService.createOrUpdateCart(request.getFoodId(), request.getQuantity(), userId);
+//        return ResponseEntity.ok(updatedCart);
+//    }
     @PostMapping("/user/{userId}")
-    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody Cart cart, @PathVariable Long userId) {
-        Cart updatedCart = cartService.createOrUpdateCart(cart, userId);
+    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody CartUpdateRequest request, @PathVariable Long userId) {
+        System.out.println("Received cart update request for userId=" + userId + " with foodId=" + request.getFoodId() + " and quantity=" + request.getQuantity());
+        Cart updatedCart = cartService.createOrUpdateCart(request.getFoodId(), request.getQuantity(), userId);
+        System.out.println("Cart updated successfully for userId=" + userId);
         return ResponseEntity.ok(updatedCart);
     }
     // update an existing cart
     @PutMapping("/{id}/user/{userId}")
-    public ResponseEntity<Cart> updateCart(@PathVariable Long userId, @RequestBody Cart cartDetails) {
+    public ResponseEntity<Cart> updateCart(@PathVariable Long userId, @RequestBody Long foodId, @RequestBody Integer quantity) {
         try {
-            Cart updatedCart = cartService.createOrUpdateCart(cartDetails, userId);
+            Cart updatedCart = cartService.createOrUpdateCart(foodId, quantity, userId);
             return ResponseEntity.ok(updatedCart);
         } catch (IllegalStateException e) {
             // Handle specific cases like cart not found or cart not belonging to the user
@@ -35,6 +53,19 @@ public class CartController {
             return ResponseEntity.notFound().build();
         }
     }
+//    @PutMapping("/{id}/user/{userId}")
+//    public ResponseEntity<Cart> updateCart(@PathVariable Long userId, @RequestBody Cart cartDetails) {
+//        try {
+//            Cart updatedCart = cartService.createOrUpdateCart(cartDetails, userId);
+//            return ResponseEntity.ok(updatedCart);
+//        } catch (IllegalStateException e) {
+//            // Handle specific cases like cart not found or cart not belonging to the user
+//            return ResponseEntity.badRequest().body(null);
+//        } catch (RuntimeException e) {
+//            // Handle other unexpected errors
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     // Get a cart by ID
     @GetMapping("/{id}")
