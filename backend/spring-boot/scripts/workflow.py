@@ -8,6 +8,8 @@ BASE_URL_USER = "http://localhost:8080/api/users"
 BASE_URL_CART = "http://localhost:8080/api/carts"
 BASE_URL_ORDER = "http://localhost:8080/api/orders"
 BASE_URL_PAYMENT = "http://localhost:8080/api/payments"
+BASE_URL_FOOD = "http://localhost:8080/api/foods"
+
 
 def save_user_id(user_id):
     with open('user_id.txt', 'w') as file:
@@ -31,7 +33,7 @@ def create_user():
     user_data = {
         "userName": "newusertest",
         "password": "testpassword",
-        "email": "test@example.com",
+        "email": "user@cooper.edu",
         "fullName": "New User",
         "phoneNumber": "1234567890"
     }
@@ -56,19 +58,54 @@ def get_user(user_id):
         print(f"Failed to get user {user_id}:", response.text)
 
 
+def create_food(user_id):
+    if not user_id:
+        print("No user ID available. Cannot create food.")
+        return
+    url = f"{BASE_URL_FOOD}/{user_id}"
+    food_data = {
+        "name": "Chocolate Cake",
+        "description": "Rich chocolate cake with layers of dark chocolate ganache",
+        "price": 7.99,
+        "image": "url_to_chocolate_cake_image",
+        "quantity": 10,
+        "category": "DESSERT"
+    }
+    response = requests.post(url, json=food_data)
+    if response.ok:
+        print("Create food response:\n", json.dumps(response.json(), indent=4))
+    else:
+        print("Failed to create food:", response.text)
+
+
+def view_food(user_id):
+    if not user_id:
+        print("No user ID available. Cannot create food.")
+        return
+    url = f"{BASE_URL_FOOD}/{user_id}"
+    food_data = {
+        "name": "Chocolate Cake",
+        "description": "Rich chocolate cake with layers of dark chocolate ganache",
+        "price": 7.99,
+        "image": "url_to_chocolate_cake_image",
+        "quantity": 10,
+        "category": "DESSERT"
+    }
+    response = requests.post(url, json=food_data)
+    if response.ok:
+        print("Create food response:\n", json.dumps(response.json(), indent=4))
+    else:
+        print("Failed to create food:", response.text)
+
+
 def create_cart(user_id):
     if not user_id:
         print("No user ID available. Cannot create cart.")
         return
     url = f"{BASE_URL_CART}/user/{user_id}"
     cart_data = {
-        "totalPrice": 120.50,
-        "paymentStatus": "PENDING",
-        "products": {
-            "1": 3,
-            "2": 2,
-            "5": 1
-        }
+        "foodId": 1,
+        "quantity": 3
     }
     response = requests.post(url, json=cart_data)
     if response.ok:
@@ -77,7 +114,7 @@ def create_cart(user_id):
         print("Failed to create cart:", response.text)
 
 
-# View the cart for a user
+
 def view_cart(user_id):
     url = f"{BASE_URL_CART}/user/{user_id}"
     response = requests.get(url)
@@ -86,17 +123,7 @@ def view_cart(user_id):
     else:
         print("Failed to view cart:", response.text)
 
-# Delete a cart for a user
-def delete_cart(user_id):
-    temp_url = f"{BASE_URL_CART}/user/{user_id}"
-    response = requests.get(temp_url)
-    cart_id = response.json().get('cartId')
-    url = f"{BASE_URL_CART}/{cart_id}"
-    response = requests.delete(url)
-    if response.ok:
-        print(f"Cart with ID {user_id} deleted, simulating cart abandonment.")
-    else:
-        print(f"Failed to delete cart with ID {user_id}.", response.text)
+
 
 
 def create_order_from_cart(user_id):
@@ -110,6 +137,7 @@ def create_order_from_cart(user_id):
     else:
         print("Failed to change cart to order:", response.text)
 
+
 def get_order_history(user_id):
     if not user_id:
         print("No user ID available. Cannot get order history.")
@@ -120,6 +148,21 @@ def get_order_history(user_id):
         print("Get order history response:\n", json.dumps(response.json(), indent=4))
     else:
         print("Failed to get order history:", response.text)
+
+
+def get_all_orders(user_id):
+    if not user_id:
+        print("No user ID available. Cannot get order history.")
+        return
+    url = f"{BASE_URL_ORDER}/all"
+    response = requests.get(url)
+    if response.ok:
+        print("Get order history response:\n", json.dumps(response.json(), indent=4))
+    else:
+        print("Failed to get order history:", response.text)
+
+
+
 
 def update_user(user_id):
     if not user_id:
@@ -138,6 +181,7 @@ def update_user(user_id):
     else:
         print(f"Failed to update user {user_id}:", response.text)
     return response.ok
+
 
 def delete_user(user_id):
     if not user_id:
@@ -161,12 +205,42 @@ def add_payment_info(user_id):
         "phoneNumber": "1",
         "paymentMethodId": "someid",
     }
-    temp_url = f"{BASE_URL_CART}/user/{user_id}"
-    response = requests.get(temp_url)
-    payment_info_id = response.json().get('cartId')
-    url = f"{BASE_URL_PAYMENT}/user/{payment_info_id}"
+    url = f"{BASE_URL_PAYMENT}/user/{user_id}"
     response = requests.post(url, json=payment_info)
     print("Add payment info response:", json.dumps(response.json(), indent=4))
+
+# Delete a cart for a user
+def delete_cart(user_id):
+    temp_url = f"{BASE_URL_CART}/user/{user_id}"
+    response = requests.get(temp_url)
+    cart_id = response.json().get('cartId')
+    url = f"{BASE_URL_CART}/{cart_id}"
+    response = requests.delete(url)
+    if response.ok:
+        print(f"Cart with ID {user_id} deleted, simulating cart abandonment.")
+    else:
+        print(f"Failed to delete cart with ID {user_id}.", response.text)
+
+
+def update_payment_info(user_id):
+    if not user_id:
+        print("No user ID available. Cannot add payment info.")
+        return
+
+    temp_url = f"{BASE_URL_PAYMENT}/{user_id}"
+    response = requests.get(temp_url)
+    payment_info_id = response.json().get('paymentId')
+    print(payment_info_id)
+    payment_info = {
+        "paymentId": payment_info_id,
+        "billingAddress": "321 Faker St, The Faketown, KF 54321",
+        "phoneNumber": "2",
+        "paymentMethodId": "idsome",
+    }
+    url = f"{BASE_URL_PAYMENT}/user/{payment_info_id}"
+    response = requests.put(url, json=payment_info)
+    print("Add payment info response:", json.dumps(response.json(), indent=4))
+
 
 # id used in GET is payment_info_id not user_id
 def get_payment_info(user_id):
@@ -180,6 +254,7 @@ def get_payment_info(user_id):
     else:
         print("Failed to get payment info:", response.text)
 
+
 # Delete by payement_id not user id
 def delete_payment_info(user_id):
     if not user_id:
@@ -192,6 +267,7 @@ def delete_payment_info(user_id):
     else:
         print("Failed to delete payment info:", response.text)
 
+
 def main():
     user_id = load_user_id()
 
@@ -203,29 +279,32 @@ def main():
         elif argument == "01":
             get_user(user_id)
         elif argument == "02":
-            create_cart(user_id)
+            create_food(user_id)
         elif argument == "03":
-            view_cart(user_id)
+            create_cart(user_id)
         elif argument == "04":
-            delete_cart(user_id)
+            view_cart(user_id)
         elif argument == "05":
-            create_order_from_cart(user_id)
+            delete_cart(user_id)
         elif argument == "06":
-            get_order_history(user_id)
+            create_order_from_cart(user_id)
         elif argument == "07":
-            update_user(user_id)
+            get_order_history(user_id)
         elif argument == "08":
-            add_payment_info(user_id)
+            update_user(user_id)
         elif argument == "09":
-            get_payment_info(user_id)
+            add_payment_info(user_id)
         elif argument == "10":
-            delete_payment_info(user_id)
+            get_payment_info(user_id)
         elif argument == "11":
+            delete_payment_info(user_id)
+        elif argument == "12":
             delete_user(user_id)
         else:
             print("Invalid argument. Please use a number between 00 and 11.")
     else:
         print("Please provide a test argument.")
+
 
 if __name__ == "__main__":
     main()
