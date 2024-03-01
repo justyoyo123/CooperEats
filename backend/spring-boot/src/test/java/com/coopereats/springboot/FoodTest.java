@@ -1,4 +1,4 @@
-package com.coopereats.springboot.foodtest;
+package com.coopereats.springboot;
 
 import com.coopereats.springboot.food.Food;
 import com.coopereats.springboot.food.FoodRepository;
