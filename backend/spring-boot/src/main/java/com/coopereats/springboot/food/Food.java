@@ -23,19 +23,19 @@ public class Food {
     @Column(name = "FOOD_ID")
     private long foodId;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME")
     private String name;
 
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "PRICE", nullable = false)
+    @Column(name = "PRICE")
     private double price;
 
     @Column(name = "IMAGE")
     private String image;
 
-    @Column(name = "QUANTITY", nullable = false)
+    @Column(name = "QUANTITY")
     private int quantity;
     
     @ManyToMany(mappedBy = "foods")
