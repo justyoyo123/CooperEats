@@ -1,5 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+
+import Cart from './components/Cart/Cart';
 
 function App() {
   return (
