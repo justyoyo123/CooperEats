@@ -4,9 +4,12 @@ import com.coopereats.springboot.user.User;
 import com.coopereats.springboot.user.UserRepository;
 import com.coopereats.springboot.cart.CartRepository;
 import com.coopereats.springboot.cart.Cart;
+import com.coopereats.springboot.paymentsystem.PaymentProcessingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -19,13 +22,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
+    private final PaymentProcessingService paymentProcessingService;
+
     @Autowired
     private CartRepository cartRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, PaymentProcessingService paymentProcessingService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.paymentProcessingService = paymentProcessingService;
     }
 
     @Transactional
@@ -74,20 +80,32 @@ public class OrderService {
         return orderRepository.findByUserUserId(userId);
     }
 
+
     @Transactional
-    public Order createOrderFromCart(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+    public Order createOrderFromRequest(Long userId, String paymentIntentId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
         Cart cart = cartRepository.findByUser(user);
 
-        // create new order
+//            // Retrieve the PaymentIntent by its clientSecret to verify its status
+//            PaymentIntent paymentIntent = paymentProcessingService.retrievePaymentIntent(paymentIntentId);
+//
+//            // Check if the payment was successful
+//            if (!"succeeded".equals(paymentIntent.getStatus())) {
+//                throw new RuntimeException("Payment failed or is incomplete");
+//            }
+
+        // Proceed to create the order as payment was successful
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
         order.setPickupTime(LocalDateTime.now());
         order.setTotalPrice(cart.getTotalPrice());
         order.setPaymentStatus("PAID");
-        order.setProducts(new HashMap<>(cart.getProducts())); // Clone the products from the cart
+        order.setProducts(new HashMap<>(cart.getProducts()));
+        order.setUser(user);
 
-        Order savedOrder = createOrder(order, userId);
+        // Save the order
+        Order savedOrder = orderRepository.save(order);
 
         // Clear the cart after creating the order
         cart.clearProducts();

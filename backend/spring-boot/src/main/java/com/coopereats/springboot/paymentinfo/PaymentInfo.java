@@ -24,6 +24,10 @@ public class PaymentInfo {
     @Column(name="PAYMENT_METHOD_ID")
     private String paymentMethodId;
 
+    @Column(name="STRIPE_CUSTOMER_ID")
+    private String stripeCustomerId;
+
+
     public long getPaymentId() {
         return paymentId;
     }
@@ -62,5 +66,13 @@ public class PaymentInfo {
 
     public void setPaymentMethodId(String paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
+    }
+
+    public String getStripeCustomerId() {
+        return stripeCustomerId;
+    }
+
+    public void setStripeCustomerId(String stripeCustomerId) {
+        this.stripeCustomerId = stripeCustomerId;
     }
 }
