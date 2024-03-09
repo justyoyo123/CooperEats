@@ -1,5 +1,6 @@
 package com.coopereats.springboot.paymentsystem;
 
+import io.micrometer.common.lang.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.stripe.Stripe;
@@ -18,23 +19,39 @@ public class PaymentProcessingService {
     @Value("${stripe.api.key}")
     private String apiKey;
 
-    public PaymentIntent createPaymentIntent(double amount) throws StripeException {
+//    public PaymentIntent createPaymentIntent(double amount) throws StripeException {
+//        Stripe.apiKey = apiKey;
+//        System.out.println("amount " + amount);
+//        List<Object> paymentMethodTypes = new ArrayList<>();
+//        paymentMethodTypes.add("card");
+//
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("amount", (int) (amount * 100)); // Convert to cents
+//        params.put("currency", "usd");
+//        params.put("payment_method_types", paymentMethodTypes);
+//
+//        return PaymentIntent.create(params);
+//    }
+//
+//    public PaymentIntent retrievePaymentIntent(String paymentIntentId) throws StripeException {
+//        Stripe.apiKey = apiKey;
+//        return PaymentIntent.retrieve(paymentIntentId);
+//    }
+    public PaymentIntent createPaymentIntent(double amount, @Nullable String customerId) throws StripeException {
         Stripe.apiKey = apiKey;
-        System.out.println("amount " + amount);
-        List<Object> paymentMethodTypes = new ArrayList<>();
-        paymentMethodTypes.add("card");
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("amount", (int) (amount * 100)); // Convert to cents
-        params.put("currency", "usd");
-        params.put("payment_method_types", paymentMethodTypes);
+        PaymentIntentCreateParams.Builder paramsBuilder = PaymentIntentCreateParams.builder()
+                .setAmount((long) (amount * 100)) // Convert amount to cents
+                .setCurrency("usd")
+                .addPaymentMethodType("card");
 
+        if (customerId != null && !customerId.trim().isEmpty()) {
+            paramsBuilder.setCustomer(customerId);
+        }
+
+        PaymentIntentCreateParams params = paramsBuilder.build();
         return PaymentIntent.create(params);
     }
 
-    public PaymentIntent retrievePaymentIntent(String paymentIntentId) throws StripeException {
-        Stripe.apiKey = apiKey;
-        return PaymentIntent.retrieve(paymentIntentId);
-    }
 }
 

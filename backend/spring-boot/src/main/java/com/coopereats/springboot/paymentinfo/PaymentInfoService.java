@@ -81,14 +81,14 @@ public class PaymentInfoService {
         paymentMethod.attach(params);
     }
 
-    public List<PaymentMethod> getSavedPaymentMethods(String customerId) throws StripeException {
-
-        PaymentMethodListParams params = PaymentMethodListParams.builder()
-                .setCustomer(customerId)
-                .setType(PaymentMethodListParams.Type.CARD) //only card payments
-                .build();
-
-        PaymentMethodCollection paymentMethods = PaymentMethod.list(params);
-        return paymentMethods.getData();
-    }
+//    public List<PaymentMethod> getSavedPaymentMethods(String customerId) throws StripeException {
+//
+//        PaymentMethodListParams params = PaymentMethodListParams.builder()
+//                .setCustomer(customerId)
+//                .setType(PaymentMethodListParams.Type.CARD) //only card payments
+//                .build();
+//
+//        PaymentMethodCollection paymentMethods = PaymentMethod.list(params);
+//        return paymentMethods.getData();
+//    }
 }

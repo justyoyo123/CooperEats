@@ -5,13 +5,9 @@ import com.coopereats.springboot.user.User;
 import com.coopereats.springboot.user.UserRepository;
 import com.coopereats.springboot.paymentinfo.PaymentInfoRepository;
 import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentMethod;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/paymentinfo")
@@ -61,13 +57,20 @@ public class PaymentInfoController {
         }
     }
 
-    @GetMapping("/savedPaymentMethods/{stripeCustomerId}")
-    public ResponseEntity<?> getSavedPaymentMethods(@PathVariable String stripeCustomerId) {
+    @PostMapping("/savePaymentMethod/user/{userId}")
+    public ResponseEntity<String> savePaymentMethod(@PathVariable Long userId, @RequestBody String paymentMethodId) {
         try {
-            List<PaymentMethod> savedPaymentMethods = paymentInfoService.getSavedPaymentMethods(stripeCustomerId);
-            return ResponseEntity.ok(savedPaymentMethods);
-        } catch (StripeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching saved payment methods: " + e.getMessage());
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            PaymentInfo paymentInfo = paymentInfoService.getPaymentInfoByUserId(userId);
+            if (paymentInfo.getStripeCustomerId() == null) {
+                String customerId = paymentInfoService.createStripeCustomer(user);
+                paymentInfo.setStripeCustomerId(customerId);
+                paymentInfoRepository.save(paymentInfo);
+            }
+            paymentInfoService.attachPaymentMethodToCustomer(paymentMethodId, paymentInfo.getStripeCustomerId());
+            return ResponseEntity.ok("Payment method saved successfully");
+        } catch (StripeException | RuntimeException e) {
+            return ResponseEntity.badRequest().body("Failed to save payment method: " + e.getMessage());
         }
     }
 

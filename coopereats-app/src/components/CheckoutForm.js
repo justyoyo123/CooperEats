@@ -30,8 +30,6 @@ const CheckoutForm = () => {
     const [saveCard, setSaveCard] = useState(false); // State for saving card information
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
-    const userId = 1; //should be set dynamically
-
     const handleSaveCardChange = (event) => {
         setSaveCard(event.target.checked);
     };
@@ -59,7 +57,7 @@ const CheckoutForm = () => {
                     amount: 1099, // needs to be passed from cart
                     saveCard: saveCard, // Whether to save the card, set by user
                     paymentMethodId: paymentMethod.id,
-                    userId: userId,
+                    userId: 3, // should be dynamically set
                 });
 
                 // Confirm the payment on the frontend
@@ -76,7 +74,7 @@ const CheckoutForm = () => {
 
                         // Use Axios to send request to create order once payment is succeeded
                         const orderRequest = {
-                            userId: userId,
+                            userId: 3, // should be dynamically set
                             paymentIntentId: confirmResult.paymentIntent.id
                         };
 
