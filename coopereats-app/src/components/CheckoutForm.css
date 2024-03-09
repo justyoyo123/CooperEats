@@ -1,0 +1,46 @@
+.checkout-form {
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 20px;
+    background: #ffffff;
+    max-width: 400px;
+    margin: 40px auto;
+}
+
+.checkout-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout-form label {
+    margin-bottom: 10px;
+    color: #6b7c93;
+    font-weight: 300;
+}
+
+.pay-button {
+    background: #5469d4;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.pay-button:hover {
+    background: #4353b3;
+}
+
+.pay-button:disabled {
+    background: #a7a7a7;
+    cursor: not-allowed;
+}
+
+#card-element {
+    border-radius: 4px;
+    border: 1px solid #e1e1e1;
+    padding: 10px;
+}
