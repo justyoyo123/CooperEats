@@ -32,11 +32,11 @@ const CheckoutForm = () => {
     const [savedPaymentMethodId, setSavedPaymentMethodId] = useState("");
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const [paymentInfoLoaded, setPaymentInfoLoaded] = useState(false);
+    const [hasSavedPaymentInfo, setHasSavedPaymentInfo] = useState(null);
 
     const userId = 1; // should be dynamically set
 
     useEffect(() => {
-        // Optionally, load saved payment methods when the component mounts
         loadSavedPaymentMethods();
     }, []);
     const loadSavedPaymentMethods = async () => {
@@ -51,9 +51,11 @@ const CheckoutForm = () => {
                 // we save paymentmethodId in table so just use that
                 console.log("Saved paymentMethodId found:", paymentInfo.paymentMethodId);
                 setSavedPaymentMethodId(paymentInfo.paymentMethodId);
+                setHasSavedPaymentInfo(true);
             } else {
                 console.log('No saved payment method found for user.');
                 setSavedPaymentMethodId("");
+                setHasSavedPaymentInfo(false);
             }
         } catch (error) {
             console.error('Error fetching saved payment method:', error);
@@ -164,17 +166,28 @@ const CheckoutForm = () => {
                         label="Save this card for future transactions"
                     />
                     <Button onClick={() => {
+                        setHasSavedPaymentInfo(null);
                         loadSavedPaymentMethods();
                         setPaymentInfoLoaded(true); // Set the state to true when the payment methods are loaded
                     }} variant="outlined" sx={{ mt: 2, mb: 2 }}>
                         Load Saved Payment Methods
                     </Button>
-                    {paymentInfoLoaded && (
+                    {paymentInfoLoaded && hasSavedPaymentInfo === true && (
                         <Snackbar
                             open={paymentInfoLoaded}
                             autoHideDuration={6000}
                             onClose={() => setPaymentInfoLoaded(false)}
                             message="Payment info loaded. Click pay to proceed."
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                        />
+                    )}
+                    {hasSavedPaymentInfo === false && (
+                        <Snackbar
+                            open={true}
+                            autoHideDuration={6000}
+                            onClose={() => setHasSavedPaymentInfo(null)}
+                            message="No saved payment info."
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                         />
                     )}
                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }} disabled={!stripe}>
