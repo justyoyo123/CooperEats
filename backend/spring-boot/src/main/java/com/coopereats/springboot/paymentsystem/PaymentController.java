@@ -31,57 +31,6 @@ public class PaymentController {
         this.userRepository = userRepository;
     }
 
-//    @PostMapping("/charge")
-//    public ResponseEntity<?> createPaymentIntent(@RequestBody PaymentRequest paymentRequest) {
-//        try {
-//            User user = userRepository.findById(paymentRequest.getUserId())
-//                    .orElseThrow(() -> new RuntimeException("User not found with id: " + paymentRequest.getUserId()));
-//
-//            // Check if user wishes to save card and if PaymentInfo exists
-//            PaymentInfo paymentInfo = paymentInfoService.getPaymentInfoByUserId(user.getUserId());
-//            String customerId = null;
-//            boolean confirmNow = false;
-//            if (paymentRequest.isSaveCard()) {
-//                if (paymentInfo == null) {
-//                    paymentInfo = new PaymentInfo();
-//                    paymentInfo.setUser(user);
-//                }
-//
-//                // Create a new Stripe customer if not already present
-//                customerId = paymentInfo.getStripeCustomerId();
-//                if (customerId == null) {
-//                    customerId = paymentInfoService.createStripeCustomer(user); // Assuming you have email in User
-//                    paymentInfo.setStripeCustomerId(customerId);
-//                }
-//
-//                // Save/update PaymentInfo
-//                paymentInfoService.savePaymentInfo(paymentInfo);
-//                // Attach the PaymentMethod to the Stripe customer
-//                paymentInfoService.attachPaymentMethodToCustomer(paymentRequest.getPaymentMethodId(), customerId);
-//                confirmNow = paymentRequest.getPaymentMethodId() == null;
-//            }
-//            confirmNow = true;
-//            // Create PaymentIntent with the customer ID if available
-//            PaymentIntent paymentIntent = paymentProcessingService.createPaymentIntent(paymentRequest.getAmount(), customerId, paymentRequest.getPaymentMethodId(), true);
-//
-//            if (paymentRequest.isSaveCard() && paymentRequest.getPaymentMethodId() != null && customerId != null) {
-//                // Attach the PaymentMethod to the Stripe customer
-//                paymentInfoService.attachPaymentMethodToCustomer(paymentRequest.getPaymentMethodId(), customerId);
-//
-//                // Update PaymentInfo with the new payment method ID
-//                paymentInfo.setPaymentMethodId(paymentRequest.getPaymentMethodId());
-//                paymentInfoService.savePaymentInfo(paymentInfo);
-//            }
-//
-//            return ResponseEntity.ok(Map.of("clientSecret", paymentIntent.getClientSecret()));
-//        } catch (StripeException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating payment intent: " + e.getMessage());
-//        } catch (RuntimeException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-//        }
-   // }
     @PostMapping("/charge")
     public ResponseEntity<?> createPaymentIntent(@RequestBody PaymentRequest paymentRequest) {
         try {

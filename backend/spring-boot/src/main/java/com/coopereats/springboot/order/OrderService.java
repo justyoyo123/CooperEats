@@ -87,14 +87,6 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
         Cart cart = cartRepository.findByUser(user);
 
-//            // Retrieve the PaymentIntent by its clientSecret to verify its status
-//            PaymentIntent paymentIntent = paymentProcessingService.retrievePaymentIntent(paymentIntentId);
-//
-//            // Check if the payment was successful
-//            if (!"succeeded".equals(paymentIntent.getStatus())) {
-//                throw new RuntimeException("Payment failed or is incomplete");
-//            }
-
         // Proceed to create the order as payment was successful
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());

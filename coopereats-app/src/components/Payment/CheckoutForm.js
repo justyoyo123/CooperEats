@@ -41,16 +41,15 @@ const CheckoutForm = () => {
     }, []);
     const loadSavedPaymentMethods = async () => {
         setLoadingSavedMethods(true);
-        console.log("Loading saved payment methods for user ID:", userId); // Log the user ID being queried
+        console.log("Loading saved payment methods for user ID:", userId);
         try {
             // Directly fetch the user's payment info, which includes the paymentMethodId
             const { data: paymentInfo } = await axios.get(`http://localhost:8080/api/paymentinfo/${userId}`);
             console.log("Retrieved payment info:", paymentInfo); // Log the retrieved payment info
 
             if (paymentInfo && paymentInfo.paymentMethodId) {
-                // If there's a saved paymentMethodId, you can directly use it without fetching from Stripe
-                // For display purposes, you might want to set it in a way that's usable in your UI
-                console.log("Saved paymentMethodId found:", paymentInfo.paymentMethodId); // Log the found paymentMethodId
+                // we save paymentmethodId in table so just use that
+                console.log("Saved paymentMethodId found:", paymentInfo.paymentMethodId);
                 setSavedPaymentMethodId(paymentInfo.paymentMethodId);
             } else {
                 console.log('No saved payment method found for user.');
@@ -60,7 +59,7 @@ const CheckoutForm = () => {
             console.error('Error fetching saved payment method:', error);
         } finally {
             setLoadingSavedMethods(false);
-            console.log("Finished loading saved payment methods."); // Log completion of the loading process
+            console.log("Finished loading saved payment methods.");
         }
     };
 
