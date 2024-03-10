@@ -26,6 +26,7 @@ function Header() {
         <li><Link to="/cart">Cart</Link></li>
         {user ? (
           <>
+            <li><Link to="/profile">Profile</Link></li>
             <li>{user.email}</li> {/* Display the user's email */}
             <li><button onClick={() => getAuth().signOut()}>Logout</button></li> {/* Logout button */}
           </>
