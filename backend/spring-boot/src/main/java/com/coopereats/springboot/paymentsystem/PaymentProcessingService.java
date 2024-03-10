@@ -19,39 +19,66 @@ public class PaymentProcessingService {
     @Value("${stripe.api.key}")
     private String apiKey;
 
-//    public PaymentIntent createPaymentIntent(double amount) throws StripeException {
+//    public PaymentIntent createPaymentIntent(double amount, @Nullable String customerId) throws StripeException {
 //        Stripe.apiKey = apiKey;
-//        System.out.println("amount " + amount);
-//        List<Object> paymentMethodTypes = new ArrayList<>();
-//        paymentMethodTypes.add("card");
 //
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("amount", (int) (amount * 100)); // Convert to cents
-//        params.put("currency", "usd");
-//        params.put("payment_method_types", paymentMethodTypes);
+//        PaymentIntentCreateParams.Builder paramsBuilder = PaymentIntentCreateParams.builder()
+//                .setAmount((long) (amount * 100)) // Convert amount to cents
+//                .setCurrency("usd")
+//                .addPaymentMethodType("card");
 //
+//        if (customerId != null && !customerId.trim().isEmpty()) {
+//            paramsBuilder.setCustomer(customerId);
+//        }
+//
+//        PaymentIntentCreateParams params = paramsBuilder.build();
 //        return PaymentIntent.create(params);
 //    }
+//    public PaymentIntent createPaymentIntent(double amount, String customerId, String paymentMethodId, boolean confirmNow) throws StripeException {
+//        PaymentIntentCreateParams.Builder paramsBuilder = PaymentIntentCreateParams.builder()
+//                .setAmount((long) (amount * 100)) // convert amount to cents
+//                .setCurrency("usd")
+//                .setCustomer(customerId);
 //
-//    public PaymentIntent retrievePaymentIntent(String paymentIntentId) throws StripeException {
-//        Stripe.apiKey = apiKey;
-//        return PaymentIntent.retrieve(paymentIntentId);
+//        if (paymentMethodId != null && !paymentMethodId.isEmpty()) {
+//            paramsBuilder.setPaymentMethod(paymentMethodId);
+//        }
+//
+//        if (confirmNow) {
+//            paramsBuilder
+//                    .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.AUTOMATIC)
+//                    .setConfirm(true)
+//                    .setOffSession(true); // Only include off_session when confirming immediately
+//        }
+//
+//        PaymentIntentCreateParams params = paramsBuilder.build();
+//        return PaymentIntent.create(params);
 //    }
-    public PaymentIntent createPaymentIntent(double amount, @Nullable String customerId) throws StripeException {
-        Stripe.apiKey = apiKey;
-
-        PaymentIntentCreateParams.Builder paramsBuilder = PaymentIntentCreateParams.builder()
-                .setAmount((long) (amount * 100)) // Convert amount to cents
+    public PaymentIntent createPaymentIntent(double amount, String customerId, String paymentMethodId) throws StripeException {
+        PaymentIntentCreateParams.Builder builder = PaymentIntentCreateParams.builder()
+                .setAmount((long) (amount * 100)) // convert amount to cents
                 .setCurrency("usd")
-                .addPaymentMethodType("card");
+                .setCustomer(customerId)
+                .setAutomaticPaymentMethods(PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build());
 
-        if (customerId != null && !customerId.trim().isEmpty()) {
-            paramsBuilder.setCustomer(customerId);
+        if (paymentMethodId != null && !paymentMethodId.isEmpty()) {
+            builder.setPaymentMethod(paymentMethodId);
         }
 
-        PaymentIntentCreateParams params = paramsBuilder.build();
+//        if (confirm) {
+//            builder.setConfirm(true)
+//                    .setOffSession(true); // Required if confirming the payment intent immediately
+//        }
+
+        // Since the Stripe Java library may not directly allow setting "allow_redirects" to "never",
+        // enabling automatic_payment_methods and setting off_session to true aims to prioritize
+        // non-redirect payment methods automatically.
+
+        PaymentIntentCreateParams params = builder.build();
+
         return PaymentIntent.create(params);
     }
+
 
 }
 
