@@ -8,6 +8,7 @@ import FoodMenu from './components/Menu/FoodMenu';
 import DrinkMenu from './components/Menu/DrinkMenu';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
+import ProfilePage from './components/Profile/ProfilePage';
 
 function Home() {
   const [data, setData] = React.useState(null);
@@ -52,6 +53,7 @@ function App() {
           <Route path="/dessertmenu" element={<DrinkMenu />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           {/* Include any other routes here */}
         </Routes>
       </div>
