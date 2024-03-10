@@ -90,7 +90,6 @@ public class PaymentController {
 
             PaymentInfo paymentInfo = paymentInfoService.getPaymentInfoByUserId(user.getUserId());
             String customerId = paymentInfo != null ? paymentInfo.getStripeCustomerId() : null;
-            boolean confirmnow = false;
             // If the user wants to save the card and no Stripe customer exists, create one.
             if (paymentRequest.isSaveCard() && customerId == null) {
                 customerId = paymentInfoService.createStripeCustomer(user);
@@ -100,7 +99,6 @@ public class PaymentController {
                 }
                 paymentInfo.setStripeCustomerId(customerId);
                 paymentInfoService.savePaymentInfo(paymentInfo);
-                confirmnow = true;
             }
 
             // Ensure the payment method is attached to the customer
@@ -108,7 +106,6 @@ public class PaymentController {
                 paymentInfoService.attachPaymentMethodToCustomer(paymentRequest.getPaymentMethodId(), customerId);
                 paymentInfo.setPaymentMethodId(paymentRequest.getPaymentMethodId());
                 paymentInfoService.savePaymentInfo(paymentInfo);
-                confirmnow = true;
             }
 
             // Now create the PaymentIntent with the customer and payment method

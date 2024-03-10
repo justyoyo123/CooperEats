@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel } from '@mui/material';
+import {Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel, Snackbar} from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import axios from 'axios';
 import './CheckoutForm.css';
@@ -28,12 +28,45 @@ const CheckoutForm = () => {
     const elements = useElements();
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [saveCard, setSaveCard] = useState(false); // State for saving card information
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [loadingSavedMethods, setLoadingSavedMethods] = useState(true);
+    const [savedPaymentMethodId, setSavedPaymentMethodId] = useState("");
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+    const [paymentInfoLoaded, setPaymentInfoLoaded] = useState(false);
+
+    const userId = 1; // should be dynamically set
+
+    useEffect(() => {
+        // Optionally, load saved payment methods when the component mounts
+        loadSavedPaymentMethods();
+    }, []);
+    const loadSavedPaymentMethods = async () => {
+        setLoadingSavedMethods(true);
+        console.log("Loading saved payment methods for user ID:", userId); // Log the user ID being queried
+        try {
+            // Directly fetch the user's payment info, which includes the paymentMethodId
+            const { data: paymentInfo } = await axios.get(`http://localhost:8080/api/paymentinfo/${userId}`);
+            console.log("Retrieved payment info:", paymentInfo); // Log the retrieved payment info
+
+            if (paymentInfo && paymentInfo.paymentMethodId) {
+                // If there's a saved paymentMethodId, you can directly use it without fetching from Stripe
+                // For display purposes, you might want to set it in a way that's usable in your UI
+                console.log("Saved paymentMethodId found:", paymentInfo.paymentMethodId); // Log the found paymentMethodId
+                setSavedPaymentMethodId(paymentInfo.paymentMethodId);
+            } else {
+                console.log('No saved payment method found for user.');
+                setSavedPaymentMethodId("");
+            }
+        } catch (error) {
+            console.error('Error fetching saved payment method:', error);
+        } finally {
+            setLoadingSavedMethods(false);
+            console.log("Finished loading saved payment methods."); // Log completion of the loading process
+        }
+    };
 
     const handleSaveCardChange = (event) => {
         setSaveCard(event.target.checked);
     };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -42,52 +75,60 @@ const CheckoutForm = () => {
             return;
         }
 
-        const cardElement = elements.getElement(CardElement);
-        const {error, paymentMethod} = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardElement,
-        });
+        let paymentMethodId = savedPaymentMethodId;
+        if (!paymentMethodId) {
+            // Create a new payment method if no saved method is selected
+            const cardElement = elements.getElement(CardElement);
+            const { error, paymentMethod } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardElement,
+            });
 
-        if (error) {
-            console.error(error);
-        } else {
-            try {
-                // use axios to call backend to create a Payment Intent
-                const { data: paymentIntentResponse } = await axios.post('http://localhost:8080/api/payments/charge', {
-                    amount: 1099, // needs to be passed from cart
-                    saveCard: saveCard, // Whether to save the card, set by user
-                    paymentMethodId: paymentMethod.id,
-                    userId: 3, // should be dynamically set
-                });
-
-                // Confirm the payment on the frontend
-                const confirmResult = await stripe.confirmCardPayment(paymentIntentResponse.clientSecret, {
-                    payment_method: paymentMethod.id,
-                });
-
-                if (confirmResult.error) {
-                    console.error(confirmResult.error);
-                } else {
-                    if (confirmResult.paymentIntent.status === 'succeeded') {
-                        console.log('Payment succeeded!');
-                        setPaymentSuccess(true);
-
-                        // Use Axios to send request to create order once payment is succeeded
-                        const orderRequest = {
-                            userId: 3, // should be dynamically set
-                            paymentIntentId: confirmResult.paymentIntent.id
-                        };
-
-                        await axios.post('http://localhost:8080/api/orders/placeOrder', orderRequest);
-                        console.log('Order created successfully');
-                    }
-                }
-            } catch (error) {
-                console.error('Error during the payment or order creation process:', error);
+            if (error) {
+                console.error(error);
+                return;
             }
+
+            paymentMethodId = paymentMethod.id;
+        }
+
+        // Construct the payload to send to your backend
+        const paymentPayload = {
+            amount: 1099, // Example amount, should be dynamically set based on the actual order
+            saveCard, // Indicates whether the user has opted to save the card
+            paymentMethodId, // The ID of the new or existing payment method
+            userId, // The user's ID, dynamically set
+        };
+
+        try {
+            // Call your backend to create the PaymentIntent and optionally save the card
+            const { data: paymentIntentResponse } = await axios.post('http://localhost:8080/api/payments/charge', paymentPayload);
+
+            // Confirm the payment on the frontend
+            const confirmResult = await stripe.confirmCardPayment(paymentIntentResponse.clientSecret, {
+                payment_method: paymentMethodId,
+            });
+
+            if (confirmResult.error) {
+                console.error(confirmResult.error);
+            } else if (confirmResult.paymentIntent && confirmResult.paymentIntent.status === 'succeeded') {
+                console.log('Payment succeeded!');
+                setPaymentSuccess(true);
+
+                // After successful payment, send a request to create the order
+                const orderRequest = {
+                    userId: userId,
+                    paymentIntentId: confirmResult.paymentIntent.id,
+                };
+
+                // Send the order creation request
+                const orderResponse = await axios.post('http://localhost:8080/api/orders/placeOrder', orderRequest);
+                console.log('Order created successfully:', orderResponse.data);
+            }
+        } catch (error) {
+            console.error('Error during the payment or order creation process:', error);
         }
     };
-
     if (paymentSuccess) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
@@ -123,6 +164,20 @@ const CheckoutForm = () => {
                         control={<Checkbox checked={saveCard} onChange={handleSaveCardChange} name="saveCard" />}
                         label="Save this card for future transactions"
                     />
+                    <Button onClick={() => {
+                        loadSavedPaymentMethods();
+                        setPaymentInfoLoaded(true); // Set the state to true when the payment methods are loaded
+                    }} variant="outlined" sx={{ mt: 2, mb: 2 }}>
+                        Load Saved Payment Methods
+                    </Button>
+                    {paymentInfoLoaded && (
+                        <Snackbar
+                            open={paymentInfoLoaded}
+                            autoHideDuration={6000}
+                            onClose={() => setPaymentInfoLoaded(false)}
+                            message="Payment info loaded. Click pay to proceed."
+                        />
+                    )}
                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }} disabled={!stripe}>
                         Pay
                     </Button>

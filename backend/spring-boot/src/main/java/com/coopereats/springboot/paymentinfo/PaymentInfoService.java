@@ -7,6 +7,7 @@ import com.stripe.model.Customer;
 import com.stripe.model.PaymentMethod;
 import com.stripe.model.PaymentMethodCollection;
 import com.stripe.param.PaymentMethodListParams;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,14 @@ public class PaymentInfoService {
     public PaymentInfoService(PaymentInfoRepository paymentInfoRepository, UserRepository userRepository) {
         this.paymentInfoRepository = paymentInfoRepository;
         this.userRepository = userRepository;
+
     }
+
+    @PostConstruct
+    public void init() {
+        Stripe.apiKey = apiKey; // Set the Stripe API key
+    }
+
     public PaymentInfo addorupdatePaymentInfo(Long userId, PaymentInfo paymentInfo) {
         // Find the user by userId
         User user = userRepository.findById(userId)
