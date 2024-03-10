@@ -1,39 +1,62 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
-import CreateAccountPage from './components/CreateAccountPage';
+import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import CartPage from './components/Cart/CartPage';
+import LoginPage from './components/Login/LoginPage';
+import useUser from './hooks/useUser';
+import { getAuth, signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
+// Home component
 function Home() {
-  const [data, setData] = React.useState(null);
+  const { user, isLoading, data, setData } = useUser(); // Assuming useUser hook manages the state
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    const loadUsers = async () => {
-      const response = await axios.get(`http://localhost:8080/api/getUsers`);
-      setData(response.data);
-    };
+  useEffect(() => {
+    if (!isLoading && user) {
+      const loadUsers = async () => {
+        const token = await user.getIdToken();
+        const headers = { Authorization: `Bearer ${token}` };
+        try {
+          const response = await axios.get(`http://localhost:8080/api/getUsers`, { headers });
+          setData(response.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      loadUsers();
+    }
+  }, [user, isLoading, setData]);
 
-    loadUsers();
-  }, []);
+  const handleSignOut = async () => {
+    try {
+      await signOut(getAuth());
+      navigate('/login');
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
 
-  if (data) {
-    return (
-      <>
-        <h1>RPS</h1>
-        <nav>
-          <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
-          <Link to="/create-account">Create Account</Link>
-        </nav>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </>
-    );
+  if (isLoading) {
+    return <div className="centered"><h1>Loading...</h1></div>;
   }
 
-  return <h1>Data</h1>;
+  return (
+    <div className="centered">
+      {user ? (
+        <>
+          <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
+          <button className="auth-button" onClick={handleSignOut}>Log Out</button>
+        </>
+      ) : (
+        <h2>Welcome to CooperEats! Please log in.</h2>
+      )}
+    </div>
+  );
 }
 
 function App() {
@@ -46,7 +69,8 @@ function App() {
           <Route path="/create-account" element={<CreateAccountPage />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/cart" element={<CartPage />} />
-          {/* Include any other routes here */}
+          <Route path="/login" element={<LoginPage />} />
+          {/* Additional routes can be added here */}
         </Routes>
       </div>
     </Router>

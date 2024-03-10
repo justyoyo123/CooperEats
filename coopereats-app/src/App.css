@@ -36,3 +36,111 @@
     transform: rotate(360deg);
   }
 }
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.center-container button {
+  margin-top: 20px;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+
+/* Login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
+}
+
+.login-form input,
+.login-form button,
+.login-form p {
+  margin: 10px 0;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Add styles for the error message if needed */
+.error {
+  color: red;
+}
+
+/* CreateAccountPage */
+.create-account-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.create-account-form {
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
+}
+
+.create-account-form input,
+.create-account-form button,
+.create-account-form p {
+  margin: 10px 0;
+}
+
+.create-account-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.create-account-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Log-out */
+
+.auth-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
