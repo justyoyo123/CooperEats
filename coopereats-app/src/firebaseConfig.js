@@ -1,3 +1,5 @@
+import { initializeApp } from "firebase/app";
+
 const firebaseConfig = {
     apiKey: "AIzaSyCHYJpVwOQ-53IZ7pMBq7kLRlPDHHxyxgw",
     authDomain: "coopereats-92fe8.firebaseapp.com",
