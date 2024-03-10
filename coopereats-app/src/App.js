@@ -6,6 +6,7 @@ import CreateAccountPage from './components/CreateAccountPage';
 import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import CartPage from './components/Cart/CartPage';
+import LoginPage from './components/Login/LoginPage';
 
 function Home() {
   const [data, setData] = React.useState(null);
@@ -27,6 +28,7 @@ function Home() {
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/create-account">Create Account</Link>
+          <Link to="/login">Login</Link>
         </nav>
         <pre>{JSON.stringify(data, null, 2)}</pre>
       </>
@@ -46,6 +48,7 @@ function App() {
           <Route path="/create-account" element={<CreateAccountPage />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/login" element={<LoginPage />} />
           {/* Include any other routes here */}
         </Routes>
       </div>
