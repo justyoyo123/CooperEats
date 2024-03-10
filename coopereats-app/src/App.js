@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccountPage';
 import Header from './components/Header/Header';
-import Menu from './components/Menu/Menu';
+import FoodMenu from './components/Menu/FoodMenu';
+import DrinkMenu from './components/Menu/DrinkMenu';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 
@@ -46,7 +47,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create-account" element={<CreateAccountPage />} />
-          <Route path="/menu" element={<Menu />} />
+          <Route path="/foodmenu" element={<FoodMenu />} />
+          <Route path="/drinkmenu" element={<DrinkMenu />} />
+          <Route path="/dessertmenu" element={<DrinkMenu />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
           {/* Include any other routes here */}

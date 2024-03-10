@@ -19,12 +19,14 @@ function Header() {
         <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo"/>
       </Link>
       <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/menu">Menu</Link></li>
+        {/* <li><Link to="/">Home</Link></li> */}
+        <li><Link to="/foodmenu">Food</Link></li>
+        <li><Link to="/drinkmenu">Drink</Link></li>
+        <li><Link to="/dessertmenu">Dessert</Link></li>
         <li><Link to="/cart">Cart</Link></li>
         {user ? (
           <>
-            <li>Welcome, {user.email}</li> {/* Display the user's email */}
+            <li>{user.email}</li> {/* Display the user's email */}
             <li><button onClick={() => getAuth().signOut()}>Logout</button></li> {/* Logout button */}
           </>
         ) : (
