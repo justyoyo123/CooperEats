@@ -15,7 +15,9 @@ function Header() {
 
   return (
     <header className="header">
-      <h1>CooperEats</h1>
+      <Link to="/">
+        <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo"/>
+      </Link>
       <ul>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/menu">Menu</Link></li>
