@@ -1,3 +1,4 @@
+// test credit card numbers: https://docs.stripe.com/testing
 import React, {useEffect, useState} from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import {Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel, Snackbar} from '@mui/material';
@@ -30,7 +31,6 @@ const CheckoutForm = () => {
     const [saveCard, setSaveCard] = useState(false); // State for saving card information
     const [loadingSavedMethods, setLoadingSavedMethods] = useState(true);
     const [savedPaymentMethodId, setSavedPaymentMethodId] = useState("");
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const [paymentInfoLoaded, setPaymentInfoLoaded] = useState(false);
     const [hasSavedPaymentInfo, setHasSavedPaymentInfo] = useState(null);
 
@@ -181,9 +181,9 @@ const CheckoutForm = () => {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                         />
                     )}
-                    {hasSavedPaymentInfo === false && (
+                    {paymentInfoLoaded && hasSavedPaymentInfo === false && (
                         <Snackbar
-                            open={true}
+                            open={paymentInfoLoaded}
                             autoHideDuration={6000}
                             onClose={() => setHasSavedPaymentInfo(null)}
                             message="No saved payment info."
