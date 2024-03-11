@@ -73,4 +73,15 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    public Long getUserByFirebaseUid(String firebaseuid) {
+        User user = userRepository.findByFirebaseUid(firebaseuid);
+        if (user != null) {
+            return user.getUserId();
+        } else {
+            System.out.println("NOOOOO");
+            return null; // or throw new CustomNotFoundException("User not found for Firebase UID: " + firebaseuid);
+        }
+    }
+
 }

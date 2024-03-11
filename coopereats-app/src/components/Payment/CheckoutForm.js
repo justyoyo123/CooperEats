@@ -5,6 +5,7 @@ import {Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel, 
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import axios from 'axios';
 import './CheckoutForm.css';
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -32,8 +33,35 @@ const CheckoutForm = () => {
     const [savedPaymentMethodId, setSavedPaymentMethodId] = useState("");
     const [paymentInfoLoaded, setPaymentInfoLoaded] = useState(false);
     const [hasSavedPaymentInfo, setHasSavedPaymentInfo] = useState(null);
+    const [userId, setUserId] = useState(null);
 
-    const userId = 1; // should be dynamically set
+    useEffect(() => {
+        const fetchUserId = async (firebaseUid) => {
+            try {
+                // Replace with your actual backend endpoint
+                const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+                setUserId(response.data);
+                console.log("Fetched application user ID:", response.data);
+            } catch (error) {
+                console.error("Error fetching application user ID:", error);
+                setUserId(null);
+            }
+        };
+
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Fetch the application-specific userId using the Firebase UID
+                fetchUserId(user.uid);
+            } else {
+                // User is signed out
+                setUserId(null);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
 
     useEffect(() => {
         loadSavedPaymentMethods();
