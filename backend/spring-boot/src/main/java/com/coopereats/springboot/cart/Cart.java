@@ -28,14 +28,7 @@ public class Cart {
 
     @Column(name = "PAYMEfooNT_STATUS")
     private String paymentStatus;
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "cart_food",
-        joinColumns = @JoinColumn(name = "CART_ID"),
-        inverseJoinColumns = @JoinColumn(name = "FOOD_ID")
-    )
-    private Set<Food> foods = new HashSet<>();
-    
-    
+
     @ElementCollection
     @CollectionTable(name = "cart_items", joinColumns = @JoinColumn(name = "cart_id"))
     @MapKeyColumn(name = "product_id") // Column for the map key (product ID).
@@ -85,24 +78,6 @@ public class Cart {
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
-    }
-    public Set<Food> getFoods() {
-        return foods;
-    }
-
-    public void setFoods(Set<Food> foods) {
-        this.foods = foods;
-    }
-
-    // Methods to add and remove food items
-    public void addFood(Food food) {
-        foods.add(food);
-        food.getCarts().add(this);
-    }
-
-    public void removeFood(Food food) {
-        foods.remove(food);
-        food.getCarts().remove(this);
     }
 
 }

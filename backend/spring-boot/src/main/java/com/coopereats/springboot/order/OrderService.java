@@ -22,16 +22,13 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
-    private final PaymentProcessingService paymentProcessingService;
+    private final CartRepository cartRepository;
 
     @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, PaymentProcessingService paymentProcessingService) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, CartRepository cartRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
-        this.paymentProcessingService = paymentProcessingService;
+        this.cartRepository = cartRepository;
     }
 
     @Transactional

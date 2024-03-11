@@ -29,7 +29,6 @@ const CheckoutForm = () => {
     const elements = useElements();
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [saveCard, setSaveCard] = useState(false); // State for saving card information
-    const [loadingSavedMethods, setLoadingSavedMethods] = useState(true);
     const [savedPaymentMethodId, setSavedPaymentMethodId] = useState("");
     const [paymentInfoLoaded, setPaymentInfoLoaded] = useState(false);
     const [hasSavedPaymentInfo, setHasSavedPaymentInfo] = useState(null);
@@ -40,7 +39,6 @@ const CheckoutForm = () => {
         loadSavedPaymentMethods();
     }, []);
     const loadSavedPaymentMethods = async () => {
-        setLoadingSavedMethods(true);
         console.log("Loading saved payment methods for user ID:", userId);
         try {
             // Directly fetch the user's payment info, which includes the paymentMethodId
@@ -60,7 +58,6 @@ const CheckoutForm = () => {
         } catch (error) {
             console.error('Error fetching saved payment method:', error);
         } finally {
-            setLoadingSavedMethods(false);
             console.log("Finished loading saved payment methods.");
         }
     };
@@ -129,6 +126,7 @@ const CheckoutForm = () => {
                 // Send the order creation request
                 const orderResponse = await axios.post('http://localhost:8080/api/orders/placeOrder', orderRequest);
                 console.log('Order created successfully:', orderResponse.data);
+
             }
         } catch (error) {
             console.error('Error during the payment or order creation process:', error);
