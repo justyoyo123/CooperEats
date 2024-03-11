@@ -38,7 +38,6 @@ const CheckoutForm = () => {
     useEffect(() => {
         const fetchUserId = async (firebaseUid) => {
             try {
-                // Replace with your actual backend endpoint
                 const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
                 setUserId(response.data);
                 console.log("Fetched application user ID:", response.data);
