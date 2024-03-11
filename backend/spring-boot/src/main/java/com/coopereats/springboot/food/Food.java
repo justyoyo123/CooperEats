@@ -37,9 +37,6 @@ public class Food {
 
     @Column(name = "QUANTITY")
     private int quantity;
-    
-    @ManyToMany(mappedBy = "foods")
-    private Set<Cart> carts = new HashSet<>();
 
     @Column(name = "CATEGORY")
     @Enumerated(EnumType.STRING)
@@ -95,14 +92,6 @@ public class Food {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-    
-    public Set<Cart> getCarts() {
-        return carts;
-    }
-
-    public void setCarts(Set<Cart> carts) {
-        this.carts = carts;
     }
 
     public Food.Category getCategory() {

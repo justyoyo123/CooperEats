@@ -93,16 +93,20 @@ const CheckoutForm = () => {
             paymentMethodId = paymentMethod.id;
         }
 
-        // Construct the payload to send to your backend
+        //get total amount from cart
+        const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+        let cartTotalAmount = 0;
+        cartTotalAmount = response.data.totalPrice;
+
         const paymentPayload = {
-            amount: 1099, // Example amount, should be dynamically set based on the actual order
-            saveCard, // Indicates whether the user has opted to save the card
-            paymentMethodId, // The ID of the new or existing payment method
-            userId, // The user's ID, dynamically set
+            amount: cartTotalAmount,
+            saveCard,
+            paymentMethodId,
+            userId,
         };
 
         try {
-            // Call your backend to create the PaymentIntent and optionally save the card
+            // Call backend to create the PaymentIntent and optionally save the card
             const { data: paymentIntentResponse } = await axios.post('http://localhost:8080/api/payments/charge', paymentPayload);
 
             // Confirm the payment on the frontend

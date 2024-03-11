@@ -127,10 +127,18 @@ public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
     }
 
     @Transactional
-    public void deleteCart(long id) {
-        if (!cartRepository.existsById(id)) {
-            throw new IllegalStateException("Cart with ID " + id + " does not exist.");
-        }
-        cartRepository.deleteById(id);
+    public void deleteCart(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+        Cart cart = cartRepository.findByUser(user);
+        // Clear the cart after creating the order
+        cart.clearProducts();
+        cart.setPaymentStatus("");
+        cart.setTotalPrice(0.0);
+        cartRepository.save(cart);
+//        if (!cartRepository.existsById(id)) {
+//            throw new IllegalStateException("Cart with ID " + id + " does not exist.");
+//        }
+//        cartRepository.deleteById(id);
     }
 }

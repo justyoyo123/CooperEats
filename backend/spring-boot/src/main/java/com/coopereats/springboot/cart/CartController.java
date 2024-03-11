@@ -53,19 +53,6 @@ public class CartController {
             return ResponseEntity.notFound().build();
         }
     }
-//    @PutMapping("/{id}/user/{userId}")
-//    public ResponseEntity<Cart> updateCart(@PathVariable Long userId, @RequestBody Cart cartDetails) {
-//        try {
-//            Cart updatedCart = cartService.createOrUpdateCart(cartDetails, userId);
-//            return ResponseEntity.ok(updatedCart);
-//        } catch (IllegalStateException e) {
-//            // Handle specific cases like cart not found or cart not belonging to the user
-//            return ResponseEntity.badRequest().body(null);
-//        } catch (RuntimeException e) {
-//            // Handle other unexpected errors
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
 
     // Get a cart by ID
     @GetMapping("/{id}")
@@ -81,10 +68,10 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    // Delete a cart by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCart(@PathVariable Long id) {
-        cartService.deleteCart(id);
+    // Delete a cart by userID
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteCart(@PathVariable Long userId) {
+        cartService.deleteCart(userId);
         return ResponseEntity.ok().build();
     }
 }
