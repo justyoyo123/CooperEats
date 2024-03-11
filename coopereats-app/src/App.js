@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
-import Menu from './components/Menu/Menu';
+import FoodMenu from './components/Menu/FoodMenu';
+import DrinkMenu from './components/Menu/DrinkMenu';
+import DessertMenu from './components/Menu/DessertMenu';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import useUser from './hooks/useUser';
@@ -67,9 +69,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create-account" element={<CreateAccountPage />} />
-          <Route path="/menu" element={<Menu />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/food" element={<FoodMenu />} />
+          <Route path="/drink" element={<DrinkMenu />} />
+          <Route path="/dessert" element={<DessertMenu />} />
           {/* Additional routes can be added here */}
         </Routes>
       </div>
