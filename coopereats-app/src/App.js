@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
@@ -13,6 +13,8 @@ import useUser from './hooks/useUser';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Button, Navbar, Container } from 'react-bootstrap';
+import AdminPage from './components/Admin/AdminPage'; 
+
 
 // Home component
 function Home() {
@@ -63,7 +65,23 @@ function Home() {
 }
 
 function App() {
+
+  const { user, setUser } = useUser(); // Adjust this line based on your useUser hook
+
+  const ProtectedRoute = ({ children }) => {
+    if (!user) {
+      return <Navigate to="/login" />;
+    }
+
+    const isAdmin = user && user.role === 'admin';
+
+    if (!isAdmin) {
+      return <Navigate to="/" />;
+    }
+    return children;
+  };
   return (
+
     <Router>
       <div className="App">
         <Header />
@@ -75,6 +93,15 @@ function App() {
           <Route path="/food" element={<FoodMenu />} />
           <Route path="/drink" element={<DrinkMenu />} />
           <Route path="/dessert" element={<DessertMenu />} />
+          <Route path="/admin" element={<AdminPage />} />
+          { <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminPage />
+              </ProtectedRoute>
+            }
+          /> }
           {/* Additional routes can be added here */}
         </Routes>
       </div>
