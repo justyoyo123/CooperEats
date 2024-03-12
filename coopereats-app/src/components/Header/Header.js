@@ -20,9 +20,9 @@ function Header() {
       </Link>
       <ul>
         {/* <li><Link to="/">Home</Link></li> */}
-        <li><Link to="/foodmenu">Food</Link></li>
-        <li><Link to="/drinkmenu">Drink</Link></li>
-        <li><Link to="/dessertmenu">Dessert</Link></li>
+        <li><Link to="/food">Food</Link></li>
+        <li><Link to="/drink">Drink</Link></li>
+        <li><Link to="/dessert">Dessert</Link></li>
         <li><Link to="/cart">Cart</Link></li>
         {user ? (
           <>
