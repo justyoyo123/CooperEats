@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminHeader from './AdminHeader'; // Import the admin header
+import AdminHeader from '../Header/AdminHeader'; // Import the admin header
 
 const AdminPage = () => {
   return (
