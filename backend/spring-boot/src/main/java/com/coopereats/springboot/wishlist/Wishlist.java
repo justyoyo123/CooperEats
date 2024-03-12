@@ -21,7 +21,7 @@ public class Wishlist {
     private User user;
 
     @ElementCollection
-    @CollectionTable(name = "cart_items", joinColumns = @JoinColumn(name = "cart_id"))
+    @CollectionTable(name = "wishlist_items", joinColumns = @JoinColumn(name = "wishlist_id"))
     @MapKeyColumn(name = "product_id") // Column for the map key (product ID).
     @Column(name = "quantity") // Column for the map value (quantity of the product).
     private Map<Long, Integer> products = new HashMap<>();
