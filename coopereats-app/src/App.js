@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
@@ -10,10 +10,11 @@ import DessertMenu from './components/Menu/DessertMenu';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import useUser from './hooks/useUser';
-import PaymentPage from './components/Payment/Payment';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Button, Navbar, Container } from 'react-bootstrap';
+import AdminPage from './components/Admin/AdminPage';
+
 
 // Home component
 function Home() {
@@ -50,37 +51,63 @@ function Home() {
   }
 
   return (
-    <div className="centered">
-      {user ? (
-        <>
-          <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
-          <button className="auth-button" onClick={handleSignOut}>Log Out</button>
-        </>
-      ) : (
-        <h2>Welcome to CooperEats! Please log in.</h2>
-      )}
-    </div>
+      <div className="centered">
+        {user ? (
+            <>
+              <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
+              <button className="auth-button" onClick={handleSignOut}>Log Out</button>
+            </>
+        ) : (
+            <h2>Welcome to CooperEats! Please log in.</h2>
+        )}
+      </div>
   );
 }
 
 function App() {
+
+  const { user, setUser } = useUser(); // Adjust this line based on your useUser hook
+
+  const ProtectedRoute = ({ children }) => {
+    if (!user) {
+      return <Navigate to="/login" />;
+    }
+
+    const isAdmin = user && user.role === 'admin';
+
+    if (!isAdmin) {
+      return <Navigate to="/" />;
+    }
+    return children;
+  };
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/create-account" element={<CreateAccountPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/food" element={<FoodMenu />} />
-          <Route path="/drink" element={<DrinkMenu />} />
-          <Route path="/dessert" element={<DessertMenu />} />
+
+      <Router>
+        <div className="App">
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/create-account" element={<CreateAccountPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/food" element={<FoodMenu />} />
+            <Route path="/drink" element={<DrinkMenu />} />
+            <Route path="/dessert" element={<DessertMenu />} />
             <Route path="/payment" element={<PaymentPage />} />
-          {/* Additional routes can be added here */}
-        </Routes>
-      </div>
-    </Router>
+            <Route path="/admin" element={<AdminPage />} />
+            <</>
+            { <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminPage />
+                  </ProtectedRoute>
+                }
+            /> }
+            {/* Additional routes can be added here */}
+          </Routes>
+        </div>
+      </Router>
   );
 }
 
