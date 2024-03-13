@@ -1,0 +1,29 @@
+/* AdminHeader.css */
+.admin-header {
+    /* Your styles for admin header */
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .admin-header ul {
+    list-style: none;
+    display: flex;
+  }
+  
+  .admin-header li {
+    margin: 0 10px;
+  }
+  
+  .admin-header a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .admin-header button {
+    cursor: pointer;
+  }
+  

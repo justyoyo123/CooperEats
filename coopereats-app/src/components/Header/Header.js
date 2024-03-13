@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function Header() {
   const [user, setUser] = useState(null);
+
+  // Placeholder function for admin check - replace this with your actual logic
+  const isAdmin = (user) => {
+    // check a user property like user.role === 'admin' or firebase?
+    return user && user.isAdmin; // Example property, replace with your actual admin check
+  };
 
   useEffect(() => {
     const auth = getAuth();
@@ -16,22 +22,24 @@ function Header() {
   return (
     <header className="header">
       <Link to="/">
-        <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo"/>
+        <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
       </Link>
       <ul>
-        {/* <li><Link to="/">Home</Link></li> */}
-        <li><Link to="/foodmenu">Food</Link></li>
-        <li><Link to="/drinkmenu">Drink</Link></li>
-        <li><Link to="/dessertmenu">Dessert</Link></li>
+        <li><Link to="/food">Food</Link></li>
+        <li><Link to="/drink">Drink</Link></li>
+        <li><Link to="/dessert">Dessert</Link></li>
         <li><Link to="/cart">Cart</Link></li>
+        {user && isAdmin(user) && (
+          <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
+        )}
         {user ? (
           <>
             <li><Link to="/profile">Profile</Link></li>
-            <li>{user.email}</li> {/* Display the user's email */}
-            <li><button onClick={() => getAuth().signOut()}>Logout</button></li> {/* Logout button */}
+            <li>{user.email}</li>
+            <li><button onClick={() => getAuth().signOut()}>Logout</button></li>
           </>
         ) : (
-          <li><Link to="/login">Login</Link></li> /* Show Login link if not logged in */
+          <li><Link to="/login">Login</Link></li>
         )}
       </ul>
     </header>

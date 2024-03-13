@@ -1,5 +1,5 @@
 header {
-    background-color: #333;
+    background-color: #fdf2aa;
     color: #fff;
     padding: 20px;
     text-align: center;
@@ -21,12 +21,13 @@ header {
   }
   
   header ul li a {
-    color: #fff;
+    color: #333;
     text-decoration: none;
     font-weight: bold;
   }
   
   header ul li a:hover {
-    text-decoration: underline;
+    color:darkcyan;
+    /* text-decoration: underline; */
   }
   
