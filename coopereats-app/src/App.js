@@ -96,7 +96,6 @@ function App() {
             <Route path="/dessert" element={<DessertMenu />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/admin" element={<AdminPage />} />
-            <</>
             { <Route
                 path="/admin"
                 element={
