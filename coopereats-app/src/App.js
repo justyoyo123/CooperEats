@@ -16,6 +16,7 @@ import { Button, Navbar, Container } from 'react-bootstrap';
 import AdminPage from './components/Admin/AdminPage';
 import ProfilePage from './components/Profile/ProfilePage';
 import { AuthProvider } from './contexts/AuthContext'; // Ensure you have the correct path to AuthContext.js
+import FoodPage from './components/Food/FoodPage';
 
 // Home component
 function Home() {
@@ -82,7 +83,7 @@ function App() {
   };
 
   return (
-    <AuthProvider> {/* Wrap your Router with AuthProvider */}
+    <AuthProvider>
       <Router>
         <div className="App">
           <Header />
@@ -91,20 +92,11 @@ function App() {
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/food" element={<FoodMenu />} />
-            <Route path="/drink" element={<DrinkMenu />} />
-            <Route path="/dessert" element={<DessertMenu />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/food" element={<FoodPage />} />
+            {/* Ensure other menu routes are updated similarly */}
             <Route path="/profile" element={<ProfilePage />} />
             {/* ProtectedRoute for admin pages */}
-            <Route path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminPage />
-                </ProtectedRoute>
-              }
-            />
-            {/* Additional routes can be added here */}
+            <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
           </Routes>
         </div>
       </Router>
