@@ -34,7 +34,12 @@ public class WebSecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(authz -> authz
+<<<<<<< HEAD
                         .anyRequest().permitAll()) // Temporarily permit all requests
+=======
+                        .requestMatchers("/api/users/**").permitAll() // Permit all requests to /api/users
+                        .anyRequest().authenticated()) // All other requests require authentication
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()))); // Configure JWT resource server
 
         return http.build();

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
@@ -7,17 +8,27 @@ import Header from './components/Header/Header';
 import FoodMenu from './components/Menu/FoodMenu';
 import DrinkMenu from './components/Menu/DrinkMenu';
 import DessertMenu from './components/Menu/DessertMenu';
+=======
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import './App.css';
+import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
+import Header from './components/Header/Header';
+import Menu from './components/Menu/Menu';
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import useUser from './hooks/useUser';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { Button, Navbar, Container } from 'react-bootstrap';
 import AdminPage from './components/Admin/AdminPage'; 
 import ProfilePage from './components/Profile/ProfilePage';
 import { AuthProvider } from './contexts/AuthContext'; // Ensure you have the correct path to AuthContext.js
 
 
+=======
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
 
 // Home component
 function Home() {
@@ -29,6 +40,15 @@ function Home() {
       const loadUsers = async () => {
         const token = await user.getIdToken();
         const headers = { Authorization: `Bearer ${token}` };
+<<<<<<< HEAD
+=======
+        try {
+          const response = await axios.get(`http://localhost:8080/api/getUsers`, { headers });
+          setData(response.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
       };
       loadUsers();
     }
@@ -62,6 +82,7 @@ function Home() {
 }
 
 function App() {
+<<<<<<< HEAD
 
   const { user, setUser } = useUser(); // Adjust this line based on your useUser hook
 
@@ -106,6 +127,22 @@ function App() {
         </div>
       </Router>
     </AuthProvider>
+=======
+  return (
+    <Router>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create-account" element={<CreateAccountPage />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          {/* Additional routes can be added here */}
+        </Routes>
+      </div>
+    </Router>
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
   );
 }
 

@@ -35,11 +35,9 @@ build/
 ### Firebase Service Account Key ###
 serviceAccountKey.json
 
-### Node_moudle
+### Node_module ###
 /node_modules
 
-### Data
+### Data ###
 /data
 
-### Data
-/.idea

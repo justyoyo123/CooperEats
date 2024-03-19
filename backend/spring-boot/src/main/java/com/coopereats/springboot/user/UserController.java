@@ -5,7 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+<<<<<<< HEAD
 import org.springframework.http.HttpStatus;
+=======
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
 
 @RestController
 @RequestMapping("/api/users")
@@ -59,6 +62,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+<<<<<<< HEAD
 
     // Fetch a user ID by email
     @GetMapping("/findByEmail")
@@ -67,4 +71,6 @@ public class UserController {
                 .map(user -> ResponseEntity.ok(user.getUserId()))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+=======
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
 }

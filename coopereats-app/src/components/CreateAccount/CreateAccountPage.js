@@ -10,7 +10,10 @@ const CreateAccountPage = () => {
   const [error, setError] = useState('');
   const [fullName, setFullName] = useState(''); // Add full name state
   const [phoneNumber, setPhoneNumber] = useState(''); // Add phone number state
+<<<<<<< HEAD
   const [userName, setUserName] = useState(''); // Add userName state
+=======
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
 
   const navigate = useNavigate();
 
@@ -26,7 +29,11 @@ const CreateAccountPage = () => {
 
       // Then, create a user in the backend database
       const backendUser = {
+<<<<<<< HEAD
         userName: userName,
+=======
+        userName: email, // This should be a unique username, not the email
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
         email: email,
         password: password, // You might want to hash the password or handle it differently
         fullName: fullName,
@@ -52,6 +59,7 @@ const CreateAccountPage = () => {
                 {error && <p className="error">{error}</p>}
                 <div className="input-group">
                     <input
+<<<<<<< HEAD
                         placeholder="Username"
                         value={userName}
                         onChange={e => setUserName(e.target.value)}
@@ -59,6 +67,8 @@ const CreateAccountPage = () => {
                 </div>
                 <div className="input-group">
                     <input
+=======
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
                         placeholder="Email"
                         value={email}
                         onChange={e => setEmail(e.target.value)}

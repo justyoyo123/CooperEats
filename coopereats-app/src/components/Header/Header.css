@@ -1,5 +1,9 @@
 header {
+<<<<<<< HEAD
     background-color: #fdf2aa;
+=======
+    background-color: #333;
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
     color: #fff;
     padding: 20px;
     text-align: center;
@@ -21,13 +25,21 @@ header {
   }
   
   header ul li a {
+<<<<<<< HEAD
     color: #333;
+=======
+    color: #fff;
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
     text-decoration: none;
     font-weight: bold;
   }
   
   header ul li a:hover {
+<<<<<<< HEAD
     color:darkcyan;
     /* text-decoration: underline; */
+=======
+    text-decoration: underline;
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
   }
   

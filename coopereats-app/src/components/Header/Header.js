@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
@@ -47,3 +48,23 @@ function Header() {
 }
 
 export default Header;
+=======
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Header.css';
+
+function Header() {
+  return (
+    <header>
+      <h1>CooperEats</h1>
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/menu">Menu</Link></li>
+        <li><Link to="/cart">Cart</Link></li>
+      </ul>
+    </header>
+  );
+};
+
+export default Header;
+>>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
