@@ -10,10 +10,7 @@ const CreateAccountPage = () => {
   const [error, setError] = useState('');
   const [fullName, setFullName] = useState(''); // Add full name state
   const [phoneNumber, setPhoneNumber] = useState(''); // Add phone number state
-<<<<<<< HEAD
   const [userName, setUserName] = useState(''); // Add userName state
-=======
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
 
   const navigate = useNavigate();
 
@@ -29,11 +26,7 @@ const CreateAccountPage = () => {
 
       // Then, create a user in the backend database
       const backendUser = {
-<<<<<<< HEAD
         userName: userName,
-=======
-        userName: email, // This should be a unique username, not the email
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
         email: email,
         password: password, // You might want to hash the password or handle it differently
         fullName: fullName,
@@ -52,51 +45,48 @@ const CreateAccountPage = () => {
     }
   };
 
-    return (
-        <div className="create-account-container">
-            <div className="create-account-form">
-                <h1>Create Account</h1>
-                {error && <p className="error">{error}</p>}
-                <div className="input-group">
-                    <input
-<<<<<<< HEAD
-                        placeholder="Username"
-                        value={userName}
-                        onChange={e => setUserName(e.target.value)}
-                    />
-                </div>
-                <div className="input-group">
-                    <input
-=======
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
-                        placeholder="Email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="input-group">
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                </div>
-                <div className="input-group">
-                    <input
-                        type="password"
-                        placeholder="Re-enter Password"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                    />
-                </div>
-                <button onClick={createAccount}>Create Account</button>
-                <p>
-                    <Link to="/login">Already have an account? Log in here</Link>
-                </p>
-            </div>
+  return (
+    <div className="create-account-container">
+      <div className="create-account-form">
+        <h1>Create Account</h1>
+        {error && <p className="error">{error}</p>}
+        <div className="input-group">
+          <input
+            placeholder="Username"
+            value={userName}
+            onChange={e => setUserName(e.target.value)}
+          />
         </div>
-    );
+        <div className="input-group">
+          <input
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="input-group">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="input-group">
+          <input
+            type="password"
+            placeholder="Re-enter Password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+          />
+        </div>
+        <button onClick={createAccount}>Create Account</button>
+        <p>
+          <Link to="/login">Already have an account? Log in here</Link>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default CreateAccountPage;
