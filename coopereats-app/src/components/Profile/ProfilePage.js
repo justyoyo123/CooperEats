@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useUser from '../../hooks/useUser';
@@ -221,4 +222,16 @@ const ProfilePage = () => {
     );
   };
 
+=======
+import React from 'react';
+
+const ProfilePage = () => {
+    return (
+      <div>
+        {/* This is an empty Menu component */}
+      </div>
+    );
+  };
+  
+>>>>>>> shifting_payment
   export default ProfilePage;

@@ -24,7 +24,7 @@ public class CartService {
         this.userRepository = userRepository;
         this.foodService = foodService;
     }
-//    @Transactional
+    //    @Transactional
 //    public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
 //
 //        User user = userRepository.findById(userId)
@@ -49,34 +49,34 @@ public class CartService {
 //        }
 //        return cartRepository.save(cart);
 //    }
-@Transactional
-public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
-    System.out.println("Attempting to find or create cart for userId=" + userId);
-    User user = userRepository.findById(userId)
-            .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+    @Transactional
+    public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
+        System.out.println("Attempting to find or create cart for userId=" + userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
 
-    // Attempt to find an existing cart for the user
-    Optional<Cart> existingCartOpt = Optional.ofNullable(cartRepository.findByUser(user));
-    Cart cart;
-    if (existingCartOpt.isPresent()) {
-        // If the cart exists, update it
-        cart = existingCartOpt.get();
-        System.out.println("Existing cart found. Updating cart for userId=" + userId);
-        cart.getProducts().put(foodId, quantity); // Add new item
-        cart.setTotalPrice(cart.getTotalPrice() + quantity * getProductPrice(foodId)); // Update total price
-    } else {
-        // If no cart exists, create a new one
-        System.out.println("No existing cart found. Creating new cart for userId=" + userId);
-        cart = new Cart();
-        cart.getProducts().put(foodId, quantity); // Add new item
-        cart.setTotalPrice(quantity * getProductPrice(foodId)); // Set total price
-        cart.setPaymentStatus("PENDING");
-        cart.setUser(user); // Set the user to the new cart
+        // Attempt to find an existing cart for the user
+        Optional<Cart> existingCartOpt = Optional.ofNullable(cartRepository.findByUser(user));
+        Cart cart;
+        if (existingCartOpt.isPresent()) {
+            // If the cart exists, update it
+            cart = existingCartOpt.get();
+            System.out.println("Existing cart found. Updating cart for userId=" + userId);
+            cart.getProducts().put(foodId, quantity); // Add new item
+            cart.setTotalPrice(cart.getTotalPrice() + quantity * getProductPrice(foodId)); // Update total price
+        } else {
+            // If no cart exists, create a new one
+            System.out.println("No existing cart found. Creating new cart for userId=" + userId);
+            cart = new Cart();
+            cart.getProducts().put(foodId, quantity); // Add new item
+            cart.setTotalPrice(quantity * getProductPrice(foodId)); // Set total price
+            cart.setPaymentStatus("PENDING");
+            cart.setUser(user); // Set the user to the new cart
+        }
+        Cart savedCart = cartRepository.save(cart);
+        System.out.println("Cart saved successfully for userId=" + userId + ". Cart ID: " + savedCart.getCartId());
+        return savedCart;
     }
-    Cart savedCart = cartRepository.save(cart);
-    System.out.println("Cart saved successfully for userId=" + userId + ". Cart ID: " + savedCart.getCartId());
-    return savedCart;
-}
 
 
     private double getProductPrice(Long foodId) {
@@ -127,10 +127,18 @@ public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
     }
 
     @Transactional
-    public void deleteCart(long id) {
-        if (!cartRepository.existsById(id)) {
-            throw new IllegalStateException("Cart with ID " + id + " does not exist.");
-        }
-        cartRepository.deleteById(id);
+    public void deleteCart(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+        Cart cart = cartRepository.findByUser(user);
+        // Clear the cart after creating the order
+        cart.clearProducts();
+        cart.setPaymentStatus("");
+        cart.setTotalPrice(0.0);
+        cartRepository.save(cart);
+//        if (!cartRepository.existsById(id)) {
+//            throw new IllegalStateException("Cart with ID " + id + " does not exist.");
+//        }
+//        cartRepository.deleteById(id);
     }
 }

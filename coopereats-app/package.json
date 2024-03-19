@@ -14,7 +14,13 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.15.12",
+    "@mui/material": "^5.8.4",
+    "@stripe/react-stripe-js": "^2.5.1",
+    "@stripe/stripe-js": "^1.21.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,6 +1,6 @@
 header {
-    background-color: #fdf2aa; /* Light background from one version */
-    color: #333; /* Dark text for contrast */
+    background-color: #fdf2aa; /* Light background */
+    color: #333; /* Dark text for contrast, assuming you want contrast over the white text in the other version */
     padding: 20px;
     text-align: center;
 }
@@ -28,5 +28,5 @@ header ul li a {
 
 header ul li a:hover {
     color: darkcyan; /* Highlight color on hover */
-    text-decoration: underline; /* Underline for clear interaction feedback */
+    text-decoration: underline; /* Combine both versions by adding underline for clear interaction feedback */
 }

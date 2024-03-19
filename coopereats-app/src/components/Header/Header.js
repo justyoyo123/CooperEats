@@ -22,10 +22,12 @@ function Header() {
   return (
     <header className="header">
       <Link to="/">
-        <h1>CooperEats</h1>
+        <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
+        {/* Optionally, include the site name as well for accessibility and SEO */}
+        <h1 className="visually-hidden">CooperEats</h1>
       </Link>
       <ul>
-        <li><Link to="/">Home</Link></li>
+        <li><Link to="/">Home</Link></li> {/* Re-integrated from HEAD */}
         <li><Link to="/food">Food</Link></li>
         <li><Link to="/drink">Drink</Link></li>
         <li><Link to="/dessert">Dessert</Link></li>

@@ -23,7 +23,7 @@ const CreateAccountPage = () => {
 
       // First, create a user in Firebase
       const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
-
+      const firebaseUid = userCredential.user.uid;
       // Then, create a user in the backend database
       const backendUser = {
         userName: userName,
@@ -31,6 +31,7 @@ const CreateAccountPage = () => {
         password: password, // You might want to hash the password or handle it differently
         fullName: fullName,
         phoneNumber: phoneNumber,
+        firebaseUid: firebaseUid, // Add the Firebase UID to the user object
       };
       const response = await axios.post('http://localhost:8080/api/users', backendUser);
 
