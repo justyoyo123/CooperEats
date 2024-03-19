@@ -35,6 +35,7 @@ public class WebSecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/users/**").permitAll() // Permit all requests to /api/users
+                        .requestMatchers("/api/foods/**").permitAll() // Permit all requests to /api/foods
                         .anyRequest().authenticated()) // All other requests require authentication
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()))); // Configure JWT resource server
 

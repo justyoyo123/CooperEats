@@ -1,14 +1,8 @@
 package com.coopereats.springboot.user;
 
-<<<<<<< HEAD
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-=======
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +20,7 @@ public class UserService {
     public User createUser(User user) {
         if ("frankie@cooper.edu".equals(user.getEmail())) {
             user.setRole(User.Role.ADMIN);
-<<<<<<< HEAD
         } else {
-=======
-        }
-        else {
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
             user.setRole(User.Role.USER);
         }
         return userRepository.save(user);
@@ -47,15 +36,13 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-<<<<<<< HEAD
     // Method to find a user by email
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-=======
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
     // Method to update a user
+    @Transactional
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id " + id));

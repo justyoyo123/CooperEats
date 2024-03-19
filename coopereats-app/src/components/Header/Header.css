@@ -1,45 +1,32 @@
 header {
-<<<<<<< HEAD
-    background-color: #fdf2aa;
-=======
-    background-color: #333;
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
-    color: #fff;
+    background-color: #fdf2aa; /* Light background from one version */
+    color: #333; /* Dark text for contrast */
     padding: 20px;
     text-align: center;
-  }
-  
-  header h1 {
+}
+
+header h1 {
     margin: 0;
-  }
-  
-  header ul {
+}
+
+header ul {
     list-style: none;
     padding: 0;
     display: flex;
     justify-content: center;
-  }
-  
-  header ul li {
+}
+
+header ul li {
     margin: 0 15px;
-  }
-  
-  header ul li a {
-<<<<<<< HEAD
-    color: #333;
-=======
-    color: #fff;
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
+}
+
+header ul li a {
+    color: #333; /* Dark text on light background for readability */
     text-decoration: none;
     font-weight: bold;
-  }
-  
-  header ul li a:hover {
-<<<<<<< HEAD
-    color:darkcyan;
-    /* text-decoration: underline; */
-=======
-    text-decoration: underline;
->>>>>>> 2a64b4ba2f56cdc8146cc6a123743a32a41b5ee6
-  }
-  
+}
+
+header ul li a:hover {
+    color: darkcyan; /* Highlight color on hover */
+    text-decoration: underline; /* Underline for clear interaction feedback */
+}
