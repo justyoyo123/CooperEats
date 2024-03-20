@@ -65,18 +65,28 @@ public class UserService {
     }
 
     @Transactional
-    // Method to delete a user
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("User with ID " + id + " does not exist."));
-        Cart cart = cartRepository.findByUser(user);
-        List<Order> orders = orderRepository.findByUserUserId(id);
-        cartRepository.deleteById(cart.getCartId());
-        for (Order order : orders) {
-            orderRepository.deleteById(order.getOrderId());
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()) {
+            throw new IllegalStateException("User with ID " + id + " does not exist.");
         }
+        User user = userOptional.get();
+        // Log details about the user to be deleted for debugging purposes
+        System.out.println("Deleting user with ID: " + user.getUserId() + ", Email: " + user.getEmail());
+
+        Cart cart = cartRepository.findByUser(user);
+        if (cart != null) {
+            cartRepository.deleteById(cart.getCartId());
+        } else {
+            System.out.println("No cart found for user with ID: " + id);
+        }
+        List<Order> orders = orderRepository.findByUserUserId(id);
+        orders.forEach(order -> {
+            orderRepository.deleteById(order.getOrderId());
+        });
         userRepository.deleteById(id);
     }
+
 
     public Long getUserByFirebaseUid(String firebaseuid) {
         User user = userRepository.findByFirebaseUid(firebaseuid);

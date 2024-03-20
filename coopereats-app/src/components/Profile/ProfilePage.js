@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useUser from '../../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, deleteUser } from 'firebase/auth';
+import { getAuth, deleteUser as deleteFirebaseUser } from 'firebase/auth';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -104,28 +103,35 @@ const ProfilePage = () => {
     }
   };
 
-   const handleDeleteUser = async () => {
-      try {
-        // Delete user from your backend database
-        const response = await axios.delete(`${BACKEND_URL}/${userId}`);
-        if (response.status === 200) {
-          // If successful, proceed to delete the user from Firebase
-          const auth = getAuth();
-          const user = auth.currentUser;
+  const handleDeleteUser = async () => {
+    const auth = getAuth();
+    const firebaseUser = auth.currentUser;
 
-          deleteUser(user).then(() => {
-            setError('User deleted successfully.');
-            navigate('/login');
-          }).catch((error) => {
-            setError(error.message);
-          });
-        } else {
-          setError('Failed to delete user from database.');
-        }
-      } catch (error) {
-        setError(error.response?.data?.message || 'Error deleting user.');
+    if (!firebaseUser) {
+      console.error("No user is currently logged in.");
+      setError("No user is currently logged in.");
+      return;
+    }
+
+    try {
+      // Assuming the backend is correctly set up to delete users by their ID
+      const deleteResponse = await axios.delete(`${BACKEND_URL}/${userId}`);
+      if (deleteResponse.status === 200) {
+
+        // Optionally, proceed to delete the user from Firebase Authentication
+        await deleteFirebaseUser(firebaseUser);
+
+        navigate('/login');
+      } else {
+        console.error(`Failed to delete user from database: Status code ${deleteResponse.status}`);
+        setError('Failed to delete user from database.');
       }
-    };
+    } catch (error) {
+      console.error(`Error occurred while attempting to delete user: ${error.message}`);
+      setError(error.response?.data?.message || error.message || 'Error occurred while attempting to delete user.');
+    }
+  };
+
 
     return (
       <div className="profile-container">
@@ -222,16 +228,4 @@ const ProfilePage = () => {
     );
   };
 
-=======
-import React from 'react';
-
-const ProfilePage = () => {
-    return (
-      <div>
-        {/* This is an empty Menu component */}
-      </div>
-    );
-  };
-  
->>>>>>> shifting_payment
-  export default ProfilePage;
+export default ProfilePage;

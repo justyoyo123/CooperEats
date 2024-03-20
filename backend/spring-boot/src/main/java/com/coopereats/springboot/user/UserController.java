@@ -55,10 +55,16 @@ public class UserController {
         try {
             userService.deleteUser(id);
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred while deleting user with ID: " + id);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     // Fetch a user ID by email
     @GetMapping("/findByEmail")
