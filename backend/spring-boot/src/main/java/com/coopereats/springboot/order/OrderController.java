@@ -1,5 +1,6 @@
 package com.coopereats.springboot.order;
 
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,15 +65,13 @@ public class OrderController {
     }
 
     // Create an order from a cart
-    @PostMapping("/placeOrder/{userId}")
-    public ResponseEntity<Order> createOrderFromCart(@PathVariable Long userId) {
+    @PostMapping("/placeOrder")
+    public ResponseEntity<Order> createOrderFromRequest(@RequestBody OrderCreationRequest orderRequest) {
         try {
-            // Create an order from the cart
-            Order order = orderService.createOrderFromCart(userId);
-
+            Order order = orderService.createOrderFromRequest(orderRequest.getUserId(), orderRequest.getPaymentIntentId());
             return ResponseEntity.ok(order);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null); // Return a bad request status
+            return ResponseEntity.badRequest().body(null);
         }
     }
 }

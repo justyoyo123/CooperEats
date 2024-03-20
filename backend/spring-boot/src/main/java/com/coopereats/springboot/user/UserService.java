@@ -1,6 +1,10 @@
 package com.coopereats.springboot.user;
 
+import com.coopereats.springboot.cart.Cart;
+import com.coopereats.springboot.order.Order;
 import jakarta.transaction.Transactional;
+import com.coopereats.springboot.order.OrderRepository;
+import com.coopereats.springboot.cart.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +16,15 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final CartRepository cartRepository;
+
+    private final OrderRepository orderRepository;
+
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CartRepository cartRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
+        this.orderRepository = orderRepository;
     }
 
     // Method to add a new user and define if admin or regular user
@@ -50,8 +60,28 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     // Method to delete a user
     public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + id + " does not exist."));
+        Cart cart = cartRepository.findByUser(user);
+        List<Order> orders = orderRepository.findByUserUserId(id);
+        cartRepository.deleteById(cart.getCartId());
+        for (Order order : orders) {
+            orderRepository.deleteById(order.getOrderId());
+        }
         userRepository.deleteById(id);
     }
+
+    public Long getUserByFirebaseUid(String firebaseuid) {
+        User user = userRepository.findByFirebaseUid(firebaseuid);
+        if (user != null) {
+            return user.getUserId();
+        } else {
+            System.out.println("NOOOOO");
+            return null; // or throw new CustomNotFoundException("User not found for Firebase UID: " + firebaseuid);
+        }
+    }
+
 }
