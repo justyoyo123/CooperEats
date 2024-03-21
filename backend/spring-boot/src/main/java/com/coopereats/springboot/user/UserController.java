@@ -58,4 +58,14 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/firebase/{firebaseuid}")
+    public ResponseEntity<?> getUserByFirebaseUid(@PathVariable String firebaseuid) {
+        Long userId = userService.getUserByFirebaseUid(firebaseuid);
+        if (userId != null) {
+            return ResponseEntity.ok().body(userId);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
