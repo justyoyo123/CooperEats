@@ -16,7 +16,6 @@ import { Button, Navbar, Container } from 'react-bootstrap';
 import AdminPage from './components/Admin/AdminPage'; 
 
 
-// Home component
 function Home() {
   const { user, isLoading, data, setData } = useUser(); // Assuming useUser hook manages the state
   const navigate = useNavigate();
@@ -66,15 +65,12 @@ function Home() {
 
 function App() {
 
-  const { user, setUser } = useUser(); // Adjust this line based on your useUser hook
-
+  const { user, setUser } = useUser(); // Admin check starts here but not complete
   const ProtectedRoute = ({ children }) => {
     if (!user) {
       return <Navigate to="/login" />;
     }
-
     const isAdmin = user && user.role === 'admin';
-
     if (!isAdmin) {
       return <Navigate to="/" />;
     }
@@ -93,7 +89,6 @@ function App() {
           <Route path="/food" element={<FoodMenu />} />
           <Route path="/drink" element={<DrinkMenu />} />
           <Route path="/dessert" element={<DessertMenu />} />
-          <Route path="/admin" element={<AdminPage />} />
           { <Route
             path="/admin"
             element={

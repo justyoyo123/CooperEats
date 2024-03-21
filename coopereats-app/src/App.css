@@ -2,6 +2,12 @@
   text-align: center;
 }
 
+.main-bg {
+  height: 300px;
+  background-image: url('../public/images/design/cafeteria.png');
+  background-size: cover;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
