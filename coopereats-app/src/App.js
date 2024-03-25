@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-ro
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
-import FoodMenu from './components/Menu/FoodMenu';
+//import FoodMenu from './components/Menu/FoodMenu';
+import MainMenu from './components/Menu/MainMenu';
+import AppetizerMenu from './components/Menu/AppetizerMenu';
 import DrinkMenu from './components/Menu/DrinkMenu';
 import DessertMenu from './components/Menu/DessertMenu';
 import CartPage from './components/Cart/CartPage';
@@ -86,7 +88,8 @@ function App() {
           <Route path="/create-account" element={<CreateAccountPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/food" element={<FoodMenu />} />
+          <Route path="/appetizer" element={<AppetizerMenu />} /> {/* New appetizer component */}
+          <Route path="/main" element={<MainMenu />} /> {/* Renamed from FoodMenu */}
           <Route path="/drink" element={<DrinkMenu />} />
           <Route path="/dessert" element={<DessertMenu />} />
           { <Route
