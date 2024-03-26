@@ -7,6 +7,8 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/AuthContext';
 import { initializeApp } from 'firebase/app';
 import firebaseConfig from './firebaseConfig';
+import { Provider } from "react-redux";
+import store from './store.js'
 
 // Initialize Firebase only once here
 const app = initializeApp(firebaseConfig);
@@ -14,11 +16,11 @@ const app = initializeApp(firebaseConfig);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <AuthProvider> {/* Wrapping App with AuthProvider */}
+  <Provider store={store}>
+    <AuthProvider>
       <App />
     </AuthProvider>
-  </React.StrictMode>
+  </Provider>
 );
 
 reportWebVitals();

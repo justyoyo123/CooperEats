@@ -2,11 +2,6 @@
   text-align: center;
 }
 
-.main-bg {
-  height: 300px;
-  background-image: url('../public/images/design/cafeteria.png');
-  background-size: cover;
-}
 
 .App-logo {
   height: 40vmin;
@@ -18,6 +13,28 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+table {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #8B4513; /* This is a shade of brown */
+  color: white;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
 
 .App-header {
   background-color: #282c34;
