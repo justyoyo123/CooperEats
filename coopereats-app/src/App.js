@@ -10,6 +10,7 @@ import DessertMenu from './components/Menu/DessertMenu';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import useUser from './hooks/useUser';
+import PaymentPage from './components/Payment/Payment';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Button, Navbar, Container } from 'react-bootstrap';
@@ -26,7 +27,7 @@ function Home() {
         const token = await user.getIdToken();
         const headers = { Authorization: `Bearer ${token}` };
         try {
-          const response = await axios.get(`http://localhost:8080/api/getUsers`, { headers });
+          const response = await axios.get(`http://localhost:8080/api/users`, { headers });
           setData(response.data);
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -89,6 +90,7 @@ function App() {
           <Route path="/food" element={<FoodMenu />} />
           <Route path="/drink" element={<DrinkMenu />} />
           <Route path="/dessert" element={<DessertMenu />} />
+          <Route path="/payment" element={<PaymentPage />} />
           { <Route
             path="/admin"
             element={
