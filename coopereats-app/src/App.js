@@ -12,6 +12,7 @@ import DessertMenu from './components/Menu/DessertMenu';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import useUser from './hooks/useUser';
+import PaymentPage from './components/Payment/Payment';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Button, Navbar, Container } from 'react-bootstrap';
@@ -92,6 +93,7 @@ function App() {
           <Route path="/main" element={<MainMenu />} /> {/* Renamed from FoodMenu */}
           <Route path="/drink" element={<DrinkMenu />} />
           <Route path="/dessert" element={<DessertMenu />} />
+          <Route path="/payment" element={<PaymentPage />} />
           { <Route
             path="/admin"
             element={
