@@ -1,43 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 
 function AdminOrdersPage() {
-    const [foods, setFoods] = useState([]);
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        const fetchFoods = async () => {
+        const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/orders');
-                setFoods(response.data);
+                const response = await axios.get('http://localhost:8080/api/orders/all');
+                setOrders(response.data);
             } catch (error) {
-                console.error('Error fetching foods:', error);
+                console.error('Error fetching orders:', error);
             }
         };
 
-        fetchFoods();
+        fetchOrders();
     }, []);
 
     return (
         <TableContainer component={Paper}>
-            <Table aria-label="simple table">
+            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2 }}>
+                Orders
+            </Typography>
+            <Table aria-label="orders table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Food ID</TableCell>
-                        <TableCell align="right">Name</TableCell>
-                        <TableCell align="right">Price</TableCell>
-                        <TableCell align="right">Category</TableCell>
+                        <TableCell>Order ID</TableCell>
+                        <TableCell align="right">User</TableCell>
+                        <TableCell align="right">Order Date</TableCell>
+                        <TableCell align="right">Pickup Time</TableCell>
+                        <TableCell align="right">Total Price</TableCell>
+                        <TableCell align="right">Payment Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {foods.map((food) => (
-                        <TableRow key={food.id}>
+                    {orders.map((order) => (
+                        <TableRow key={order.orderId}>
                             <TableCell component="th" scope="row">
-                                {food.id}
+                                {order.orderId}
                             </TableCell>
-                            <TableCell align="right">{food.name}</TableCell>
-                            <TableCell align="right">${food.price}</TableCell>
-                            <TableCell align="right">{food.category}</TableCell>
+                            <TableCell align="right">{order.user ? order.user.email : 'N/A'}</TableCell>
+                            <TableCell align="right">{order.orderDate}</TableCell>
+                            <TableCell align="right">{order.pickupTime}</TableCell>
+                            <TableCell align="right">${order.totalPrice}</TableCell>
+                            <TableCell align="right">{order.paymentStatus}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

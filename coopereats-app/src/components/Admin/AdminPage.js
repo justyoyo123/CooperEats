@@ -12,21 +12,23 @@ const AdminPage = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [categories, setCategories] = useState([]);
     const sectionRefs = useRef([]);
+    const [foodQuantities, setFoodQuantities] = useState({});
+
+    const fetchFoods = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/foods');
+            setFoods(response.data);
+            // Create a unique list of categories from the fetched foods
+            const fetchedCategories = [...new Set(response.data.map(food => food.category))];
+            setCategories(fetchedCategories);
+            // Update the ref for scroll behavior
+            //sectionRefs.current = fetchedCategories.map((_, i) => sectionRefs.current[i] ?? createRef());
+        } catch (error) {
+            console.error('Failed to fetch foods', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchFoods = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/foods');
-                setFoods(response.data);
-                // Assuming the response includes categories or you extract them from foods
-                const fetchedCategories = [...new Set(response.data.map(food => food.category))];
-                setCategories(fetchedCategories);
-                sectionRefs.current = fetchedCategories.map((_, i) => sectionRefs.current[i] ?? React.createRef());
-            } catch (error) {
-                console.log('Failed to fetch foods', error);
-            }
-        };
-
         fetchFoods();
     }, []);
 
@@ -60,6 +62,7 @@ const AdminPage = () => {
             let new_quantity = response.data.quantity + 1;
             await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
             console.log("Increase quantity for", foodId);
+            fetchFoods(); // Refetch foods list to update UI
         } catch (error) {
             console.error('Failed to increase quantity:', error);
         }
@@ -71,6 +74,7 @@ const AdminPage = () => {
             let new_quantity = response.data.quantity - 1;
             await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
             console.log("Decrease quantity for", foodId);
+            fetchFoods(); // Refetch foods list to update UI
         } catch (error) {
             console.error('Failed to increase quantity:', error);
         }
@@ -80,12 +84,13 @@ const AdminPage = () => {
         try {
             const response = await axios.delete(`http://localhost:8080/api/foods/${foodId}`);
             console.log("Deleted food for", foodId);
+            fetchFoods(); // Refetch foods list to update UI
         } catch (error) {
             console.error('Failed to increase quantity:', error);
         }
     };
 
-// Update the rendering part of your component
+    // Update the rendering part of your component
     return (
         <div className="food-menu">
             <AdminHeader/> {/* Use the admin-specific header */}
