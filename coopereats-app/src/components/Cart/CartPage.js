@@ -124,6 +124,19 @@ const CartPage = () => {
         }
     };
 
+    const handleClearCart = async () => {
+        if (!userId) return; // Guard clause if userId is not available
+        try {
+            // DELETE request to clear the cart
+            const response = await axios.delete(`http://localhost:8080/api/carts/${userId}`);
+            // Update cart state to reflect the cleared cart
+            setCart(response.data);
+            console.log("Cart cleared");
+        } catch (error) {
+            console.error('Failed to clear cart:', error);
+        }
+    };
+
     if (!cart) {
         return (
             <Typography variant="h4" component="div" style={{ fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
@@ -165,6 +178,9 @@ const CartPage = () => {
                 </Typography>
                 <Button variant="contained" color="primary" onClick={goToCheckout} sx={{ mt: 2 }}>
                     Proceed to Checkout
+                </Button>
+                <Button variant="outlined" color="secondary" onClick={handleClearCart} sx={{ mt: 2 }}>
+                    Clear Cart
                 </Button>
             </CardContent>
         </Card>
