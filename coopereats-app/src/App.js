@@ -29,7 +29,7 @@ function Home() {
         const token = await user.getIdToken();
         const headers = { Authorization: `Bearer ${token}` };
         try {
-          const response = await axios.get(`http://localhost:8080/api/getUsers`, { headers });
+          const response = await axios.get(`http://localhost:8080/api/users`, { headers });
           setData(response.data);
         } catch (error) {
           console.error('Error fetching data:', error);
