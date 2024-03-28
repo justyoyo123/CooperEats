@@ -58,7 +58,7 @@ const AdminPage = () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
             let new_quantity = response.data.quantity + 1;
-            await axios.put(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
+            await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
             console.log("Increase quantity for", foodId);
         } catch (error) {
             console.error('Failed to increase quantity:', error);
@@ -69,7 +69,7 @@ const AdminPage = () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
             let new_quantity = response.data.quantity - 1;
-            await axios.put(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
+            await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
             console.log("Decrease quantity for", foodId);
         } catch (error) {
             console.error('Failed to increase quantity:', error);
@@ -106,7 +106,7 @@ const AdminPage = () => {
                     </Typography>
                     <Grid container spacing={3}>
                         {foods.filter(food => food.category === category).map(food => (
-                            <Grid item xs={12} sm={6} md={4} key={food.id}>
+                            <Grid item xs={12} sm={6} md={4} key={food.foodId}>
                                 <Card>
                                     <CardMedia
                                         component="img"
@@ -125,13 +125,13 @@ const AdminPage = () => {
                                             Quantity: {food.quantity}
                                         </Typography>
                                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-                                            <IconButton color="primary" onClick={() => handleIncreaseQuantity(food.id)}>
+                                            <IconButton color="primary" onClick={() => handleIncreaseQuantity(food.foodId)}>
                                                 <AddIcon />
                                             </IconButton>
-                                            <IconButton color="secondary" onClick={() => handleDecreaseQuantity(food.id)}>
+                                            <IconButton color="secondary" onClick={() => handleDecreaseQuantity(food.foodId)}>
                                                 <RemoveIcon />
                                             </IconButton>
-                                            <IconButton color="error" onClick={() => handleDeleteItem(food.id)}>
+                                            <IconButton color="error" onClick={() => handleDeleteItem(food.foodId)}>
                                                 <DeleteIcon />
                                             </IconButton>
                                         </Box>
