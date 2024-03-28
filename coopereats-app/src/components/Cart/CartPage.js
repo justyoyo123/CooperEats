@@ -8,9 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-//const userId = 1; // Placeholder user ID, EDIT after firebase is configured
-
-const CartPage = () => {
+  const CartPage = () => {
     const navigate = useNavigate();
     //below is logic taken from checkoutform to dynamically get userid based off who is currently logged in. can maybe wrap in its own function but fine for now
     const [userId, setUserId] = useState(null);
@@ -185,6 +183,6 @@ const CartPage = () => {
             </CardContent>
         </Card>
     );
-};
+  }
 
 export default CartPage;
