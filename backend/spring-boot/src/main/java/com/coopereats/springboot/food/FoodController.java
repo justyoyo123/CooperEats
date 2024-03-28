@@ -41,6 +41,16 @@ public class FoodController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/modifyQuantity/{id}")
+    public ResponseEntity<Food> modifyQuantity(@PathVariable Long id, @RequestBody Food food) {
+        return foodService.getFoodById(id)
+                .map(f -> {
+                    f.setQuantity(food.getQuantity());
+                    return ResponseEntity.ok(foodService.saveOrUpdateFood(f));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping
     public ResponseEntity<List<Food>> getAllFoods() {
         List<Food> foods = foodService.getAllFoods();
