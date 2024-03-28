@@ -12,6 +12,8 @@ import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import PaymentPage from './components/Payment/Payment';
 import AdminPage from './components/Admin/AdminPage';
+import AdminUsersPage from './components/Admin/AdminUsersPage';
+import AdminOrdersPage from './components/Admin/AdminOrdersPage';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 function App() {
@@ -84,6 +86,8 @@ function App() {
             <Route path="/admin" element={
                 <AdminPage />
             } />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/orders" element={<AdminOrdersPage />} />
           </Routes>
         </div>
       </Router>
