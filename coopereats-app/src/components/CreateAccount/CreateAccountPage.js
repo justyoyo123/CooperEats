@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react'; // Updated import
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import axios from 'axios'; // Import axios
+
 
 const CreateAccountPage = () => {
   const [email, setEmail] = useState('');
