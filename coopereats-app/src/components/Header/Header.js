@@ -77,15 +77,17 @@
 //
 // export default Header;
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from "axios";
+import AdminHeader from './AdminHeader';
 
 function Header() {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
@@ -132,33 +134,42 @@ function Header() {
       setUser(currentUser);
     });
   }, []);
-
-  return (
-      <header className="header">
-        <Link to="/">
-          <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
-        </Link>
-        <ul>
-          <li><Link to="/appetizer">Appetizer</Link></li>
-          <li><Link to="/main">Main</Link></li>
-          <li><Link to="/drink">Drink</Link></li>
-          <li><Link to="/dessert">Dessert</Link></li>
-          <li><Link to="/cart">Cart</Link></li>
-          {isAdmin && (
-              <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
-          )}
-          {user ? (
-              <>
-                <li><Link to="/profile">Profile</Link></li>
-                <li>{user.email}</li>
-                <li><button onClick={() => getAuth().signOut()}>Logout</button></li>
-              </>
-          ) : (
-              <li><Link to="/login">Login</Link></li>
-          )}
-        </ul>
-      </header>
-  );
+  // Here, we decide which header to render based on isAdmin state
+  if (isAdmin) {
+    return <AdminHeader/>;
+  } else {
+    return (
+        <header className="header">
+          <Link to="/">
+            <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
+          </Link>
+          <ul>
+            <li><Link to="/appetizer">Appetizer</Link></li>
+            <li><Link to="/main">Main</Link></li>
+            <li><Link to="/drink">Drink</Link></li>
+            <li><Link to="/dessert">Dessert</Link></li>
+            <li><Link to="/cart">Cart</Link></li>
+            {isAdmin && (
+                <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
+            )}
+            {user ? (
+                <>
+                  <li><Link to="/profile">Profile</Link></li>
+                  <li>{user.email}</li>
+                  <li>
+                    <button onClick={() => {
+                      getAuth().signOut().then(() => navigate('/')); // Logout and redirect to '/'
+                    }}>Logout
+                    </button>
+                  </li>
+                </>
+            ) : (
+                <li><Link to="/login">Login</Link></li>
+            )}
+          </ul>
+        </header>
+    );
+  }
 }
 
 export default Header;

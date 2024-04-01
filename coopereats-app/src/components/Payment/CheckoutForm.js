@@ -34,6 +34,7 @@ const CheckoutForm = () => {
     const [paymentInfoLoaded, setPaymentInfoLoaded] = useState(false);
     const [hasSavedPaymentInfo, setHasSavedPaymentInfo] = useState(null);
     const [userId, setUserId] = useState(null);
+    const [orderId, setOrderId] = useState(null);
 
     useEffect(() => {
         const fetchUserId = async (firebaseUid) => {
@@ -153,13 +154,40 @@ const CheckoutForm = () => {
                 // Send the order creation request
                 const orderResponse = await axios.post('http://localhost:8080/api/orders/placeOrder', orderRequest);
                 console.log('Order created successfully:', orderResponse.data);
-
+                setOrderId(orderResponse.data.orderId);
             }
         } catch (error) {
             console.error('Error during the payment or order creation process:', error);
         }
     };
+
+    const handleFoodUpdate = async () => {
+        try {
+            const orderResponse = await axios.get(`http://localhost:8080/api/orders/${orderId}`);
+            let orderedProducts = orderResponse.data.products;
+
+            // Iterate over each product in the order
+            for (const [foodId, orderedQuantity] of Object.entries(orderedProducts)) {
+                // Fetch the current quantity of the food item
+                const foodResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+                const currentQuantity = foodResponse.data.quantity;
+
+                // Calculate the new quantity after subtracting the ordered amount
+                const newQuantity = currentQuantity - orderedQuantity;
+
+                // Update the quantity in the backend
+                await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: newQuantity });
+                console.log(`Quantity updated for food ID ${foodId}: ${newQuantity}`);
+            }
+
+        } catch (error) {
+            console.error('Failed to update food quantities:', error);
+        }
+    };
+
+
     if (paymentSuccess) {
+        handleFoodUpdate();
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
                 <Card sx={{ maxWidth: 345, boxShadow: 3 }}>

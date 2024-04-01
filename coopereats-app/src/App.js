@@ -83,7 +83,7 @@ function App() {
             <Route path="/main" element={<MainMenu />} />
             <Route path="/drink" element={<DrinkMenu />} />
             <Route path="/dessert" element={<DessertMenu />} />
-            <Route path="/admin" element={
+            <Route path="/admin/menu" element={
                 <AdminPage />
             } />
             <Route path="/admin/users" element={<AdminUsersPage />} />
