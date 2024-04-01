@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import { Tabs, Tab, Box } from '@mui/material';
+import { Tabs, Tab, Box, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import './FoodPage.css';
 
 const FoodPage = () => {
@@ -11,6 +13,7 @@ const FoodPage = () => {
   const [categories, setCategories] = useState([]);
   const sectionRefs = useRef([]);
   const [userId, setUserId] = useState(null);
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
@@ -95,8 +98,19 @@ const FoodPage = () => {
     sectionRefs.current[newValue].current.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Function to increment quantity
+  const incrementQuantity = (foodId) => {
+    setQuantities(prev => ({ ...prev, [foodId]: (prev[foodId] || 0) + 1 }));
+  };
+
+  // Function to decrement quantity
+  const decrementQuantity = (foodId) => {
+    setQuantities(prev => ({ ...prev, [foodId]: Math.max(1, (prev[foodId] || 1) - 1) }));
+  };
+
   const handleAddToCart = async (foodId) =>{
     try{
+      const quantity = quantities[foodId] || 1;
       const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
         foodId,
         quantity: 1,
@@ -128,8 +142,13 @@ const FoodPage = () => {
                   <p>Description: {food.description}</p>
                   <p>Quantity: {food.quantity}</p>
                   <p>Food ID: {food.foodId}</p>
-                  <button onClick={() => handleAddToCart(food.foodId)}>Add to Cart</button>
                 </div>
+                <div>
+                  <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
+                  <span>{quantities[food.foodId] || 1}</span>
+                  <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
+                </div>
+                <button onClick={() => handleAddToCart(food.foodId)}>Add to Cart</button>
               </div>
             ))}
           </div>
