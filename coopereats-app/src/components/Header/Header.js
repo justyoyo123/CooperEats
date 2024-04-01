@@ -29,8 +29,6 @@ function Header() {
       <ul>
         <li><Link to="/">Home</Link></li> {/* Re-integrated from HEAD */}
         <li><Link to="/food">Food</Link></li>
-        <li><Link to="/drink">Drink</Link></li>
-        <li><Link to="/dessert">Dessert</Link></li>
         <li><Link to="/cart">Cart</Link></li>
         {user && isAdmin(user) && (
           <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins

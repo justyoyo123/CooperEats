@@ -1,13 +1,58 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 import { Tabs, Tab, Box } from '@mui/material';
 import './FoodPage.css';
 
 const FoodPage = () => {
   const [foods, setFoods] = useState([]);
+  const [cart, setCart] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const [categories, setCategories] = useState([]);
   const sectionRefs = useRef([]);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const fetchUserId = async (firebaseUid) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+            setUserId(response.data);
+            console.log("Fetched application user ID:", response.data);
+        } catch (error) {
+            console.error("Error fetching application user ID:", error);
+            setUserId(null);
+        }
+    };
+
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Fetch the application-specific userId using the Firebase UID
+            fetchUserId(user.uid);
+        } else {
+            // User is signed out
+            setUserId(null);
+        }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+        fetchCartByUserId();
+    }
+  }, [userId]); // Fetch cart when userId changes
+
+  // Function to fetch the cart
+  const fetchCartByUserId = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+        setCart(response.data);
+    } catch (error) {
+        console.error('Failed to fetch cart:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -44,12 +89,23 @@ const FoodPage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [activeTab]);
-
+  
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     sectionRefs.current[newValue].current.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleAddToCart = async (foodId) =>{
+    try{
+      const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
+        foodId,
+        quantity: 1,
+      });
+      setCart(response.data);
+    } catch(error){
+      console.error('Failed to add item to cart:', error);
+    }
+  }  
   return (
     <div className="food-menu">
       <h1>Food Menu</h1>
@@ -65,13 +121,14 @@ const FoodPage = () => {
           <h2>{category}</h2>
           <div className="food-list">
             {foods.filter(food => food.category === category).map(food => (
-              <div className="food-item" key={food.id}>
+              <div className="food-item" key={food.foodId}>
                 <img src={food.img} alt={food.name} className="food-image" />
                 <div className="food-details">
                   <h3>{food.name} - ${food.price}</h3>
                   <p>Description: {food.description}</p>
                   <p>Quantity: {food.quantity}</p>
-                  <p>Food ID: {food.food_id}</p>
+                  <p>Food ID: {food.foodId}</p>
+                  <button onClick={() => handleAddToCart(food.foodId)}>Add to Cart</button>
                 </div>
               </div>
             ))}
