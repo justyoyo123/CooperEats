@@ -68,7 +68,7 @@ public class OrderController {
     @PostMapping("/placeOrder")
     public ResponseEntity<Order> createOrderFromRequest(@RequestBody OrderCreationRequest orderRequest) {
         try {
-            Order order = orderService.createOrderFromRequest(orderRequest.getUserId(), orderRequest.getPaymentIntentId());
+            Order order = orderService.createOrderFromRequest(orderRequest.getUserId(), orderRequest.getPaymentIntentId(), orderRequest.getPickupTime());
             return ResponseEntity.ok(order);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);

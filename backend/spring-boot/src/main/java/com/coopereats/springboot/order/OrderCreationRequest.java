@@ -1,8 +1,12 @@
 package com.coopereats.springboot.order;
 
+import java.time.LocalDateTime;
+
 public class OrderCreationRequest {
     private Long userId;
     private String paymentIntentId;
+
+    private LocalDateTime pickupTime;
 
     public OrderCreationRequest() {}
 
@@ -26,5 +30,13 @@ public class OrderCreationRequest {
 
     public void setPaymentIntentId(String paymentIntentId) { // Changed method name
         this.paymentIntentId = paymentIntentId;
+    }
+
+    public LocalDateTime getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(LocalDateTime pickupTime) {
+        this.pickupTime = pickupTime;
     }
 }

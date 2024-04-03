@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Typography } from '@mui/material';
 
 function AdminOrdersPage() {
     const [orders, setOrders] = useState([]);
@@ -19,32 +19,38 @@ function AdminOrdersPage() {
     }, []);
 
     return (
-        <TableContainer component={Paper}>
-            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2 }}>
+        <TableContainer component={Paper} sx={{ maxWidth: '90%', margin: 'auto', overflowX: 'auto' }}>
+            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'primary.main' }}>
                 Orders
             </Typography>
-            <Table aria-label="orders table">
+            <Table aria-label="orders table" sx={{ minWidth: 650 }}>
                 <TableHead>
-                    <TableRow>
+                    <TableRow sx={{ '& th': { fontWeight: 'bold', backgroundColor: 'primary.dark', color: 'common.white' } }}>
                         <TableCell>Order ID</TableCell>
-                        <TableCell align="right">User</TableCell>
-                        <TableCell align="right">Order Date</TableCell>
-                        <TableCell align="right">Pickup Time</TableCell>
-                        <TableCell align="right">Total Price</TableCell>
-                        <TableCell align="right">Payment Status</TableCell>
+                        <TableCell>User</TableCell>
+                        <TableCell>Products</TableCell>
+                        <TableCell>Order Date</TableCell>
+                        <TableCell>Pickup Time</TableCell>
+                        <TableCell>Total Price</TableCell>
+                        <TableCell>Payment Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {orders.map((order) => (
-                        <TableRow key={order.orderId}>
+                    {orders.map((order, index) => (
+                        <TableRow key={order.orderId} sx={{ '&:nth-of-type(odd)': { backgroundColor: 'action.hover' } }}>
                             <TableCell component="th" scope="row">
                                 {order.orderId}
                             </TableCell>
-                            <TableCell align="right">{order.user ? order.user.email : 'N/A'}</TableCell>
-                            <TableCell align="right">{order.orderDate}</TableCell>
-                            <TableCell align="right">{order.pickupTime}</TableCell>
-                            <TableCell align="right">${order.totalPrice}</TableCell>
-                            <TableCell align="right">{order.paymentStatus}</TableCell>
+                            <TableCell>{order.user ? order.user.email : 'N/A'}</TableCell>
+                            <TableCell>
+                                {Object.entries(order.products).map(([productName, quantity]) => (
+                                    <div key={productName}>{`${productName}: ${quantity}`}</div>
+                                ))}
+                            </TableCell>
+                            <TableCell>{order.orderDate}</TableCell>
+                            <TableCell>{order.pickupTime}</TableCell>
+                            <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                            <TableCell>{order.paymentStatus}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

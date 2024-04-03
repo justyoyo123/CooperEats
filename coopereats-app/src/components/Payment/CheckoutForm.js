@@ -1,7 +1,7 @@
 // test credit card numbers: https://docs.stripe.com/testing
 import React, {useEffect, useState} from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import {Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel, Snackbar} from '@mui/material';
+import {Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel, Snackbar, TextField} from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import axios from 'axios';
 import './CheckoutForm.css';
@@ -35,6 +35,7 @@ const CheckoutForm = () => {
     const [hasSavedPaymentInfo, setHasSavedPaymentInfo] = useState(null);
     const [userId, setUserId] = useState(null);
     const [orderId, setOrderId] = useState(null);
+    const [pickupTime, setPickupTime] = useState("");
 
     useEffect(() => {
         const fetchUserId = async (firebaseUid) => {
@@ -149,6 +150,7 @@ const CheckoutForm = () => {
                 const orderRequest = {
                     userId: userId,
                     paymentIntentId: confirmResult.paymentIntent.id,
+                    pickupTime: pickupTime,
                 };
 
                 // Send the order creation request
@@ -184,7 +186,6 @@ const CheckoutForm = () => {
             console.error('Failed to update food quantities:', error);
         }
     };
-
 
     if (paymentSuccess) {
         handleFoodUpdate();
@@ -247,6 +248,17 @@ const CheckoutForm = () => {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                         />
                     )}
+                    <TextField
+                        id="pickup-time"
+                        label="Pickup Time"
+                        type="datetime-local"
+                        value={pickupTime}
+                        onChange={e => setPickupTime(e.target.value)}
+                        sx={{ mt: 2, mb: 2 }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }} disabled={!stripe}>
                         Pay
                     </Button>
