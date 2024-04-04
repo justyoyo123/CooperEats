@@ -8,7 +8,7 @@ function AdminHeader() {
   return (
     <header className="admin-header">
       <Link to="/admin">
-        <img src="../../public/images/design/TheCooperUnion_logo.png" alt="CooperEats Admin Logo" style={{ maxWidth: "120px", height: "auto"}} />
+        <img src="./images/design/TheCooperUnion_logo.png" alt="CooperEats Admin Logo" style={{ maxWidth: "120px", height: "auto"}} />
       </Link>
       <nav>
           <ul>
