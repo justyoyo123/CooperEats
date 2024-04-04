@@ -16,7 +16,7 @@ import PaymentPage from './components/Payment/Payment';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 //import { Button, Navbar, Container } from 'react-bootstrap';
-import AdminPage from './components/Admin/AdminPage';
+import AdminPage from './components/Admin/AdminPage'; 
 
 
 function Home() {
@@ -53,16 +53,16 @@ function Home() {
   }
 
   return (
-      <div className="centered">
-        {user ? (
-            <>
-              <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
-              <button className="auth-button" onClick={handleSignOut}>Log Out</button>
-            </>
-        ) : (
-            <h2>Welcome to CooperEats! Please log in.</h2>
-        )}
-      </div>
+    <div className="centered">
+      {user ? (
+        <>
+          <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
+          <button className="auth-button" onClick={handleSignOut}>Log Out</button>
+        </>
+      ) : (
+        <h2>Welcome to CooperEats! Please log in.</h2>
+      )}
+    </div>
   );
 }
 
@@ -80,7 +80,6 @@ function App() {
     return children;
   };
   return (
-
       <Router>
         <div className="App">
           <Header />

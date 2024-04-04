@@ -70,30 +70,30 @@ function Header() {
   }, []);
 
   return (
-      <header className="header">
-        <Link to="/">
-          <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
-        </Link>
-        <ul>
-          <li><Link to="/appetizer">Appetizer</Link></li>
-          <li><Link to="/main">Main</Link></li>
-          <li><Link to="/drink">Drink</Link></li>
-          <li><Link to="/dessert">Dessert</Link></li>
-          <li><Link to="/cart">Cart</Link></li>
-          {user && isAdmin(user) && (
-              <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
-          )}
-          {user ? (
-              <>
-                <li><Link to="/profile">Profile</Link></li>
-                <li>{user.email}</li>
-                <li><button onClick={() => getAuth().signOut()}>Logout</button></li>
-              </>
-          ) : (
-              <li><Link to="/login">Login</Link></li>
-          )}
-        </ul>
-      </header>
+    <header className="header">
+      <Link to="/">
+        <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
+      </Link>
+      <ul>
+        <li><Link to="/appetizer">Appetizer</Link></li>
+        <li><Link to="/main">Main</Link></li>
+        <li><Link to="/drink">Drink</Link></li>
+        <li><Link to="/dessert">Dessert</Link></li>
+        <li><Link to="/cart">Cart</Link></li>
+        {user && isAdmin(user) && (
+          <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
+        )}
+        {user ? (
+          <>
+            <li><Link to="/profile">Profile</Link></li>
+            <li>{user.email}</li>
+            <li><button onClick={() => getAuth().signOut()}>Logout</button></li>
+          </>
+        ) : (
+          <li><Link to="/login">Login</Link></li>
+        )}
+      </ul>
+    </header>
   );
 }
 

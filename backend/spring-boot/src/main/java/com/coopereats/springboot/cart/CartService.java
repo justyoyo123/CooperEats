@@ -8,7 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
+
+import static java.lang.Math.abs;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 public class CartService {
@@ -24,60 +29,6 @@ public class CartService {
         this.userRepository = userRepository;
         this.foodService = foodService;
     }
-    //    @Transactional
-//    public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
-//
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
-//
-//        // Attempt to find an existing cart for the user
-//        Optional<Cart> existingCartOpt = Optional.ofNullable(cartRepository.findByUser(user));
-//        Cart cart;
-//        if (existingCartOpt.isPresent()) {
-//            // If the cart exists, update it
-//            cart = existingCartOpt.get();
-//            cart.getProducts().put(foodId, quantity); // Add new item
-//            cart.setTotalPrice(cart.getTotalPrice() + quantity * getProductPrice(foodId)); // Update total price
-//            cart.setPaymentStatus(cart.getPaymentStatus()); // Update payment status if needed
-//        } else {
-//            // If no cart exists, create a new one
-//            cart = new Cart();
-//            cart.getProducts().put(foodId, quantity); // Add new item
-//            cart.setTotalPrice(quantity * getProductPrice(foodId)); // Set total price
-//            cart.setPaymentStatus("PENDING");
-//            cart.setUser(user); // Set the user to the new cart
-//        }
-//        return cartRepository.save(cart);
-//    }
-    @Transactional
-    public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
-        System.out.println("Attempting to find or create cart for userId=" + userId);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
-
-        // Attempt to find an existing cart for the user
-        Optional<Cart> existingCartOpt = Optional.ofNullable(cartRepository.findByUser(user));
-        Cart cart;
-        if (existingCartOpt.isPresent()) {
-            // If the cart exists, update it
-            cart = existingCartOpt.get();
-            System.out.println("Existing cart found. Updating cart for userId=" + userId);
-            cart.getProducts().put(foodId, quantity); // Add new item
-            cart.setTotalPrice(cart.getTotalPrice() + quantity * getProductPrice(foodId)); // Update total price
-        } else {
-            // If no cart exists, create a new one
-            System.out.println("No existing cart found. Creating new cart for userId=" + userId);
-            cart = new Cart();
-            cart.getProducts().put(foodId, quantity); // Add new item
-            cart.setTotalPrice(quantity * getProductPrice(foodId)); // Set total price
-            cart.setPaymentStatus("PENDING");
-            cart.setUser(user); // Set the user to the new cart
-        }
-        Cart savedCart = cartRepository.save(cart);
-        System.out.println("Cart saved successfully for userId=" + userId + ". Cart ID: " + savedCart.getCartId());
-        return savedCart;
-    }
-
 
     private double getProductPrice(Long foodId) {
         Optional<Food> foodOptional = foodService.getFoodById(foodId);
@@ -88,28 +39,51 @@ public class CartService {
         }
     }
 
-//    public Cart createOrUpdateCart(Cart cartDetails, Long userId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
-//
-//        // Attempt to find an existing cart for the user
-//        Optional<Cart> existingCartOpt = Optional.ofNullable(cartRepository.findByUser(user));
-//
-//        Cart cart;
-//        if (existingCartOpt.isPresent()) {
-//            // If the cart exists, update it
-//            cart = existingCartOpt.get();
-//            cart.getProducts().clear(); // Clear existing items
-//            cart.getProducts().putAll(cartDetails.getProducts()); // Add new items
-//            cart.setTotalPrice(cartDetails.getTotalPrice()); // Update total price if needed
-//            cart.setPaymentStatus(cartDetails.getPaymentStatus()); // Update payment status if needed
-//        } else {
-//            // If no cart exists, create a new one
-//            cart = cartDetails;
-//            cart.setUser(user); // Set the user to the new cart
-//        }
-//        return cartRepository.save(cart);
-//    }
+    @Transactional
+    public Cart createOrUpdateCart(Long foodId, Integer quantity, Long userId) {
+        System.out.println("Attempting to find or create cart for userId=" + userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+
+        Cart cart = cartRepository.findByUser(user);
+        double new_price;
+        if (cart == null) {
+            System.out.println("No existing cart found. Creating new cart for userId=" + userId);
+            cart = new Cart();
+            cart.setUser(user);
+            cart.setPaymentStatus("PENDING");
+            new_price = quantity * getProductPrice(foodId); // Initial price calculation
+            cart.setTotalPrice(new_price);
+            cart.getProducts().put(foodId, quantity);
+        } else {
+            System.out.println("Existing cart found. Updating cart for userId=" + userId);
+            Map<Long, Integer> products = cart.getProducts();
+            // Calculate the new quantity or remove the product
+            int newQuantity = products.getOrDefault(foodId, 0) + quantity;
+            if (newQuantity <= 0) {
+                products.remove(foodId);
+                new_price = cart.getTotalPrice() - abs(quantity) * getProductPrice(foodId);
+            } else {
+                products.put(foodId, newQuantity);
+                if (quantity < 0) {
+                    new_price = cart.getTotalPrice() - abs(quantity) * getProductPrice(foodId);
+                } else {
+                    new_price = cart.getTotalPrice() + quantity * getProductPrice(foodId);
+                }
+            }
+            // Ensure new_price is not negative and round to 2 decimal places
+            new_price = Math.max(0, new_price);
+            BigDecimal bd = BigDecimal.valueOf(new_price);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            cart.setTotalPrice(bd.doubleValue());
+
+            cart.setProducts(products);
+        }
+
+        Cart savedCart = cartRepository.save(cart);
+        System.out.println("Cart saved successfully for userId=" + userId + ". Cart ID: " + savedCart.getCartId());
+        return savedCart;
+    }
 
     public Cart getCartById(long id) {
         return cartRepository.findById(id)
@@ -136,9 +110,5 @@ public class CartService {
         cart.setPaymentStatus("");
         cart.setTotalPrice(0.0);
         cartRepository.save(cart);
-//        if (!cartRepository.existsById(id)) {
-//            throw new IllegalStateException("Cart with ID " + id + " does not exist.");
-//        }
-//        cartRepository.deleteById(id);
     }
 }
