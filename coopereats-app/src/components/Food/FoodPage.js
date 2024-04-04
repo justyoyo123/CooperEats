@@ -4,7 +4,37 @@ import {getAuth, onAuthStateChanged} from "firebase/auth";
 import { Tabs, Tab, Box, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import garlicBreadSticksImage from '../../foodImages/garlicBread.png';
+import chickenWingsImage from '../../foodImages/chickenWing.png';
+import stuffedMushroomImage from '../../foodImages/stuffedMushroom.png';
+import grilledSalmonImage from '../../foodImages/grilledSalmon.png';
+import beefRasagnaImage from '../../foodImages/beefRasagna.png';
+import vstirFryImage from '../../foodImages/vstirFry.png';
+import dChocolateImage from '../../foodImages/dChocolate.png';
+import chocoChipImage from '../../foodImages/chocoChip.png';
+import miniChocoChipImage from '../../foodImages/miniChocoChip.png';
+import icedLemonImage from '../../foodImages/icedLemon.png';
+import mangoSmoothieImage from '../../foodImages/mangoS.png';
+import chocoChipMImage from '../../foodImages/chocoChipM.png';
 import './FoodPage.css';
+import './FoodPage.css';
+import FoodItemDetailsModal from './FoodItemDetailsModal'; // Make sure this path is correct
+
+
+const foodImages = {
+  "Garlic Bread Sticks": garlicBreadSticksImage,
+  "Chicken Wings": chickenWingsImage,
+  "Stuffed Mushrooms": stuffedMushroomImage,
+  "Grilled Salmon": grilledSalmonImage,
+  "Beef Lasagna":beefRasagnaImage,
+  "Vegetable Stir Fry": vstirFryImage,
+  "Double Chocolate Muffin": dChocolateImage,
+  "Choco Chip Muffin Deluxe": chocoChipImage,
+  "Mini Chocolate Muffin": miniChocoChipImage,
+  "Iced Lemon Tea": icedLemonImage,
+  "Mango Smoothie": mangoSmoothieImage,
+  "Choco Chip Muffin Classic": chocoChipMImage,
+};
 
 const FoodPage = () => {
   const [foods, setFoods] = useState([]);
@@ -136,7 +166,7 @@ const FoodPage = () => {
           <div className="food-list">
             {foods.filter(food => food.category === category).map(food => (
               <div className="food-item" key={food.foodId}>
-                <img src={food.img} alt={food.name} className="food-image" />
+                <img src={foodImages[food.name] || '../../foodImages/cheesecake.jpeg'} alt={food.name} className="food-image" />
                 <div className="food-details">
                   <h3>{food.name} - ${food.price}</h3>
                   <p>Description: {food.description}</p>

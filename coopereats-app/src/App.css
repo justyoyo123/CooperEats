@@ -144,3 +144,13 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.carousel-container {
+  max-width: 400px;
+  margin: auto; /* Centers the carousel */
+}
+
+.carousel-image {
+  max-height: 250px; /* Adjust based on your needs */
+  object-fit: cover; /* Keeps the aspect ratio */
+}

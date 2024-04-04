@@ -11,6 +11,8 @@ import AdminPage from './components/Admin/AdminPage';
 import ProfilePage from './components/Profile/ProfilePage';
 import FoodPage from './components/Food/FoodPage';
 import { AuthProvider } from './contexts/AuthContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Car from './components/Carousel/Caro';
 
 function App() {
   const { user } = useUser(); // Use destructuring to get the user from useUser hook, adjust if your hook returns differently
@@ -33,6 +35,7 @@ function App() {
         <div className="App">
           <Header />
           <Routes>
+            <Route path="/" element={<Car />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
