@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DrinkMenu = () => {
+const Menu = () => {
     return (
       <div>
         {/* This is an empty Menu component */}
@@ -8,4 +8,4 @@ const DrinkMenu = () => {
     );
   };
   
-  export default DrinkMenu;
+  export default Menu;

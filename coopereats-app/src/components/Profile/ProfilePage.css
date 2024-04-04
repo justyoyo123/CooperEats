@@ -1,0 +1,40 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+button {
+  margin-top: 20px;
+}
+
+.profile-info {
+  text-align: left;
+  margin-left: 20px;
+  margin-top: 5px;
+  margin-bottom: 25px;
+}
+
+.profile-info p {
+  margin: 5px 0;
+}
+
+.profile-edit .input-group {
+  margin-bottom: 20px;
+}
+
+.profile-edit .input-group input,
+.profile-edit .input-group button {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+}
+
+.profile-edit .input-group button {
+  width: auto;
+  padding: 10px 20px;
+}

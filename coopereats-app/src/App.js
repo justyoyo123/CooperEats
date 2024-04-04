@@ -80,32 +80,31 @@ function App() {
     return children;
   };
   return (
-
-    <Router>
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/create-account" element={<CreateAccountPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/appetizer" element={<AppetizerMenu />} /> {/* New appetizer component */}
-          <Route path="/main" element={<MainMenu />} /> {/* Renamed from FoodMenu */}
-          <Route path="/drink" element={<DrinkMenu />} />
-          <Route path="/dessert" element={<DessertMenu />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          { <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminPage />
-              </ProtectedRoute>
-            }
-          /> }
-          {/* Additional routes can be added here */}
-        </Routes>
-      </div>
-    </Router>
+      <Router>
+        <div className="App">
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/create-account" element={<CreateAccountPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/appetizer" element={<AppetizerMenu />} /> {/* New appetizer component */}
+            <Route path="/main" element={<MainMenu />} /> {/* Renamed from FoodMenu */}
+            <Route path="/drink" element={<DrinkMenu />} />
+            <Route path="/dessert" element={<DessertMenu />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            { <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminPage />
+                  </ProtectedRoute>
+                }
+            /> }
+            {/* Additional routes can be added here */}
+          </Routes>
+        </div>
+      </Router>
   );
 }
 
