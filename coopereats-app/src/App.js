@@ -1,53 +1,111 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
+//import FoodMenu from './components/Menu/FoodMenu';
+import MainMenu from './components/Menu/MainMenu';
+import AppetizerMenu from './components/Menu/AppetizerMenu';
+import DrinkMenu from './components/Menu/DrinkMenu';
+import DessertMenu from './components/Menu/DessertMenu';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import useUser from './hooks/useUser';
 import PaymentPage from './components/Payment/Payment';
+import { getAuth, signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+//import { Button, Navbar, Container } from 'react-bootstrap';
 import AdminPage from './components/Admin/AdminPage';
-import ProfilePage from './components/Profile/ProfilePage';
-import FoodPage from './components/Food/FoodPage';
-import { AuthProvider } from './contexts/AuthContext';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Car from './components/Carousel/Caro';
+
+
+function Home() {
+  const { user, isLoading, data, setData } = useUser(); // Assuming useUser hook manages the state
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      const loadUsers = async () => {
+        const token = await user.getIdToken();
+        const headers = { Authorization: `Bearer ${token}` };
+        try {
+          const response = await axios.get(`http://localhost:8080/api/users`, { headers });
+          setData(response.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      loadUsers();
+    }
+  }, [user, isLoading, setData]);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(getAuth());
+      navigate('/login');
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
+
+  if (isLoading) {
+    return <div className="centered"><h1>Loading...</h1></div>;
+  }
+
+  return (
+      <div className="centered">
+        {user ? (
+            <>
+              <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
+              <button className="auth-button" onClick={handleSignOut}>Log Out</button>
+            </>
+        ) : (
+            <h2>Welcome to CooperEats! Please log in.</h2>
+        )}
+      </div>
+  );
+}
 
 function App() {
-  const { user } = useUser(); // Use destructuring to get the user from useUser hook, adjust if your hook returns differently
 
+  const { user, setUser } = useUser(); // Admin check starts here but not complete
   const ProtectedRoute = ({ children }) => {
     if (!user) {
       return <Navigate to="/login" />;
     }
-
     const isAdmin = user && user.role === 'admin';
     if (!isAdmin) {
       return <Navigate to="/" />;
     }
     return children;
   };
-
   return (
-    <AuthProvider> {/* This wrapper provides the authentication context */}
+
       <Router>
         <div className="App">
           <Header />
           <Routes>
-            <Route path="/" element={<Car />} />
+            <Route path="/" element={<Home />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/food" element={<FoodPage />} />
+            <Route path="/appetizer" element={<AppetizerMenu />} /> {/* New appetizer component */}
+            <Route path="/main" element={<MainMenu />} /> {/* Renamed from FoodMenu */}
+            <Route path="/drink" element={<DrinkMenu />} />
+            <Route path="/dessert" element={<DessertMenu />} />
             <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProfilePage />} />
+            { <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminPage />
+                  </ProtectedRoute>
+                }
+            /> }
             {/* Additional routes can be added here */}
           </Routes>
         </div>
       </Router>
-    </AuthProvider>
   );
 }
 
