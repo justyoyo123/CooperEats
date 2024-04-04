@@ -110,13 +110,10 @@ public class OrderService {
     }
 
     @Transactional
-    //update pickup time
-    public Order updatePickupTime(long orderId, Order updatedOrderDetails) {
-        // Check if the order exists before updating
-        Order existingOrder = orderRepository.findById(orderId)
+    public Order fulfillOrder(long orderId) {
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalStateException("Order with ID " + orderId + " does not exist."));
-        // Update the order details
-        existingOrder.setPickupTime(updatedOrderDetails.getPickupTime());
-        return orderRepository.save(existingOrder);
+        order.setFullfillmentStatus(true);
+        return orderRepository.save(order);
     }
 }

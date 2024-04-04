@@ -102,6 +102,32 @@ const CheckoutForm = () => {
             return;
         }
 
+        // Retrieve cart details to get product quantities
+        const cartResponse = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+        const cartItems = cartResponse.data.products;
+
+        // Check quantities for each cart item
+        const stockIssues = []; // Keep track of items that exceed stock
+        for (const [foodId, quantityOrdered] of Object.entries(cartItems)) {
+            try {
+                const foodResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+                const {quantity: quantityAvailable, name} = foodResponse.data.quantity;
+
+                if (quantityOrdered > quantityAvailable) {
+                    stockIssues.push({ name, quantityLeft: quantityAvailable });
+                }
+            } catch (error) {
+                console.error(`Failed to fetch food item ${foodId}:`, error);
+            }
+        }
+
+        // If there are stock issues, alert the user and prevent order submission
+        if (stockIssues.length > 0) {
+            const message = stockIssues.map(issue => `Only ${issue.quantityLeft} ${issue.name} left.`).join("\n");
+            alert(message);
+            return; // Prevent further execution
+        }
+
         let paymentMethodId = savedPaymentMethodId;
         if (!paymentMethodId) {
             // Create a new payment method if no saved method is selected

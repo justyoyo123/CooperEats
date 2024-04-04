@@ -74,4 +74,14 @@ public class OrderController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @PutMapping("/fulfillOrder/{orderId}")
+    public ResponseEntity<Order> fulfillOrder(@PathVariable Long orderId) {
+        try {
+            Order order = orderService.fulfillOrder(orderId);
+            return ResponseEntity.ok(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }
