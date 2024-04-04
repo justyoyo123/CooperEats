@@ -10,6 +10,8 @@ function AdminOrdersPage() {
     const [foodNames, setFoodNames] = useState({});
     const [fulfilledOrders, setFulfilledOrders] = useState({});
 
+    const totalSum = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+
     const handleFulfillmentChange = async (orderId) => {
         setFulfilledOrders((prevFulfilledOrders) => ({
             ...prevFulfilledOrders,
@@ -65,7 +67,7 @@ function AdminOrdersPage() {
                 const fulfillmentStatuses = {};
                 for (const order of ordersData) {
                     // Assume each order has a 'fulfilled' field that is true when the order is fulfilled
-                    fulfillmentStatuses[order.orderId] = order.fulfilled || false;
+                    fulfillmentStatuses[order.orderId] = order.fullfillmentStatus;
                 }
 
                 // Update the state with orders, food names, and fulfillment statuses
@@ -85,6 +87,9 @@ function AdminOrdersPage() {
         <TableContainer component={Paper} sx={{ maxWidth: '90%', margin: 'auto', overflowX: 'auto' }}>
             <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'primary.main' }}>
                 Orders
+            </Typography>
+            <Typography variant="h5" gutterBottom component="div" sx={{ textAlign: 'center', mt: 2 }}>
+                Total Sales: ${totalSum.toFixed(2)}
             </Typography>
             <Table aria-label="orders table" sx={{ minWidth: 650 }}>
                 <TableHead>
