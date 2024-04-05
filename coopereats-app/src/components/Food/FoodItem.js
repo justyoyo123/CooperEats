@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import FoodItemDetailsModal from './FoodItemDetailsModal';
-import foodDetails from './foodDetails'; // Assuming you have a separate file for food details data
+import foodDetails from './FoodDetails'; // Assuming you have a separate file for food details data
 
 const FoodItem = ({ name }) => {
   const [modalShow, setModalShow] = useState(false);

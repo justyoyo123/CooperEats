@@ -1,25 +1,34 @@
-// FoodDetailsModal.js
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
-const FoodDetailsModal = ({ show, onHide, food }) => {
+const FoodItemDetailsModal = ({ show, onHide, foodName, details }) => {
   return (
-    <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal
+      show={show} // Use the show prop here
+      onHide={onHide} // Use the onHide prop here
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{food.name}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Details
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>Description</h4>
-        <p>{food.description}</p>
-        <h4>Price</h4>
-        <p>${food.price}</p>
-        {/* You can add more details here */}
+        <h4>{foodName}</h4>
+        <p>
+          Description: {details.description}<br />
+          Ingredients: {details.ingredients}<br />
+          Allergens: {details.allergens}
+        </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onHide}>Close</Button>
+        <Button onClick={onHide}>Close</Button> {/* Use the onHide prop here */}
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default FoodDetailsModal;
+export default FoodItemDetailsModal;

@@ -19,7 +19,7 @@ import mangoSmoothieImage from '../../foodImages/mangoS.png';
 import chocoChipMImage from '../../foodImages/chocoChipM.png';
 import './FoodPage.css';
 import FoodItemDetailsModal from './FoodItemDetailsModal'; // Make sure this path is correct
-
+import FoodItem from './FoodItem';
 
 const foodImages = {
   "Garlic Bread Sticks": garlicBreadSticksImage,
@@ -193,6 +193,7 @@ const FoodPage = () => {
                       <Button variant="contained" endIcon={<AddShoppingCartIcon />} onClick={() => handleAddToCart(food.foodId)}>
                         Add {quantities[food.foodId]||1} to Cart
                       </Button>
+                      <FoodItem name={food.name} />
                     </div>
                 ))}
               </div>
