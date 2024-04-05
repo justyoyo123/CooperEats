@@ -16,22 +16,6 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    // Create a cart
-//    @PostMapping("/user/{userId}")
-//    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody Cart cart, @PathVariable Long userId) {
-//        Cart updatedCart = cartService.createOrUpdateCart(cart, userId);
-//        return ResponseEntity.ok(updatedCart);
-//    }
-//    @PostMapping("/user/{userId}")
-//    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody Long foodId, @RequestBody Integer quantity, @PathVariable Long userId) {
-//        Cart updatedCart = cartService.createOrUpdateCart(foodId, quantity, userId);
-//        return ResponseEntity.ok(updatedCart);
-//    }
-//    @PostMapping("/user/{userId}")
-//    public ResponseEntity<Cart> createOrUpdateCart(@RequestBody CartUpdateRequest request, @PathVariable Long userId) {
-//        Cart updatedCart = cartService.createOrUpdateCart(request.getFoodId(), request.getQuantity(), userId);
-//        return ResponseEntity.ok(updatedCart);
-//    }
     @PostMapping("/user/{userId}")
     public ResponseEntity<Cart> createOrUpdateCart(@RequestBody CartUpdateRequest request, @PathVariable Long userId) {
         System.out.println("Received cart update request for userId=" + userId + " with foodId=" + request.getFoodId() + " and quantity=" + request.getQuantity());

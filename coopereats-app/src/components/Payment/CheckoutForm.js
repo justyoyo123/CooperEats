@@ -1,7 +1,7 @@
 // test credit card numbers: https://docs.stripe.com/testing
 import React, {useEffect, useState} from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import {Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel, Snackbar} from '@mui/material';
+import {Card, CardContent, Typography, Button, Box, Checkbox, FormControlLabel, Snackbar, TextField} from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import axios from 'axios';
 import './CheckoutForm.css';
@@ -34,6 +34,8 @@ const CheckoutForm = () => {
     const [paymentInfoLoaded, setPaymentInfoLoaded] = useState(false);
     const [hasSavedPaymentInfo, setHasSavedPaymentInfo] = useState(null);
     const [userId, setUserId] = useState(null);
+    const [orderId, setOrderId] = useState(null);
+    const [pickupTime, setPickupTime] = useState("");
 
     useEffect(() => {
         const fetchUserId = async (firebaseUid) => {
@@ -100,6 +102,32 @@ const CheckoutForm = () => {
             return;
         }
 
+        // Retrieve cart details to get product quantities
+        const cartResponse = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+        const cartItems = cartResponse.data.products;
+
+        // Check quantities for each cart item
+        const stockIssues = []; // Keep track of items that exceed stock
+        for (const [foodId, quantityOrdered] of Object.entries(cartItems)) {
+            try {
+                const foodResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+                const {quantity: quantityAvailable, name} = foodResponse.data.quantity;
+
+                if (quantityOrdered > quantityAvailable) {
+                    stockIssues.push({ name, quantityLeft: quantityAvailable });
+                }
+            } catch (error) {
+                console.error(`Failed to fetch food item ${foodId}:`, error);
+            }
+        }
+
+        // If there are stock issues, alert the user and prevent order submission
+        if (stockIssues.length > 0) {
+            const message = stockIssues.map(issue => `Only ${issue.quantityLeft} ${issue.name} left.`).join("\n");
+            alert(message);
+            return; // Prevent further execution
+        }
+
         let paymentMethodId = savedPaymentMethodId;
         if (!paymentMethodId) {
             // Create a new payment method if no saved method is selected
@@ -148,18 +176,45 @@ const CheckoutForm = () => {
                 const orderRequest = {
                     userId: userId,
                     paymentIntentId: confirmResult.paymentIntent.id,
+                    pickupTime: pickupTime,
                 };
 
                 // Send the order creation request
                 const orderResponse = await axios.post('http://localhost:8080/api/orders/placeOrder', orderRequest);
                 console.log('Order created successfully:', orderResponse.data);
-
+                setOrderId(orderResponse.data.orderId);
             }
         } catch (error) {
             console.error('Error during the payment or order creation process:', error);
         }
     };
+
+    const handleFoodUpdate = async () => {
+        try {
+            const orderResponse = await axios.get(`http://localhost:8080/api/orders/${orderId}`);
+            let orderedProducts = orderResponse.data.products;
+
+            // Iterate over each product in the order
+            for (const [foodId, orderedQuantity] of Object.entries(orderedProducts)) {
+                // Fetch the current quantity of the food item
+                const foodResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+                const currentQuantity = foodResponse.data.quantity;
+
+                // Calculate the new quantity after subtracting the ordered amount
+                const newQuantity = currentQuantity - orderedQuantity;
+
+                // Update the quantity in the backend
+                await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: newQuantity });
+                console.log(`Quantity updated for food ID ${foodId}: ${newQuantity}`);
+            }
+
+        } catch (error) {
+            console.error('Failed to update food quantities:', error);
+        }
+    };
+
     if (paymentSuccess) {
+        handleFoodUpdate();
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
                 <Card sx={{ maxWidth: 345, boxShadow: 3 }}>
@@ -219,6 +274,17 @@ const CheckoutForm = () => {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                         />
                     )}
+                    <TextField
+                        id="pickup-time"
+                        label="Pickup Time"
+                        type="datetime-local"
+                        value={pickupTime}
+                        onChange={e => setPickupTime(e.target.value)}
+                        sx={{ mt: 2, mb: 2 }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }} disabled={!stripe}>
                         Pay
                     </Button>

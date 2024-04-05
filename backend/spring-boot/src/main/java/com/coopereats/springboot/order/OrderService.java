@@ -79,7 +79,7 @@ public class OrderService {
 
 
     @Transactional
-    public Order createOrderFromRequest(Long userId, String paymentIntentId) {
+    public Order createOrderFromRequest(Long userId, String paymentIntentId, LocalDateTime pickUpTime) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
         Cart cart = cartRepository.findByUser(user);
@@ -87,7 +87,11 @@ public class OrderService {
         // Proceed to create the order as payment was successful
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
-        order.setPickupTime(LocalDateTime.now());
+        if (pickUpTime != null) {
+            order.setPickupTime(pickUpTime);
+        } else {
+            order.setPickupTime(LocalDateTime.now());
+        }
         order.setTotalPrice(cart.getTotalPrice());
         order.setPaymentStatus("PAID");
         order.setProducts(new HashMap<>(cart.getProducts()));
@@ -103,5 +107,29 @@ public class OrderService {
         cartRepository.save(cart);
 
         return savedOrder;
+    }
+
+    @Transactional
+    public Order fulfillOrder(long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalStateException("Order with ID " + orderId + " does not exist."));
+        order.setFullfillmentStatus(true);
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public void deleteUserOrders(Long userId) {
+        boolean userExists = userRepository.existsById(userId);
+        if (!userExists) {
+            throw new IllegalStateException("User with ID " + userId + " does not exist.");
+        }
+
+        // Find all orders for the user
+        List<Order> orders = orderRepository.findByUserUserId(userId);
+
+        // Delete all orders
+        for (Order order : orders) {
+            orderRepository.deleteById(order.getOrderId());
+        }
     }
 }
