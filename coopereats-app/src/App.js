@@ -15,6 +15,7 @@ import AdminPage from './components/Admin/AdminPage';
 import AdminUsersPage from './components/Admin/AdminUsersPage';
 import AdminOrdersPage from './components/Admin/AdminOrdersPage';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import HomePage from './components/Home/HomePage';
 
 
 function App() {
@@ -75,7 +76,7 @@ function App() {
         <div className="App">
           <Header user={user} onSignOut={handleSignOut} />
           <Routes>
-            <Route path="/" element={<Car />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
