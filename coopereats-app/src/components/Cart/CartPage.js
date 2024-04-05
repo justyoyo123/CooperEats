@@ -172,7 +172,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
                     </List>
                 )}
                 <Typography variant="h6" component="div" gutterBottom>
-                    Total Price: ${cart.totalPrice}
+                    Total Price: ${cart.totalPrice.toFixed(2)}
                 </Typography>
                 <Button variant="contained" color="primary" onClick={goToCheckout} sx={{ mt: 2 }}>
                     Proceed to Checkout

@@ -116,4 +116,20 @@ public class OrderService {
         order.setFullfillmentStatus(true);
         return orderRepository.save(order);
     }
+
+    @Transactional
+    public void deleteUserOrders(Long userId) {
+        boolean userExists = userRepository.existsById(userId);
+        if (!userExists) {
+            throw new IllegalStateException("User with ID " + userId + " does not exist.");
+        }
+
+        // Find all orders for the user
+        List<Order> orders = orderRepository.findByUserUserId(userId);
+
+        // Delete all orders
+        for (Order order : orders) {
+            orderRepository.deleteById(order.getOrderId());
+        }
+    }
 }

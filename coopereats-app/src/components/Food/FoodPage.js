@@ -47,25 +47,25 @@ const FoodPage = () => {
 
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
-            setUserId(response.data);
-            console.log("Fetched application user ID:", response.data);
-        } catch (error) {
-            console.error("Error fetching application user ID:", error);
-            setUserId(null);
-        }
+      try {
+        const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+        setUserId(response.data);
+        console.log("Fetched application user ID:", response.data);
+      } catch (error) {
+        console.error("Error fetching application user ID:", error);
+        setUserId(null);
+      }
     };
 
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // Fetch the application-specific userId using the Firebase UID
-            fetchUserId(user.uid);
-        } else {
-            // User is signed out
-            setUserId(null);
-        }
+      if (user) {
+        // Fetch the application-specific userId using the Firebase UID
+        fetchUserId(user.uid);
+      } else {
+        // User is signed out
+        setUserId(null);
+      }
     });
 
     return () => unsubscribe();
@@ -73,17 +73,17 @@ const FoodPage = () => {
 
   useEffect(() => {
     if (userId) {
-        fetchCartByUserId();
+      fetchCartByUserId();
     }
   }, [userId]); // Fetch cart when userId changes
 
   // Function to fetch the cart
   const fetchCartByUserId = async () => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
-        setCart(response.data);
+      const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+      setCart(response.data);
     } catch (error) {
-        console.error('Failed to fetch cart:', error);
+      console.error('Failed to fetch cart:', error);
     }
   };
 
@@ -122,7 +122,7 @@ const FoodPage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [activeTab]);
-  
+
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     sectionRefs.current[newValue].current.scrollIntoView({ behavior: 'smooth' });
@@ -143,48 +143,48 @@ const FoodPage = () => {
       const quantity = quantities[foodId] || 1;
       const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
         foodId,
-        quantity: 1,
+        quantity: quantity,
       });
       setCart(response.data);
     } catch(error){
       console.error('Failed to add item to cart:', error);
     }
-  }  
+  }
   return (
-    <div className="food-menu">
-      <h1>Food Menu</h1>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
-          {categories.map((category, index) => (
-            <Tab label={category} key={index} />
-          ))}
-        </Tabs>
-      </Box>
-      {categories.map((category, index) => (
-        <div ref={sectionRefs.current[index]} key={category}>
-          <h2>{category}</h2>
-          <div className="food-list">
-            {foods.filter(food => food.category === category).map(food => (
-              <div className="food-item" key={food.foodId}>
-                <img src={foodImages[food.name] || '../../foodImages/cheesecake.jpeg'} alt={food.name} className="food-image" />
-                <div className="food-details">
-                  <h3>{food.name} - ${food.price}</h3>
-                  <p>Description: {food.description}</p>
-                  <p>Quantity: {food.quantity}</p>
-                  <p>Food ID: {food.foodId}</p>
-                </div>
-                <div>
-                  <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
-                  <span>{quantities[food.foodId] || 1}</span>
-                  <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
-                </div>
-                <button onClick={() => handleAddToCart(food.foodId)}>Add to Cart</button>
-              </div>
+      <div className="food-menu">
+        <h1>Food Menu</h1>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
+            {categories.map((category, index) => (
+                <Tab label={category} key={index} />
             ))}
-          </div>
-        </div>
-      ))}
-    </div>
+          </Tabs>
+        </Box>
+        {categories.map((category, index) => (
+            <div ref={sectionRefs.current[index]} key={category}>
+              <h2>{category}</h2>
+              <div className="food-list">
+                {foods.filter(food => food.category === category).map(food => (
+                    <div className="food-item" key={food.foodId}>
+                      <img src={foodImages[food.name] || '../../foodImages/cheesecake.jpeg'} alt={food.name} className="food-image" />
+                      <div className="food-details">
+                        <h3>{food.name} - ${food.price}</h3>
+                        <p>Description: {food.description}</p>
+                        <p>Quantity: {food.quantity}</p>
+                        <p>Food ID: {food.foodId}</p>
+                      </div>
+                      <div>
+                        <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
+                        <span>{quantities[food.foodId] || 1}</span>
+                        <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
+                      </div>
+                      <button onClick={() => handleAddToCart(food.foodId)}>Add to Cart</button>
+                    </div>
+                ))}
+              </div>
+            </div>
+        ))}
+      </div>
   );
 };
 

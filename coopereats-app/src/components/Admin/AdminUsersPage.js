@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton} from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
+import { getAuth, deleteUser as deleteFirebaseUser } from 'firebase/auth';
 
 function AdminUsersPage() {
     const [users, setUsers] = useState([]);
@@ -21,8 +22,11 @@ function AdminUsersPage() {
     }, []);
 
     const deleteUser = async (userId) => {
+        const auth = getAuth();
+        const firebaseUser = auth.currentUser;
         try {
             await axios.delete(`http://localhost:8080/api/users/${userId}`);
+            await deleteFirebaseUser(firebaseUser);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting user:', error);
