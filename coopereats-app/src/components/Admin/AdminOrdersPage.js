@@ -5,6 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
+
 function AdminOrdersPage() {
     const [orders, setOrders] = useState([]);
     const [foodNames, setFoodNames] = useState({});
@@ -128,7 +129,7 @@ function AdminOrdersPage() {
                                     hour: '2-digit', minute: '2-digit', second: '2-digit'
                                 })}
                             </TableCell>
-                            <TableCell>${order.totalPrice}</TableCell>
+                            <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
                             <TableCell>{order.paymentStatus}</TableCell>
                             <TableCell>
                                 <Checkbox

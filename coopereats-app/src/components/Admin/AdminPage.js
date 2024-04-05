@@ -5,6 +5,34 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './AdminFoodPage.css';
+import garlicBreadSticksImage from "../../foodImages/garlicBread.png";
+import chickenWingsImage from "../../foodImages/chickenWing.png";
+import stuffedMushroomImage from "../../foodImages/stuffedMushroom.png";
+import grilledSalmonImage from "../../foodImages/grilledSalmon.png";
+import beefRasagnaImage from "../../foodImages/beefRasagna.png";
+import vstirFryImage from "../../foodImages/vstirFry.png";
+import dChocolateImage from "../../foodImages/dChocolate.png";
+import chocoChipImage from "../../foodImages/chocoChip.png";
+import miniChocoChipImage from "../../foodImages/miniChocoChip.png";
+import icedLemonImage from "../../foodImages/icedLemon.png";
+import mangoSmoothieImage from "../../foodImages/mangoS.png";
+import chocoChipMImage from "../../foodImages/chocoChipM.png";
+
+
+const foodImages = {
+    "Garlic Bread Sticks": garlicBreadSticksImage,
+    "Chicken Wings": chickenWingsImage,
+    "Stuffed Mushrooms": stuffedMushroomImage,
+    "Grilled Salmon": grilledSalmonImage,
+    "Beef Lasagna":beefRasagnaImage,
+    "Vegetable Stir Fry": vstirFryImage,
+    "Double Chocolate Muffin": dChocolateImage,
+    "Choco Chip Muffin Deluxe": chocoChipImage,
+    "Mini Chocolate Muffin": miniChocoChipImage,
+    "Iced Lemon Tea": icedLemonImage,
+    "Mango Smoothie": mangoSmoothieImage,
+    "Choco Chip Muffin Classic": chocoChipMImage,
+};
 
 const AdminPage = () => {
     const CATEGORIES = ['APPETIZER', 'MAIN_COURSE', 'DESSERT', 'DRINK'];
@@ -121,7 +149,7 @@ const AdminPage = () => {
                                                 height: 140,
                                                 objectFit: 'cover',
                                             }}
-                                            image={food.img}
+                                            image={foodImages[food.name]}
                                             alt={food.name}
                                         />
                                         <CardContent sx={{
