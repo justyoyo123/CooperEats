@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import { Tabs, Tab, Box, IconButton } from '@mui/material';
+import { Tabs, Tab, Box, IconButton, Snackbar } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import garlicBreadSticksImage from '../../foodImages/garlicBread.png';
@@ -44,6 +44,8 @@ const FoodPage = () => {
   const sectionRefs = useRef([]);
   const [userId, setUserId] = useState(null);
   const [quantities, setQuantities] = useState({});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
@@ -146,10 +148,17 @@ const FoodPage = () => {
         quantity: quantity,
       });
       setCart(response.data);
+      setSnackbarMessage('Item added to cart!');
+      setSnackbarOpen(true);
     } catch(error){
       console.error('Failed to add item to cart:', error);
     }
   }
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
       <div className="food-menu">
         <h1>Food Menu</h1>
@@ -184,6 +193,12 @@ const FoodPage = () => {
               </div>
             </div>
         ))}
+        <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+            message={snackbarMessage}
+        />
       </div>
   );
 };
