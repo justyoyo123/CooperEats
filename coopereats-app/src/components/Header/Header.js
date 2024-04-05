@@ -144,11 +144,9 @@ function Header() {
             <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
           </Link>
           <ul>
-            <li><Link to="/appetizer">Appetizer</Link></li>
-            <li><Link to="/main">Main</Link></li>
-            <li><Link to="/drink">Drink</Link></li>
-            <li><Link to="/dessert">Dessert</Link></li>
-            <li><Link to="/cart">Cart</Link></li>
+          	<li><Link to="/">Home</Link></li> {/* Re-integrated from HEAD */}
+         	<li><Link to="/food">Food</Link></li>
+          	<li><Link to="/cart">Cart</Link></li>   
             {isAdmin && (
                 <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
             )}
@@ -173,3 +171,5 @@ function Header() {
 }
 
 export default Header;
+
+

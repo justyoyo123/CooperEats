@@ -1,6 +1,7 @@
 package com.coopereats.springboot.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,11 +55,26 @@ public class UserController {
         try {
             userService.deleteUser(id);
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred while deleting user with ID: " + id);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
+
+    // Fetch a user ID by email
+    @GetMapping("/findByEmail")
+    public ResponseEntity<Long> getUserIdByEmail(@RequestParam String email) {
+        return userService.getUserByEmail(email)
+                .map(user -> ResponseEntity.ok(user.getUserId()))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Get a user ID by Firebase UID
     @GetMapping("/firebase/{firebaseuid}")
     public ResponseEntity<?> getUserByFirebaseUid(@PathVariable String firebaseuid) {
         Long userId = userService.getUserByFirebaseUid(firebaseuid);

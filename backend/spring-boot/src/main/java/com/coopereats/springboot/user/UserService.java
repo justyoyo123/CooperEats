@@ -7,7 +7,6 @@ import com.coopereats.springboot.order.OrderRepository;
 import com.coopereats.springboot.cart.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +30,7 @@ public class UserService {
     public User createUser(User user) {
         if ("frankie@cooper.edu".equals(user.getEmail())) {
             user.setRole(User.Role.ADMIN);
-        }
-        else {
+        } else {
             user.setRole(User.Role.USER);
         }
         return userRepository.save(user);
@@ -48,7 +46,13 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    // Method to find a user by email
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     // Method to update a user
+    @Transactional
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id " + id));
@@ -61,18 +65,28 @@ public class UserService {
     }
 
     @Transactional
-    // Method to delete a user
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("User with ID " + id + " does not exist."));
-        Cart cart = cartRepository.findByUser(user);
-        List<Order> orders = orderRepository.findByUserUserId(id);
-        cartRepository.deleteById(cart.getCartId());
-        for (Order order : orders) {
-            orderRepository.deleteById(order.getOrderId());
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()) {
+            throw new IllegalStateException("User with ID " + id + " does not exist.");
         }
+        User user = userOptional.get();
+        // Log details about the user to be deleted for debugging purposes
+        System.out.println("Deleting user with ID: " + user.getUserId() + ", Email: " + user.getEmail());
+
+        Cart cart = cartRepository.findByUser(user);
+        if (cart != null) {
+            cartRepository.deleteById(cart.getCartId());
+        } else {
+            System.out.println("No cart found for user with ID: " + id);
+        }
+        List<Order> orders = orderRepository.findByUserUserId(id);
+        orders.forEach(order -> {
+            orderRepository.deleteById(order.getOrderId());
+        });
         userRepository.deleteById(id);
     }
+
 
     public Long getUserByFirebaseUid(String firebaseuid) {
         User user = userRepository.findByFirebaseUid(firebaseuid);
