@@ -7,11 +7,13 @@ import { Card, CardContent, Typography, Button, List, ListItem, ListItemText, Li
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import './CartPage.css';
 
   const CartPage = () => {
     const navigate = useNavigate();
     //below is logic taken from checkoutform to dynamically get userid based off who is currently logged in. can maybe wrap in its own function but fine for now
     const [userId, setUserId] = useState(null);
+    const [foodDetails, setFoodDetails] = useState({});
     const [cart, setCart] = useState(null);
 
     useEffect(() => {
@@ -49,15 +51,40 @@ import RemoveIcon from '@mui/icons-material/Remove';
         navigate('/payment'); // Navigate to CheckoutForm
     };
 
-    // Function to fetch the cart
+    // // Function to fetch the cart
+    // const fetchCartByUserId = async () => {
+    //     try {
+    //         const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+    //         setCart(response.data);
+    //     } catch (error) {
+    //         console.error('Failed to fetch cart:', error);
+    //     }
+    // };
+
     const fetchCartByUserId = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
-            setCart(response.data);
+          const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+          setCart(response.data);
+    
+          // Fetch food details for each item in the cart
+          for (const foodId in response.data.products) {
+            fetchFoodByFoodId(foodId);
+          }
         } catch (error) {
-            console.error('Failed to fetch cart:', error);
+          console.error('Failed to fetch cart:', error);
         }
     };
+
+    const fetchFoodByFoodId = async (foodId) => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+          // Store both name and price in foodDetails
+          setFoodDetails(prev => ({ ...prev, [foodId]: {name: response.data.name, price: response.data.price} }));
+        } catch (error) {
+          console.error('Failed to fetch food:', error);
+        }
+    };
+    
 
     const handleRemoveItem = async (foodId) => {
         try {
@@ -142,6 +169,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
             </Typography>
         );
     }
+
     return (
         <Card sx={{ maxWidth: 600, margin: '20px auto' }}>
             <CardContent>
@@ -154,22 +182,23 @@ import RemoveIcon from '@mui/icons-material/Remove';
                     <List>
                         {Object.entries(cart.products).map(([foodId, quantity]) => (
                             <ListItem key={foodId} divider>
-                                <ListItemText primary={`Food ID: ${foodId}`} secondary={`Quantity: ${quantity}`} />
+                                <ListItemText primary={`${foodDetails[foodId]?.name}`} secondary={`Total: $${foodDetails[foodId]?.price * quantity}`} />
                                 <ListItemSecondaryAction>
-                                    {/* Add and Remove quantity buttons */}
-                                    <IconButton edge="end" aria-label="remove one" onClick={() => handleRemoveItemQuantity(foodId)}>
+                                    <IconButton aria-label="remove one" onClick={() => handleRemoveItemQuantity(foodId)}>
                                         <RemoveIcon />
                                     </IconButton>
-                                    <IconButton edge="end" aria-label="add one" onClick={() => handleAddItemQuantity(foodId)}>
+                                    <span>{quantity}</span>
+                                    <IconButton aria-label="add one" onClick={() => handleAddItemQuantity(foodId)}>
                                         <AddIcon />
                                     </IconButton>
-                                    <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveItem(foodId, quantity)}>
+                                    <IconButton aria-label="delete" onClick={() => handleRemoveItem(foodId, quantity)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
                     </List>
+                    
                 )}
                 <Typography variant="h6" component="div" gutterBottom>
                     Total Price: ${cart.totalPrice}

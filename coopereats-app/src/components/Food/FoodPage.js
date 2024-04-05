@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import { Tabs, Tab, Box, IconButton } from '@mui/material';
+import { Tabs, Tab, Box, Button, IconButton, Snackbar } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import garlicBreadSticksImage from '../../foodImages/garlicBread.png';
 import chickenWingsImage from '../../foodImages/chickenWing.png';
 import stuffedMushroomImage from '../../foodImages/stuffedMushroom.png';
@@ -16,7 +17,6 @@ import miniChocoChipImage from '../../foodImages/miniChocoChip.png';
 import icedLemonImage from '../../foodImages/icedLemon.png';
 import mangoSmoothieImage from '../../foodImages/mangoS.png';
 import chocoChipMImage from '../../foodImages/chocoChipM.png';
-import './FoodPage.css';
 import './FoodPage.css';
 import FoodItemDetailsModal from './FoodItemDetailsModal'; // Make sure this path is correct
 
@@ -44,28 +44,30 @@ const FoodPage = () => {
   const sectionRefs = useRef([]);
   const [userId, setUserId] = useState(null);
   const [quantities, setQuantities] = useState({});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
-            setUserId(response.data);
-            console.log("Fetched application user ID:", response.data);
-        } catch (error) {
-            console.error("Error fetching application user ID:", error);
-            setUserId(null);
-        }
+      try {
+        const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+        setUserId(response.data);
+        console.log("Fetched application user ID:", response.data);
+      } catch (error) {
+        console.error("Error fetching application user ID:", error);
+        setUserId(null);
+      }
     };
 
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // Fetch the application-specific userId using the Firebase UID
-            fetchUserId(user.uid);
-        } else {
-            // User is signed out
-            setUserId(null);
-        }
+      if (user) {
+        // Fetch the application-specific userId using the Firebase UID
+        fetchUserId(user.uid);
+      } else {
+        // User is signed out
+        setUserId(null);
+      }
     });
 
     return () => unsubscribe();
@@ -73,17 +75,17 @@ const FoodPage = () => {
 
   useEffect(() => {
     if (userId) {
-        fetchCartByUserId();
+      fetchCartByUserId();
     }
   }, [userId]); // Fetch cart when userId changes
 
   // Function to fetch the cart
   const fetchCartByUserId = async () => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
-        setCart(response.data);
+      const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+      setCart(response.data);
     } catch (error) {
-        console.error('Failed to fetch cart:', error);
+      console.error('Failed to fetch cart:', error);
     }
   };
 
@@ -122,7 +124,7 @@ const FoodPage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [activeTab]);
-  
+
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     sectionRefs.current[newValue].current.scrollIntoView({ behavior: 'smooth' });
@@ -143,48 +145,66 @@ const FoodPage = () => {
       const quantity = quantities[foodId] || 1;
       const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
         foodId,
-        quantity: 1,
+        quantity: quantity,
       });
       setCart(response.data);
+      setSnackbarMessage('Item added to cart!');
+      setSnackbarOpen(true);
     } catch(error){
       console.error('Failed to add item to cart:', error);
     }
-  }  
+  }
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
-    <div className="food-menu">
-      <h1>Food Menu</h1>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
-          {categories.map((category, index) => (
-            <Tab label={category} key={index} />
-          ))}
-        </Tabs>
-      </Box>
-      {categories.map((category, index) => (
-        <div ref={sectionRefs.current[index]} key={category}>
-          <h2>{category}</h2>
-          <div className="food-list">
-            {foods.filter(food => food.category === category).map(food => (
-              <div className="food-item" key={food.foodId}>
-                <img src={foodImages[food.name] || '../../foodImages/cheesecake.jpeg'} alt={food.name} className="food-image" />
-                <div className="food-details">
-                  <h3>{food.name} - ${food.price}</h3>
-                  <p>Description: {food.description}</p>
-                  <p>Quantity: {food.quantity}</p>
-                  <p>Food ID: {food.foodId}</p>
-                </div>
-                <div>
-                  <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
-                  <span>{quantities[food.foodId] || 1}</span>
-                  <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
-                </div>
-                <button onClick={() => handleAddToCart(food.foodId)}>Add to Cart</button>
-              </div>
+      <div className="food-menu">
+        <h1>Food Menu</h1>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
+            {categories.map((category, index) => (
+                <Tab label={category} key={index} />
             ))}
-          </div>
-        </div>
-      ))}
-    </div>
+          </Tabs>
+        </Box>
+        {categories.map((category, index) => (
+            <div ref={sectionRefs.current[index]} key={category}>
+              <h2>{category}</h2>
+              <div className="food-list">
+                {foods.filter(food => food.category === category).map(food => (
+                    <div className="food-item" key={food.foodId}>
+                      <div className='food-image-container'>
+                        <img src={foodImages[food.name] || '../../foodImages/cheesecake.jpeg'} alt={food.name} className="food-image" />
+                      </div>
+                      <div className="food-details">
+                        <h3>{food.name}</h3>
+                        <h3>${food.price}</h3>
+                        <p>{food.description}</p>
+                        <p>Quantity: {food.quantity}</p>
+                        <p>Food ID: {food.foodId}</p>
+                      </div>
+                      <div>
+                        <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
+                        <span>{quantities[food.foodId] || 1}</span>
+                        <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
+                      </div>
+                      <Button variant="contained" endIcon={<AddShoppingCartIcon />} onClick={() => handleAddToCart(food.foodId)}>
+                        Add {quantities[food.foodId]||1} to Cart
+                      </Button>
+                    </div>
+                ))}
+              </div>
+            </div>
+        ))}
+        <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+            message={snackbarMessage}
+        />
+      </div>
   );
 };
 

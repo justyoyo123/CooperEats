@@ -1,0 +1,5 @@
+.action-container {
+    display: flex; /* Use Flexbox */
+    align-items: center; /* Vertically center the flex items */
+    justify-content: center; /* Horizontally center the flex items */
+}
