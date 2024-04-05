@@ -103,7 +103,7 @@ function AdminOrdersPage() {
                 <TableHead>
                     <TableRow sx={{ '& th': { fontWeight: 'bold', backgroundColor: 'primary.dark', color: 'common.white' } }}>
                         <TableCell>Order ID</TableCell>
-                        <TableCell>User</TableCell>
+                        {/*<TableCell>User</TableCell>*/}
                         <TableCell>Products and Quantity</TableCell>
                         <TableCell>Order Date and Time</TableCell>
                         <TableCell>Pickup Time</TableCell>
@@ -118,7 +118,7 @@ function AdminOrdersPage() {
                             <TableCell component="th" scope="row">
                                 {order.orderId}
                             </TableCell>
-                            <TableCell>{order.user ? order.user.email : 'N/A'}</TableCell>
+                            {/*<TableCell>{order.user ? order.user.email : 'N/A'}</TableCell>*/}
                             <TableCell>
                                 {Object.entries(order.products).map(([foodId, quantity]) => (
                                     <div key={foodId}>{`${foodNames[foodId] || 'Loading...'}: ${quantity}`}</div>
