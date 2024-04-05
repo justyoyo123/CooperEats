@@ -10,8 +10,7 @@ function AdminOrdersPage() {
     const [orders, setOrders] = useState([]);
     const [foodNames, setFoodNames] = useState({});
     const [fulfilledOrders, setFulfilledOrders] = useState({});
-
-    const totalSum = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+    const [totalSales, setTotalSales] = useState(0);
 
     const handleFulfillmentChange = async (orderId) => {
         setFulfilledOrders((prevFulfilledOrders) => ({
@@ -50,9 +49,16 @@ function AdminOrdersPage() {
         };
 
         const fetchOrders = async () => {
+            const savedTotalSales = localStorage.getItem('totalSales');
+            if (savedTotalSales) {
+                setTotalSales(parseFloat(savedTotalSales));
+            }
             try {
                 const ordersResponse = await axios.get('http://localhost:8080/api/orders/all');
                 const ordersData = ordersResponse.data;
+
+                const currentTotal = ordersData.reduce((acc, order) => acc + order.totalPrice, 0);
+                setOrders(ordersData);
 
                 // Extract all unique foodIds from all orders
                 const allFoodIds = new Set();
@@ -69,7 +75,9 @@ function AdminOrdersPage() {
                 for (const order of ordersData) {
                     fulfillmentStatuses[order.orderId] = order.fullfillmentStatus;
                 }
-
+                const updatedTotalSales = savedTotalSales ? parseFloat(savedTotalSales) + currentTotal : currentTotal;
+                setTotalSales(updatedTotalSales);
+                localStorage.setItem('totalSales', updatedTotalSales.toString());
                 // Update the state with orders, food names, and fulfillment statuses
                 setOrders(ordersData);
                 setFoodNames(foodNames);
@@ -89,7 +97,7 @@ function AdminOrdersPage() {
                 Orders
             </Typography>
             <Typography variant="h5" gutterBottom component="div" sx={{ textAlign: 'center', mt: 2 }}>
-                Total Sales: ${totalSum.toFixed(2)}
+                Total Sales: ${totalSales.toFixed(2)}
             </Typography>
             <Table aria-label="orders table" sx={{ minWidth: 650 }}>
                 <TableHead>
