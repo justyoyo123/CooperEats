@@ -111,4 +111,12 @@ public class CartService {
         cart.setTotalPrice(0.0);
         cartRepository.save(cart);
     }
+
+    @Transactional
+    public void deleteCartForReal(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+        Cart cart = cartRepository.findByUser(user);
+        cartRepository.deleteById(cart.getCartId());
+    }
 }

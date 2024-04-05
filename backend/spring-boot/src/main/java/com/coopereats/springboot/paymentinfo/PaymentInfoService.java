@@ -70,7 +70,10 @@ public class PaymentInfoService {
         return paymentInfo;
     }
     public void deletePaymentInfo(Long userId) {
-        paymentInfoRepository.deleteById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + userId + " does not exist."));
+        PaymentInfo paymentInfo = paymentInfoRepository.findByUser(user);
+        paymentInfoRepository.deleteById(paymentInfo.getPaymentId());
     }
 
     public String createStripeCustomer(User user) throws StripeException {

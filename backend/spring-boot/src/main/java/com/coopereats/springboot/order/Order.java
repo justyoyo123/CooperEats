@@ -38,6 +38,9 @@ public class Order {
     @Column(name = "quantity")
     private Map<Long, Integer> products = new HashMap<>();
 
+    @Column(name ="FULLFILLMENT_STATUS")
+    private boolean fullfillmentStatus;
+
     // Getters and Setters
     public long getOrderId() {
         return orderId;
@@ -93,5 +96,13 @@ public class Order {
 
     public void setProducts(Map<Long, Integer> products) {
         this.products = products;
+    }
+
+    public boolean getFullfillmentStatus() {
+        return fullfillmentStatus;
+    }
+
+    public void setFullfillmentStatus(boolean fullfillmentStatus) {
+        this.fullfillmentStatus = fullfillmentStatus;
     }
 }
