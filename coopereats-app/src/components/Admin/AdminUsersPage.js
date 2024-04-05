@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton} from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
-import { getAuth, deleteUser as deleteFirebaseUser } from 'firebase/auth';
 
 function AdminUsersPage() {
     const [users, setUsers] = useState([]);
@@ -39,7 +38,7 @@ function AdminUsersPage() {
                         <TableCell align="right">Name</TableCell>
                         <TableCell align="right">Email</TableCell>
                         <TableCell align="right">Role</TableCell>
-                        <TableCell align="right">Actions</TableCell> {/* New column for actions */}
+                        <TableCell align="right">Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

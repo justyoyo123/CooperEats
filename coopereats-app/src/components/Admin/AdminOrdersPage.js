@@ -67,7 +67,6 @@ function AdminOrdersPage() {
 
                 const fulfillmentStatuses = {};
                 for (const order of ordersData) {
-                    // Assume each order has a 'fulfilled' field that is true when the order is fulfilled
                     fulfillmentStatuses[order.orderId] = order.fullfillmentStatus;
                 }
 
