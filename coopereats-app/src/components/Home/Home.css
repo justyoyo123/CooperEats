@@ -1,0 +1,25 @@
+/* Homepage */
+
+.carousel-container {
+    max-width: 400px;
+    max-height: 300px;
+    margin: auto; /* Centers the carousel */
+  }
+  
+  .carousel-image {
+    max-height: 200px; /* Adjust based on your needs */
+    object-fit: cover;  /*Keeps the aspect ratio */
+  }
+  
+  .carousel-title {
+    margin-top: 5em;
+    color: var(--text-color);
+    font-size: 3em;
+    margin-bottom: .25em;
+    text-align: center;
+  }
+  
+  .container{
+    padding-inline: 15vw;
+  }
+  

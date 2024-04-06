@@ -7,6 +7,8 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import CustomImage from './CustomImage';
 import HeroSection from './HeroSection';
+import Top from './Top/Top.jsx'
+import ExploreMenu from './ExploreMenu/ExploreMenu.jsx';
 
 function ExampleCarouselImage({ src, text }) {
   return <img src={src} alt={text} className="d-block w-100 carousel-image" />;
@@ -25,9 +27,10 @@ const HomePage = () => {
 
   return (
     <>
-    <HeroSection/>
+        <Top/>
+        <ExploreMenu/>
       <div>
-        <h2 className="carousel-title">Daily Suggestions</h2>
+        <h2 class = "container">Daily Suggestions</h2>
         <div className="d-flex justify-content-center">
           <Carousel className="carousel-container">
             {carouselItems.map((item, index) => (
