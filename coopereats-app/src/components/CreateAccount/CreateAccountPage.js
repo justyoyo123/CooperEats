@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Updated import
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import axios from 'axios'; // Import axios

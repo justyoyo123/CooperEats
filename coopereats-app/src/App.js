@@ -1,12 +1,15 @@
-import react, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
 import FoodPage from './components/Food/FoodPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Car from './components/Carousel/Caro';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import PaymentPage from './components/Payment/Payment';
@@ -16,7 +19,7 @@ import AdminUsersPage from './components/Admin/AdminUsersPage';
 import AdminOrdersPage from './components/Admin/AdminOrdersPage';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import HomePage from './components/Home/HomePage';
-
+import { CssVarsProvider } from '@mui/joy/styles';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,70 +45,51 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const handleSignOut = async () => {
     try {
       await signOut(getAuth());
-      // Since useNavigate hook can't be used outside of Router, we need to move or call this function where it can be used properly
-      // navigate('/login');
       console.log('User signed out successfully');
     } catch (error) {
       console.error("Sign out error:", error);
     }
   };
 
-  // const ProtectedRoute = ({ children }) => {
-  //   const navigate = useNavigate();
-  //
-  //   useEffect(() => {
-  //     if (!user) {
-  //       navigate('/login');
-  //     } else if (!isAdmin) {
-  //       navigate('/');
-  //     }
-  //   }, [user, isAdmin, navigate]);
-  //
-  //   return children;
-  // };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
+    <CssVarsProvider>
       <Router>
         <div className="App">
-          <Header user={user} onSignOut={handleSignOut} />
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/create-account" element={<CreateAccountPage />} />
-            <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/food" element={<FoodPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/admin/menu" element={
-                <AdminPage />
-            } />
-            <Route path="/admin/users" element={<AdminUsersPage />} />
-            <Route path="/admin/orders" element={<AdminOrdersPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            {/* For all other routes, show the header */}
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header user={user} onSignOut={handleSignOut} />
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/create-account" element={<CreateAccountPage />} />
+                    <Route path="/cart" element={<CartPage />} />
+                    <Route path="/food" element={<FoodPage />} />
+                    <Route path="/payment" element={<PaymentPage />} />
+                    <Route path="/admin/menu" element={<AdminPage />} />
+                    <Route path="/admin/users" element={<AdminUsersPage />} />
+                    <Route path="/admin/orders" element={<AdminOrdersPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    {/* Redirect any other path to HomePage */}
+                    <Route path="*" element={<HomePage />} />
+                  </Routes>
+                </>
+              }
+            />
           </Routes>
         </div>
       </Router>
-  );
-}
-
-function Home({ user, onSignOut }) {
-  return (
-      <div>
-        {user ? (
-            <>
-              <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
-              <button onClick={onSignOut}>Log Out</button>
-            </>
-        ) : (
-            <h2>Welcome to CooperEats! Please log in.</h2>
-        )}
-      </div>
+    </CssVarsProvider>
   );
 }
 
