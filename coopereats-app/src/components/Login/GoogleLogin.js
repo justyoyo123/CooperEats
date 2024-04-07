@@ -3,18 +3,16 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from "axios";
 import { Button } from '@mui/joy';
 import GoogleIcon from './GoogleIcon';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 export default function GoogleLogin() {
     const { signInWithGoogle } = useAuth();
-    const navigate = useNavigate(); // Create an instance of useNavigate
+    const navigate = useNavigate();
 
     async function handleGoogleLogin() {
         try {
             const result = await signInWithGoogle();
             const firebaseUser = result.user;
-
-            // Extracting username from email by taking the substring before '@'
             const username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"));
 
             // Check if user already exists in the backend by their Firebase UID

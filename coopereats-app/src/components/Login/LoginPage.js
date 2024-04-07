@@ -3,6 +3,9 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import useUser from '../../hooks/useUser';
 import GoogleLogin from './GoogleLogin';
+import { IconButton } from '@mui/joy';
+import HomeIcon from '@mui/icons-material/Home';
+
 
 import {
     CssVarsProvider,
@@ -27,7 +30,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { mode, setMode } = useColorScheme(); // Declare mode and setMode using useColorScheme
+    const { mode, setMode } = useColorScheme();
     const { setUser, setUserId } = useUser();
 
     const logIn = async () => {
@@ -42,6 +45,11 @@ const LoginPage = () => {
         }
     };
 
+
+    // Handle home navigation
+    const handleGoHome = () => {
+        navigate('/');
+    };
 
 
     return (
@@ -70,51 +78,51 @@ const LoginPage = () => {
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
                     width: '100%',
-                    overflowX: 'hidden',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}
             >
 
-                {/* Header with Logo */}
+                {/* Header with Color Scheme Toggle */}
                 <Box
                     component="header"
                     sx={{
                         width: '100%',
                         display: 'flex',
                         justifyContent: 'space-between',
+                        alignItems: 'center',
                         py: 3,
                         px: 2,
                     }}
                 >
-                    <Typography level="h3"
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1
-                        }}
-                    >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         {/* Logo Image */}
                         <Box
                             component="img"
                             src="/images/design/TheCooperUnion_logo.png"
                             alt="CooperEats Logo"
-                            sx={{
-                                width: 'auto', height: 50
-                            }}
+                            sx={{ width: 'auto', height: 50 }}
                         />
-                        CooperEats
-                    </Typography>
+                        <Typography level="h3">CooperEats</Typography>
+                    </Box>
+                    {/* Home Icon Button */}
+                    <IconButton
+                        aria-label="home"
+                        onClick={handleGoHome}
+                    >
+                        <HomeIcon />
+                    </IconButton>
                 </Box>
                 {/* Main content area */}
                 <Box
                     sx={{
-                        width: '100%', // This makes sure the container takes the full width
-                        maxWidth: '400px', // This sets the maximum width of the box
+                        width: '100%',
+                        maxWidth: '400px',
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center', // This aligns children (stacks) to center
-                        p: 2, // Padding around the content
+                        alignItems: 'center',
+                        p: 2,
                     }}
                 >
 
@@ -125,31 +133,38 @@ const LoginPage = () => {
                                 Sign in
                             </Typography>
                             <Typography level="body-sm">
-                                New to CooeprEats?{' '}
+                                New to CooperEats?{' '}
                                 <Link component={RouterLink} to="/create-account" underline="hover">
                                     Sign up!
                                 </Link>
                             </Typography>
                         </Stack>
                         <GoogleLogin />
-
-
-                        {/* Divider with "or" text */}
                         <Divider sx={{ my: 2 }}>or</Divider>
 
                         {/* Email and Password Input Fields */}
                         <FormControl required>
                             <FormLabel>Email</FormLabel>
-                            <Input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <Input type="email" name="email" value={email} onChange={e => setEmail(e.target.value)} />
                         </FormControl>
-                        <FormControl required>
+                        <FormControl required sx={{ mt: 2 }}> {/* Added space */}
                             <FormLabel>Password</FormLabel>
-                            <Input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <Input type="password" name="password" value={password} onChange={e => setPassword(e.target.value)} />
                         </FormControl>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Checkbox size="sm" label="Remember me" name="persistent" />
-                        </Stack>
-                        <Button fullWidth type="submit" onClick={logIn}>
+                        {/* Removed Checkbox for "Remember me" */}
+                        <Button
+                            fullWidth variant="outlined"
+                            sx={{
+                                mt: 2, // Added more space before the button
+                                borderColor: '#81c784',
+                                color: '#81c784',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(129, 200, 132, 0.04)',
+                                    borderColor: '#81c784',
+                                },
+                            }}
+                            onClick={logIn}
+                        >
                             Sign In
                         </Button>
                     </Stack>

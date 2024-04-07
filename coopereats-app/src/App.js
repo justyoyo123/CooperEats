@@ -64,7 +64,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            {/* For all other routes, show the header */}
+            <Route path="/create-account" element={<CreateAccountPage />} />
             <Route
               path="*"
               element={
@@ -72,7 +72,6 @@ function App() {
                   <Header user={user} onSignOut={handleSignOut} />
                   <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/create-account" element={<CreateAccountPage />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/food" element={<FoodPage />} />
                     <Route path="/payment" element={<PaymentPage />} />
