@@ -1,7 +1,7 @@
 .top{
     height: 34vw;
     margin: 30px auto;
-    background: url('../../../foodImages/top_img.png') no-repeat center;
+    background: url('../../../foodImages/topp_img.png') no-repeat center;
     background-size: contain;
     position: relative;
 }
