@@ -6,7 +6,6 @@ import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
 import FoodPage from './components/Food/FoodPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Car from './components/Carousel/Caro';
 import CartPage from './components/Cart/CartPage';
 import LoginPage from './components/Login/LoginPage';
 import PaymentPage from './components/Payment/Payment';

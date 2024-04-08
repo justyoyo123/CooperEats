@@ -1,0 +1,11 @@
+.cardd {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-weight: 550;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
