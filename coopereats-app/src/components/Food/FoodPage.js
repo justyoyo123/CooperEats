@@ -140,20 +140,26 @@ const FoodPage = () => {
     setQuantities(prev => ({ ...prev, [foodId]: Math.max(1, (prev[foodId] || 1) - 1) }));
   };
 
-  const handleAddToCart = async (foodId) =>{
-    try{
-      const quantity = quantities[foodId] || 1;
-      const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
-        foodId,
-        quantity: quantity,
-      });
-      setCart(response.data);
-      setSnackbarMessage('Item added to cart!');
-      setSnackbarOpen(true);
-    } catch(error){
-      console.error('Failed to add item to cart:', error);
+  const handleAddToCart = async (foodId) => {
+    if (!userId) {
+        setSnackbarMessage('Please log in to add items to the cart.');
+        setSnackbarOpen(true);
+    } else {
+        try {
+            const quantity = quantities[foodId] || 1;
+            const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
+                foodId,
+                quantity: quantity,
+            });
+            setCart(response.data);
+            setSnackbarMessage('Item added to cart!');
+            setSnackbarOpen(true);
+        } catch (error) {
+            console.error('Failed to add item to cart:', error);
+        }
     }
-  }
+}
+
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);

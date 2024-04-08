@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useUser from '../../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, deleteUser as deleteFirebaseUser } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, updatePassword, deleteUser as deleteFirebaseUser } from 'firebase/auth';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -13,6 +13,7 @@ const ProfilePage = () => {
     email: '',
     password: '',
   });
+  const [userId, setUserId] = useState(null);
   const [editableUserName, setEditableUserName] = useState('');
   const [editablePhoneNumber, setEditablePhoneNumber] = useState('');
   const [editableFullName, setEditableFullName] = useState('');
@@ -21,18 +22,18 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
-  const { userId } = useUser();
+  // const { userId } = useUser();
   const navigate = useNavigate();
   const BACKEND_URL = "http://localhost:8080/api/users";
 
-  useEffect(() => {
-    if (userId) {
-      fetchUserDetailsById(userId);
-    } else {
-      setError('User is not logged in.');
-    }
-  }, [userId]);
-
+  // useEffect(() => {
+  //   if (userId) {
+  //     fetchUserDetailsById(userId);
+  //   } else {
+  //     setError('User is not logged in.');
+  //   }
+  // }, [userId]);
+  
   const fetchUserDetailsById = async (id) => {
     try {
       const response = await axios.get(`${BACKEND_URL}/${id}`);
@@ -45,7 +46,32 @@ const ProfilePage = () => {
       setError(error.response?.data?.message || 'Error fetching user details.');
     }
   };
+  useEffect(() => {
+    const fetchUserId = async (firebaseUid) => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+        setUserId(response.data);
+        fetchUserDetailsById(response.data);
+        console.log("Fetched application user ID:", response.data);
+      } catch (error) {
+        console.error("Error fetching application user ID:", error);
+        setUserId(null);
+      }
+    };
 
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Fetch the application-specific userId using the Firebase UID
+        fetchUserId(user.uid);
+      } else {
+        // User is signed out
+        setUserId(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   const handleUpdate = async () => {
     const updatedInfo = {
       email: currentUserInfo.email,
@@ -75,6 +101,8 @@ const ProfilePage = () => {
   };
 
   const handlePasswordUpdate = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
     if (currentPasswordInput !== currentUserInfo.password) {
       setError('Current password is incorrect.');
       return;
@@ -85,6 +113,7 @@ const ProfilePage = () => {
     }
 
     try {
+      await updatePassword (user, newPassword);
       const response = await axios.put(`${BACKEND_URL}/${userId}`, {
         ...currentUserInfo,
         password: newPassword
