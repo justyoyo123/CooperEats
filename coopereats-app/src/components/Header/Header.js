@@ -4,11 +4,13 @@ import './Header.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from "axios";
 import AdminHeader from './AdminHeader';
+import { IconButton } from '@mui/joy';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function Header() {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,10 +28,8 @@ function Header() {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Fetch the application-specific userId using the Firebase UID
         fetchUserId(user.uid);
       } else {
-        // User is signed out
         setUserId(null);
       }
     });
@@ -37,18 +37,22 @@ function Header() {
     return () => unsubscribe();
   }, []);
 
+  const handleLogout = () => {
+    getAuth().signOut().then(() => navigate('/'));
+  };
+
   useEffect(() => {
     const checkAdmin = async () => {
-      if (userId) { // Only check if we have a userId
+      if (userId) {
         const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
         setIsAdmin(response.data.role === 'ADMIN');
       } else {
-        setIsAdmin(false); // Reset admin status if no user
+        setIsAdmin(false);
       }
     };
 
     checkAdmin();
-  }, [userId]); // Trigger the effect when userId changes
+  }, [userId]);
 
   useEffect(() => {
     const auth = getAuth();
@@ -56,42 +60,37 @@ function Header() {
       setUser(currentUser);
     });
   }, []);
-  // Here, we decide which header to render based on isAdmin state
+
   if (isAdmin) {
-    return <AdminHeader/>;
+    return <AdminHeader />;
   } else {
     return (
-        <header className="header">
-          <Link to="/">
-            <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
-          </Link>
-          <ul>
-          	<li><Link to="/">Home</Link></li> {/* Re-integrated from HEAD */}
-         	<li><Link to="/food">Food</Link></li>
-          	<li><Link to="/cart">Cart</Link></li>   
-            {isAdmin && (
-                <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
-            )}
-            {user ? (
-                <>
-                  <li><Link to="/profile">Profile</Link></li>
-                  <li>{user.email}</li>
-                  <li>
-                    <button onClick={() => {
-                      getAuth().signOut().then(() => navigate('/')); // Logout and redirect to '/'
-                    }}>Logout
-                    </button>
-                  </li>
-                </>
-            ) : (
-                <li><Link to="/login">Login</Link></li>
-            )}
-          </ul>
-        </header>
+      <header className="header">
+        <Link to="/">
+          <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
+        </Link>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/food">Food</Link></li>
+          <li><Link to="/cart">Cart</Link></li>
+          {isAdmin && <li><Link to="/admin">Admin</Link></li>}
+          {user ? (
+            <>
+              <li><Link to="/profile">Profile</Link></li>
+              <li>{user.email}</li>
+              <li>
+                <IconButton aria-label="logout" onClick={handleLogout}>
+                  <LogoutIcon />
+                </IconButton>
+              </li>
+            </>
+          ) : (
+            <li><Link to="/login">Login</Link></li>
+          )}
+        </ul>
+      </header>
     );
   }
 }
 
 export default Header;
-
-
