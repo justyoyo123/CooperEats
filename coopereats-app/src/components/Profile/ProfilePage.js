@@ -57,6 +57,15 @@ const ProfilePage = () => {
             fullName: editableFullName || currentUserInfo.fullName,
         };
 
+        // Strip out non-digit characters before checking the length
+        const phoneNumberDigits = updatedInfo.phoneNumber.replace(/\D/g, '');
+
+        if (phoneNumberDigits.length !== 10) {
+            alert("Invalid phone number. The phone number must be 10 digits long.");
+            setError("Invalid phone number. Please ensure it is 10 digits long.");
+            return; // Prevent the function from proceeding
+        }
+
         try {
             const response = await axios.put(`${BACKEND_URL}/${userId}`, updatedInfo);
             if (response.status === 200) {
@@ -75,6 +84,8 @@ const ProfilePage = () => {
             setError(error.response?.data?.message || 'Error updating profile.');
         }
     };
+
+
 
     const handlePasswordUpdate = async () => {
         if (currentPasswordInput !== currentUserInfo.password) {
