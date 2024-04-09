@@ -178,28 +178,40 @@ export default function MyProfile({
 
 
                     {/* Current Information Display Section */}
-                    <Box sx={{ p: 2, backgroundColor: 'background.level1', borderRadius: '8px', mb: 2, textAlign: 'left' }}>
-                        <Typography sx={{ mb: 2, fontWeight: 'bold' }}>
-                            Personal Information
-                        </Typography>
-                        <Stack spacing={1} sx={{ p: 1 }}>
-                            <Typography><strong>User ID:</strong> {userId}</Typography>
-                            <Typography><strong>Full Name:</strong> {currentUserInfo.fullName}</Typography>
-                            <Typography><strong>Username:</strong> {currentUserInfo.userName}</Typography>
-                            <Typography><strong>Phone Number:</strong> {currentUserInfo.phoneNumber}</Typography>
-                            <Typography><strong>Email:</strong> {currentUserInfo.email}</Typography>
-                        </Stack>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        mb: 2,
+                    }}>
+                        <Box sx={{
+                            p: 2,
+                            backgroundColor: 'background.level1',
+                            borderRadius: '8px',
+                            textAlign: 'left',
+                            maxWidth: '480px',
+                            width: '100%',
+                        }}>
+                            <Typography sx={{ mb: 2, fontWeight: 'bold' }}>
+                                Personal Information
+                            </Typography>
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <Stack spacing={1} sx={{ p: 1, alignItems: 'flex-start', width: 'fit-content' }}>
+                                    <Typography><strong>User ID:</strong> {userId}</Typography>
+                                    <Typography><strong>Full Name:</strong> {currentUserInfo.fullName}</Typography>
+                                    <Typography><strong>Username:</strong> {currentUserInfo.userName}</Typography>
+                                    <Typography><strong>Phone Number:</strong> {currentUserInfo.phoneNumber}</Typography>
+                                    <Typography><strong>Email:</strong> {currentUserInfo.email}</Typography>
+                                </Stack>
+                            </Box>
+                        </Box>
                     </Box>
 
 
 
-
-
-
                     {/* Personal Info Section */}
-                    <Stack direction="row" spacing={2}>
+                    <Stack direction="row" spacing={2} justifyContent="center" sx={{ flexWrap: 'wrap' }}>
                         {/* Editing Full Name */}
-                        <FormControl sx={{ flexGrow: 1 }}>
+                        <FormControl sx={{ width: '100%', maxWidth: '360px', mb: 2 }}>
                             <FormLabel>Name</FormLabel>
                             <Input
                                 size="md"
@@ -207,23 +219,24 @@ export default function MyProfile({
                                 onChange={(e) => setEditableFullName(e.target.value)}
                             />
                         </FormControl>
+                    </Stack>
 
+                    <Stack direction="row" spacing={2} justifyContent="center" sx={{ flexWrap: 'wrap' }}>
                         {/* Editing Username */}
-                        <FormControl sx={{ flexGrow: 1 }}>
+                        <FormControl sx={{ width: '100%', maxWidth: '360px', mb: 2 }}>
                             <FormLabel>Username</FormLabel>
                             <Input
                                 size="md"
                                 type="text"
                                 value={editableUserName}
                                 onChange={(e) => setEditableUserName(e.target.value)}
-                                sx={{ flexGrow: 1 }}
                             />
                         </FormControl>
                     </Stack>
 
-                    <Stack direction="row" spacing={4}>
+                    <Stack direction="row" spacing={4} justifyContent="center">
                         {/* Editing Phone Number */}
-                        <FormControl size="sm">
+                        <FormControl sx={{ width: '100%', maxWidth: '360px' }}>
                             <FormLabel>Phone Number</FormLabel>
                             <Input
                                 size="md"
@@ -235,22 +248,21 @@ export default function MyProfile({
                         </FormControl>
                     </Stack>
 
-                    <CardOverflow sx={{ borderTop: '1px solid', borderColor: 'divider' }}>
-                        <CardActions sx={{ alignSelf: 'flex-end', pt: 2 }}>
-                            <Button
-                                size="sm"
-                                variant="outlined"
-                                color="neutral"
-                                onClick={handleUpdate}
-                            >
-                                Update
-                            </Button>
-                        </CardActions>
-                    </CardOverflow>
+
+                    <CardActions sx={{ justifyContent: 'center', pt: 2 }}>
+                        <Button
+                            size="sm"
+                            variant="outlined"
+                            color="neutral"
+                            sx={{ width: 'auto', maxWidth: 'fit-content' }}
+                        >
+                            Update
+                        </Button>
+                    </CardActions>
                 </Card>
 
                 {/* Password Section */}
-                <Card>
+                <Card sx={{ textAlign: 'center' }}> {/* Add text alignment to the Card */}
                     <Box sx={{ mb: 1 }}>
                         <Typography level="title-md">Security</Typography>
                         <Typography level="body-sm">
@@ -259,10 +271,13 @@ export default function MyProfile({
                     </Box>
                     <Stack
                         spacing={3}
+                        direction="column"
+                        alignItems="center" // Align stack items to the center
+                        justifyContent="center" // Center the stack along the cross axis
                         sx={{ px: 2, py: 3 }}
                     >
                         {/* Manage Current Password */}
-                        <FormControl>
+                        <FormControl sx={{ width: '100%', maxWidth: '360px' }}> {/* Adjust max-width if needed */}
                             <FormLabel htmlFor="current-password">Current Password</FormLabel>
                             <Input
                                 id="current-password"
@@ -282,7 +297,7 @@ export default function MyProfile({
                         </FormControl>
 
                         {/* Manage New Password */}
-                        <FormControl>
+                        <FormControl sx={{ width: '100%', maxWidth: '360px' }}> {/* Adjust max-width if needed */}
                             <FormLabel htmlFor="new-password">New Password</FormLabel>
                             <Input
                                 id="new-password"
@@ -301,9 +316,8 @@ export default function MyProfile({
                             />
                         </FormControl>
 
-
                         {/* Manage Confirm New Password */}
-                        <FormControl>
+                        <FormControl sx={{ width: '100%', maxWidth: '360px' }}> {/* Adjust max-width if needed */}
                             <FormLabel htmlFor="confirm-new-password">Confirm New Password</FormLabel>
                             <Input
                                 id="confirm-new-password"
@@ -321,20 +335,21 @@ export default function MyProfile({
                                 }
                             />
                         </FormControl>
-
                     </Stack>
-
-                    <CardOverflow sx={{ borderTop: '1px solid', borderColor: 'divider' }}>
-                        <CardActions sx={{ alignSelf: 'flex-end', pt: 2 }}>
-                            <Button
-                                size="sm"
-                                variant="outlined"
-                                color="neutral">
-                                Update
-                            </Button>
-                        </CardActions>
-                    </CardOverflow>
+                    <CardActions sx={{ justifyContent: 'center', pt: 2 }}>
+                        <Button
+                            size="sm"
+                            variant="outlined"
+                            color="neutral"
+                            sx={{ width: 'auto', maxWidth: 'fit-content' }}
+                        >
+                            Update
+                        </Button>
+                    </CardActions>
                 </Card>
+
+
+
 
                 <Card>
                     <Box sx={{ mb: 1 }}>
