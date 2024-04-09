@@ -20,6 +20,7 @@ import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
 import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
+import Divider from '@mui/material/Divider';
 
 
 interface MyProfileProps {
@@ -74,6 +75,7 @@ export default function MyProfile({
     const [showNewPassword, setShowNewPassword] = React.useState(false);
     const [showConfirmNewPassword, setShowConfirmNewPassword] = React.useState(false);
     const [deleteConfirmation, setDeleteConfirmation] = React.useState(false);
+
     const navigate = useNavigate();
 
     const confirmAndDelete = () => {
@@ -155,47 +157,6 @@ export default function MyProfile({
                         <HomeIcon />
                     </IconButton>
                 </Box>
-                <Tabs
-                    defaultValue={0}
-                    sx={{
-                        bgcolor: 'transparent',
-                    }}
-                >
-                    <TabList
-                        tabFlex={1}
-                        size="sm"
-                        sx={{
-                            pl: { xs: 0, md: 4 },
-                            justifyContent: 'left',
-                            [`&& .${tabClasses.root}`]: {
-                                fontWeight: '600',
-                                flex: 'initial',
-                                color: 'text.tertiary',
-                                [`&.${tabClasses.selected}`]: {
-                                    bgcolor: 'transparent',
-                                    color: 'text.primary',
-                                    '&::after': {
-                                        height: '2px',
-                                        bgcolor: 'primary.500',
-                                    },
-                                },
-                            },
-                        }}
-                    >
-                        <Tab sx={{ borderRadius: '6px 6px 0 0' }} indicatorInset value={0}>
-                            Account Info
-                        </Tab>
-                        <Tab sx={{ borderRadius: '6px 6px 0 0' }} indicatorInset value={2}>
-                            Security
-                        </Tab>
-                        <Tab sx={{ borderRadius: '6px 6px 0 0' }} indicatorInset value={3}>
-                            Wallet
-                        </Tab>
-                        <Tab sx={{ borderRadius: '6px 6px 0 0' }} indicatorInset value={4}>
-                            Manage Account
-                        </Tab>
-                    </TabList>
-                </Tabs>
             </Box>
             <Stack
                 spacing={4}
@@ -216,18 +177,23 @@ export default function MyProfile({
                     </Box>
 
 
-
                     {/* Current Information Display Section */}
-                    <Box sx={{ p: 2, backgroundColor: 'background.level1', borderRadius: '8px', mb: 2 }}>
-                        <Typography component="div" sx={{ mb: 2, fontWeight: 'bold' }}>
-                            Current Information
+                    <Box sx={{ p: 2, backgroundColor: 'background.level1', borderRadius: '8px', mb: 2, textAlign: 'left' }}>
+                        <Typography sx={{ mb: 2, fontWeight: 'bold' }}>
+                            Personal Information
                         </Typography>
-                        <Typography><strong>User ID:</strong> {userId}</Typography> {/* Correctly display userId here */}
-                        <Typography><strong>Full Name:</strong> {currentUserInfo.fullName}</Typography>
-                        <Typography><strong>Username:</strong> {currentUserInfo.userName}</Typography>
-                        <Typography><strong>Phone Number:</strong> {currentUserInfo.phoneNumber}</Typography>
-                        <Typography><strong>Email:</strong> {currentUserInfo.email}</Typography>
+                        <Stack spacing={1} sx={{ p: 1 }}>
+                            <Typography><strong>User ID:</strong> {userId}</Typography>
+                            <Typography><strong>Full Name:</strong> {currentUserInfo.fullName}</Typography>
+                            <Typography><strong>Username:</strong> {currentUserInfo.userName}</Typography>
+                            <Typography><strong>Phone Number:</strong> {currentUserInfo.phoneNumber}</Typography>
+                            <Typography><strong>Email:</strong> {currentUserInfo.email}</Typography>
+                        </Stack>
                     </Box>
+
+
+
+
 
 
                     {/* Personal Info Section */}
