@@ -5,9 +5,9 @@ import Gujrati from "./CardImage/gujrati.jpeg";
 import beefLasagnaImage from '../../../foodImages/beefRasagna.png';
 import chocoChipImage from '../../../foodImages/chocoChipM.png';
 import gb from '../../../foodImages/garlicBread.png';
-import il from '../../../foodImages/icedLemon.png';
-import sm from '../../../foodImages/stuffedMushroom.png';
-import vsf from '../../../foodImages/vstirFry-2.jpg'
+import il from '../../../foodImages/iltea.jpeg';
+import sm from '../../../foodImages/smr.jpeg';
+import vsf from '../../../foodImages/vsfry.jpeg'
 
 export const MenuList = [
   {

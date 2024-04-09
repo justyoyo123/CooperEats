@@ -117,10 +117,10 @@ function Header() {
   } else {
     return (
         <header className="header">
-          <Link to="/">
+          <Link to="/" className="logo-link">
             <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
           </Link>
-          <ul>
+          <ul className="header-nav">
             <li>
               <IconButton onClick={() => navigate('/food')}><RestaurantMenuIcon /></IconButton>
             </li>

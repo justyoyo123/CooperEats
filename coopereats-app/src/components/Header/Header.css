@@ -30,3 +30,8 @@ header ul li a:hover {
     color: darkcyan; /* Highlight color on hover */
     text-decoration: underline; /* Combine both versions by adding underline for clear interaction feedback */
 }
+.header-nav {
+    margin-top: 20px; /* Adjust the margin as needed */
+  }
+  
+  

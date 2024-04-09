@@ -15,6 +15,7 @@ import AdminUsersPage from './components/Admin/AdminUsersPage';
 import AdminOrdersPage from './components/Admin/AdminOrdersPage';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import HomePage from './components/Home/HomePage';
+import Footer from './components/Footer/Footer';
 
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
             <Route path="/admin/orders" element={<AdminOrdersPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
+          <Footer />
         </div>
       </Router>
   );
