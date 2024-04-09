@@ -1,44 +1,25 @@
 import * as React from 'react';
-import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
-import DeleteButton from '@mui/material/Button';
-import Divider from '@mui/joy/Divider';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
-import FormHelperText from '@mui/joy/FormHelperText';
 import Input from '@mui/joy/Input';
 import IconButton from '@mui/joy/IconButton';
-import Textarea from '@mui/joy/Textarea';
 import Stack from '@mui/joy/Stack';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
 import Typography from '@mui/joy/Typography';
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab, { tabClasses } from '@mui/joy/Tab';
-import Breadcrumbs from '@mui/joy/Breadcrumbs';
-import Link from '@mui/joy/Link';
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardOverflow from '@mui/joy/CardOverflow';
+import { ChangeEvent } from 'react';
 
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
-import AccessTimeFilledRoundedIcon from '@mui/icons-material/AccessTimeFilledRounded';
-import VideocamRoundedIcon from '@mui/icons-material/VideocamRounded';
-import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import PhoneIcon from '@mui/icons-material/Phone';
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Checkbox from '@mui/material/Checkbox';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { useNavigate } from 'react-router-dom';
-
+import HomeIcon from '@mui/icons-material/Home';
 
 
 interface MyProfileProps {
@@ -107,6 +88,34 @@ export default function MyProfile({
     };
 
 
+    // Handle home navigation
+    const handleGoHome = () => {
+        navigate('/');
+    };
+
+    const formatPhoneNumber = (value: string): string => {
+        if (!value) return value;
+
+        const phoneNumber = value.replace(/[^\d]/g, '');
+        const match = phoneNumber.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+
+        if (match) {
+            const intlCode = match[1] ? '+1 ' : '';
+            return [intlCode, '(', match[2], ') - ', match[3], ' - ', match[4]].join('');
+        }
+
+        return value;
+    };
+
+
+    const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const inputNumbers = e.target.value.replace(/[^\d]/g, '');
+        const formattedPhoneNumber = formatPhoneNumber(inputNumbers);
+        setEditablePhoneNumber(formattedPhoneNumber);
+    };
+
+
+
     return (
         <Box sx={{ flex: 1, width: '100%' }}>
             <Box
@@ -117,28 +126,34 @@ export default function MyProfile({
                     zIndex: 9995,
                 }}
             >
-                <Box sx={{ px: { xs: 2, md: 6 } }}>
-                    <Breadcrumbs
-                        size="sm"
-                        aria-label="breadcrumbs"
-                        separator={<ChevronRightRoundedIcon fontSize="small" />}
-                        sx={{ pl: 0 }}
+                <Box
+                    component="header"
+                    sx={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        py: 3,
+                        px: 2,
+                    }}
+                >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        {/* Logo Image */}
+                        <Box
+                            component="img"
+                            src="/images/design/TheCooperUnion_logo.png"
+                            alt="CooperEats Logo"
+                            sx={{ width: 'auto', height: 50 }}
+                        />
+                        <Typography level="h3">CooperEats</Typography>
+                    </Box>
+                    {/* Home Icon Button */}
+                    <IconButton
+                        aria-label="home"
+                        onClick={handleGoHome}
                     >
-                        <Link
-                            underline="none"
-                            color="neutral"
-                            href="#some-link"
-                            aria-label="Home"
-                        >
-                            <HomeRoundedIcon />
-                        </Link>
-                        <Typography color="primary" fontWeight={500} fontSize={12}>
-                            My profile
-                        </Typography>
-                    </Breadcrumbs>
-                    <Typography level="h2" component="h1" sx={{ mt: 1, mb: 2 }}>
-                        My profile
-                    </Typography>
+                        <HomeIcon />
+                    </IconButton>
                 </Box>
                 <Tabs
                     defaultValue={0}
@@ -200,6 +215,8 @@ export default function MyProfile({
                         </Typography>
                     </Box>
 
+
+
                     {/* Current Information Display Section */}
                     <Box sx={{ p: 2, backgroundColor: 'background.level1', borderRadius: '8px', mb: 2 }}>
                         <Typography component="div" sx={{ mb: 2, fontWeight: 'bold' }}>
@@ -212,13 +229,14 @@ export default function MyProfile({
                         <Typography><strong>Email:</strong> {currentUserInfo.email}</Typography>
                     </Box>
 
+
                     {/* Personal Info Section */}
                     <Stack direction="row" spacing={2}>
                         {/* Editing Full Name */}
-                        <FormControl>
+                        <FormControl sx={{ flexGrow: 1 }}>
                             <FormLabel>Name</FormLabel>
                             <Input
-                                size="sm"
+                                size="md"
                                 value={editableFullName}
                                 onChange={(e) => setEditableFullName(e.target.value)}
                             />
@@ -228,7 +246,7 @@ export default function MyProfile({
                         <FormControl sx={{ flexGrow: 1 }}>
                             <FormLabel>Username</FormLabel>
                             <Input
-                                size="sm"
+                                size="md"
                                 type="text"
                                 value={editableUserName}
                                 onChange={(e) => setEditableUserName(e.target.value)}
@@ -237,19 +255,18 @@ export default function MyProfile({
                         </FormControl>
                     </Stack>
 
-                    <Stack direction="row" spacing={2}>
+                    <Stack direction="row" spacing={4}>
                         {/* Editing Phone Number */}
-                        <FormControl>
+                        <FormControl size="sm">
                             <FormLabel>Phone Number</FormLabel>
                             <Input
-                                size="sm"
+                                size="md"
                                 type="text"
                                 value={editablePhoneNumber}
-                                onChange={(e) => setEditablePhoneNumber(e.target.value)}
+                                onChange={handlePhoneNumberChange}
                                 startDecorator={<PhoneIcon />}
                             />
                         </FormControl>
-
                     </Stack>
 
                     <CardOverflow sx={{ borderTop: '1px solid', borderColor: 'divider' }}>
@@ -342,14 +359,12 @@ export default function MyProfile({
                     </Stack>
 
                     <CardOverflow sx={{ borderTop: '1px solid', borderColor: 'divider' }}>
-                        <CardActions sx={{ justifyContent: 'flex-end', pt: 2 }}>
+                        <CardActions sx={{ alignSelf: 'flex-end', pt: 2 }}>
                             <Button
                                 size="sm"
                                 variant="outlined"
-                                color="neutral"
-                                onClick={handlePasswordUpdate}
-                            >
-                                Update Password
+                                color="neutral">
+                                Update
                             </Button>
                         </CardActions>
                     </CardOverflow>
@@ -385,11 +400,11 @@ export default function MyProfile({
                             This action will permanently delete your account and all its data.
                         </Typography>
                     </Box>
-                    <Stack spacing={2} sx={{ my: 1 }}>
-                    </Stack>
 
-                    <Stack spacing={2} sx={{ my: 1 }}>
-                        <label>
+
+
+                    <Stack spacing={2} sx={{ my: 1, justifyContent: 'center' }}>
+                        <label style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
                             <input
                                 type="checkbox"
                                 checked={deleteConfirmation}
@@ -400,8 +415,9 @@ export default function MyProfile({
                     </Stack>
 
 
+
                     {/* Delete User */}
-                    <CardActions sx={{ alignSelf: 'flex-end', pt: 2 }}>
+                    <CardActions sx={{ justifyContent: 'center', pt: 2 }}>
                         <Stack direction="row" spacing={2}>
                             <Button
                                 size="sm"
@@ -411,10 +427,10 @@ export default function MyProfile({
                             >
                                 Delete
                             </Button>
-
                         </Stack>
                     </CardActions>
                 </Card>
+
             </Stack>
         </Box>
     );

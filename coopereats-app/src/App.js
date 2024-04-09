@@ -65,6 +65,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route
               path="*"
               element={
@@ -78,7 +79,6 @@ function App() {
                     <Route path="/admin/menu" element={<AdminPage />} />
                     <Route path="/admin/users" element={<AdminUsersPage />} />
                     <Route path="/admin/orders" element={<AdminOrdersPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
                     {/* Redirect any other path to HomePage */}
                     <Route path="*" element={<HomePage />} />
                   </Routes>

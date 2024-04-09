@@ -84,7 +84,7 @@ const LoginPage = () => {
                 }}
             >
 
-                {/* Header with Color Scheme Toggle */}
+                {/* Header */}
                 <Box
                     component="header"
                     sx={{
@@ -114,6 +114,7 @@ const LoginPage = () => {
                         <HomeIcon />
                     </IconButton>
                 </Box>
+
                 {/* Main content area */}
                 <Box
                     sx={{
