@@ -168,13 +168,22 @@ const FoodPage = () => {
   return (
       <div className="food-menu">
         <h1>Food Menu</h1>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
             {categories.map((category, index) => (
                 <Tab label={category} key={index} />
             ))}
           </Tabs>
-        </Box>
+        </Box> */}
+        <div className="categories-sidebar">
+          <ul>
+            {categories.map((category, index) => (
+              <li key={index} onClick={() => handleTabChange(null, index)}>
+                {category}
+              </li>
+            ))}
+          </ul>
+        </div>
         {categories.map((category, index) => (
             <div ref={sectionRefs.current[index]} key={category}>
               <h2>{category}</h2>
