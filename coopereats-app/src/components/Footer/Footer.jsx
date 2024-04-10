@@ -11,8 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const Footer = () => {
     const navigate = useNavigate();
 
-    const handleHomeClick = () => {
-        navigate('/');
+    const navigateAndScrollTop = (path) => {
+        navigate(path);
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
@@ -40,9 +40,9 @@ const Footer = () => {
                 <div className="footer-content-center">
                     <h2>COMPANY</h2>
                     <ul>
-                            <li onClick={handleHomeClick} style={{cursor: 'pointer'}}>Home</li>
-                            <li>About us</li>
-                            <li>Private policy</li>
+                            <li onClick={() => navigateAndScrollTop('/')} style={{cursor: 'pointer'}}>Home</li>
+                            <li onClick={() => navigateAndScrollTop('/about')} style={{cursor: 'pointer'}}>About Us</li>
+                            <li>Privacy Policy</li>
                     </ul>
                 </div>
                 <div className="footer-content-right">
