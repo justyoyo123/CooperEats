@@ -1,8 +1,10 @@
 header {
     background-color: #fdf2aa; /* Light background */
     color: #333; /* Dark text for contrast, assuming you want contrast over the white text in the other version */
-    padding: 20px;
+    padding: 30px;
     text-align: center;
+    display: flex;
+    justify-content: space-between;
 }
 
 header h1 {
@@ -34,4 +36,17 @@ header ul li a:hover {
     margin-top: 20px; /* Adjust the margin as needed */
   }
   
+.logo-image{
+    width: 100px;
+    height: auto;
+    margin-top: -25px;
+}
+
+.logo-link {
+    text-decoration: none; /* Removes the underline from the link */
+    color: #333; /* Sets the text color */
+    font-family: 'PT Sans'; /* Change as per your preference */
+    font-size: 50px; /* Adjusts the size of the font */
+    font-weight: bold; /* Makes the font bold */
+  }
   

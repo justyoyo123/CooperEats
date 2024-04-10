@@ -117,9 +117,13 @@ function Header() {
   } else {
     return (
         <header className="header">
-          <Link to="/" className="logo-link">
-            <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo" />
-          </Link>
+          <div>
+            <img src="./images/design/cooperlogo.png" alt="Cooper Union Logo" class="logo-image"/>
+            <Link to="/" className="logo-link">
+              {/* <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo"/> */}
+              CooperEats
+            </Link>
+          </div>
           <ul className="header-nav">
             <li>
               <IconButton onClick={() => navigate('/food')}><RestaurantMenuIcon /></IconButton>
