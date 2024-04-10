@@ -96,8 +96,11 @@ const FoodPage = () => {
         setFoods(response.data);
         // Assuming the response includes categories or you extract them from foods
         const fetchedCategories = [...new Set(response.data.map(food => food.category))];
-        setCategories(fetchedCategories);
-        sectionRefs.current = fetchedCategories.map((_, i) => sectionRefs.current[i] ?? React.createRef());
+        const sortedCategories = fetchedCategories.sort((a, b) => {
+          return categoryOrder.indexOf(a) - categoryOrder.indexOf(b);
+        });
+        setCategories(sortedCategories);
+        sectionRefs.current = sortedCategories.map((_, i) => sectionRefs.current[i] ?? React.createRef());
       } catch (error) {
         console.log('Failed to fetch foods', error);
       }
@@ -160,14 +163,21 @@ const FoodPage = () => {
     }
 }
 
-
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
+  const categoryDisplayNames = {
+    MAIN_COURSE: "Main Course",
+    DRINK: "Drinks",
+    APPETIZER: "Appetizers",
+    DESSERT: "Desserts",
+  };
+  const categoryOrder = ["APPETIZER", "MAIN_COURSE", "DESSERT", "DRINK"];
+
   return (
       <div className="food-menu">
-        <h1>Food Menu</h1>
+        {/* <h1>Food Menu</h1> */}
         {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
             {categories.map((category, index) => (
@@ -179,14 +189,14 @@ const FoodPage = () => {
           <ul>
             {categories.map((category, index) => (
               <li key={index} onClick={() => handleTabChange(null, index)}>
-                {category}
+                {categoryDisplayNames[category] || category}
               </li>
             ))}
           </ul>
         </div>
         {categories.map((category, index) => (
             <div ref={sectionRefs.current[index]} key={category}>
-              <h2>{category}</h2>
+              <h2>{categoryDisplayNames[category] || category}</h2>
               <div className="food-list">
                 {foods.filter(food => food.category === category).map(food => (
                     <div className="food-item" key={food.foodId}>
@@ -197,8 +207,8 @@ const FoodPage = () => {
                         <h3>{food.name}</h3>
                         <h3>${food.price}</h3>
                         <p>{food.description}</p>
-                        <p>Quantity: {food.quantity}</p>
-                        <p>Food ID: {food.foodId}</p>
+                        {/* <p>Quantity: {food.quantity}</p>
+                        <p>Food ID: {food.foodId}</p> */}
                       </div>
                       <div>
                         <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
