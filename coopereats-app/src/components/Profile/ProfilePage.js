@@ -87,36 +87,42 @@ const ProfilePage = () => {
   };
 
   const handlePasswordUpdate = async () => {
-    if (currentPasswordInput !== currentUserInfo.password) {
-      setError('Current password is incorrect.');
-      return;
-    }
     if (newPassword !== confirmNewPassword) {
       setError('New passwords do not match.');
       return;
     }
 
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+      setError("No user is currently logged in.");
+      return;
+    }
+
     try {
-      const auth = getAuth();
-      const user = auth.currentUser;
       await updatePassword(user, newPassword);
-      const response = await axios.put(`${BACKEND_URL}/${userId}`, {
-        ...currentUserInfo,
-        password: newPassword
-      });
+      // Assuming you want to update other user info in your backend, exclude the password update here
+      const updatedInfo = {
+        userName: currentUserInfo.userName,
+        phoneNumber: currentUserInfo.phoneNumber,
+        fullName: currentUserInfo.fullName,
+        email: currentUserInfo.email,
+        // Do not send the password to your backend
+      };
+      const response = await axios.put(`${BACKEND_URL}/${userId}`, updatedInfo);
       if (response.status === 200) {
         setError('Password updated successfully.');
-        setCurrentUserInfo({ ...currentUserInfo, password: newPassword });
-        setCurrentPasswordInput('');
+        // Clear the password fields
         setNewPassword('');
         setConfirmNewPassword('');
       } else {
-        setError('Failed to update password.');
+        setError('Failed to update user information.');
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'Error updating password.');
+      setError(error.message || 'Error updating password.');
     }
   };
+
 
   const handleDeleteUser = async () => {
     const auth = getAuth();

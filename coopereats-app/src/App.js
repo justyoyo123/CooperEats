@@ -4,6 +4,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  useLocation,
 } from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
@@ -19,9 +20,9 @@ import AdminUsersPage from './components/Admin/AdminUsersPage';
 import AdminOrdersPage from './components/Admin/AdminOrdersPage';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import HomePage from './components/Home/HomePage';
-import { CssVarsProvider } from '@mui/joy/styles';
 import Footer from './components/Footer/Footer';
 import AboutUsPage from './components/AboutUs/AboutUsPage';
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -62,11 +63,21 @@ function App() {
     return <div>Loading...</div>;
   }
 
+  const ConditionalHeader = () => {
+    const location = useLocation();
+    const excludedPaths = ['/login', '/create-account', '/profile'];
+    if (excludedPaths.includes(location.pathname)) {
+      return null; // Do not render Header on these paths
+    }
+    return <Header user={user} onSignOut={handleSignOut} />;
+  };
+
+
   return (
-    <CssVarsProvider>
+    <styled>
       <Router>
         <div className="App">
-          <Header user={user} onSignOut={handleSignOut} />
+          <ConditionalHeader />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
@@ -85,7 +96,7 @@ function App() {
           <Footer />
         </div>
       </Router>
-    </CssVarsProvider>
+    </styled>
   );
 }
 

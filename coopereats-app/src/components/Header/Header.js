@@ -4,7 +4,6 @@ import './Header.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Tabs, Tab, Box, Button, IconButton, Snackbar } from '@mui/material';
 import Badge, { BadgeProps } from '@mui/material/Badge';
-import { styled } from '@mui/material/styles';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
@@ -18,12 +17,12 @@ function Header() {
   const [userId, setUserId] = useState(null);
   const [cart, setCart] = useState([]);
   const [cartQuantity, setCartQuantity] = useState(0);
-  const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleCartUpdate = () => {
-      fetchCartByUserId(); // Assuming this function updates the cart quantity in your header
+      fetchCartByUserId();
     };
 
     window.addEventListener('cartUpdated', handleCartUpdate);
@@ -95,8 +94,7 @@ function Header() {
   };
   const fetchCartQuantity = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/carts/quantity/user/${userId}`); // Assuming there's an endpoint to directly fetch cart quantity
-      setCartQuantity(response.data.quantity);
+      const response = await axios.get(`http://localhost:8080/api/carts/quantity/user/${userId}`);
     } catch (error) {
       console.error('Failed to fetch cart quantity:', error);
       setCartQuantity(0);
@@ -106,6 +104,9 @@ function Header() {
   const handleLogout = () => {
     getAuth().signOut().then(() => navigate('/'));
   };
+
+
+
 
   if (isAdmin) {
     return <AdminHeader />;

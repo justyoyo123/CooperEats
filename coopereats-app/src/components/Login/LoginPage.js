@@ -9,13 +9,11 @@ import HomeIcon from '@mui/icons-material/Home';
 
 import {
     CssVarsProvider,
-    useColorScheme,
     CssBaseline,
     GlobalStyles,
     Box,
     Typography,
     Button,
-    Checkbox,
     FormControl,
     FormLabel,
     Input,
@@ -30,7 +28,6 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { mode, setMode } = useColorScheme();
     const { setUser, setUserId } = useUser();
 
     const logIn = async () => {
