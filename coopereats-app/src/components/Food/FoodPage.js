@@ -7,14 +7,14 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import garlicBreadSticksImage from '../../foodImages/garlicBread.png';
 import chickenWingsImage from '../../foodImages/chickenWing.png';
-import stuffedMushroomImage from '../../foodImages/stuffedMushroom.png';
+import stuffedMushroomImage from '../../foodImages/smr.jpeg';
 import grilledSalmonImage from '../../foodImages/grilledSalmon.png';
 import beefRasagnaImage from '../../foodImages/beefRasagna.png';
-import vstirFryImage from '../../foodImages/vstirFry.png';
+import vstirFryImage from '../../foodImages/vsfry.jpeg';
 import dChocolateImage from '../../foodImages/dChocolate.png';
 import chocoChipImage from '../../foodImages/chocoChip.png';
 import miniChocoChipImage from '../../foodImages/miniChocoChip.png';
-import icedLemonImage from '../../foodImages/icedLemon.png';
+import icedLemonImage from '../../foodImages/iltea.jpeg';
 import mangoSmoothieImage from '../../foodImages/mangoS.png';
 import chocoChipMImage from '../../foodImages/chocoChipM.png';
 import './FoodPage.css';
@@ -96,8 +96,11 @@ const FoodPage = () => {
         setFoods(response.data);
         // Assuming the response includes categories or you extract them from foods
         const fetchedCategories = [...new Set(response.data.map(food => food.category))];
-        setCategories(fetchedCategories);
-        sectionRefs.current = fetchedCategories.map((_, i) => sectionRefs.current[i] ?? React.createRef());
+        const sortedCategories = fetchedCategories.sort((a, b) => {
+          return categoryOrder.indexOf(a) - categoryOrder.indexOf(b);
+        });
+        setCategories(sortedCategories);
+        sectionRefs.current = sortedCategories.map((_, i) => sectionRefs.current[i] ?? React.createRef());
       } catch (error) {
         console.log('Failed to fetch foods', error);
       }
@@ -140,38 +143,60 @@ const FoodPage = () => {
     setQuantities(prev => ({ ...prev, [foodId]: Math.max(1, (prev[foodId] || 1) - 1) }));
   };
 
-  const handleAddToCart = async (foodId) =>{
-    try{
-      const quantity = quantities[foodId] || 1;
-      const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
-        foodId,
-        quantity: quantity,
-      });
-      setCart(response.data);
-      setSnackbarMessage('Item added to cart!');
-      setSnackbarOpen(true);
-    } catch(error){
-      console.error('Failed to add item to cart:', error);
+  const handleAddToCart = async (foodId) => {
+    if (!userId) {
+        setSnackbarMessage('Please log in to add items to the cart.');
+        setSnackbarOpen(true);
+    } else {
+        try {
+            const quantity = quantities[foodId] || 1;
+            const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
+                foodId,
+                quantity: quantity,
+            });
+            setCart(response.data);
+            setSnackbarMessage('Item added to cart!');
+            setSnackbarOpen(true);
+        } catch (error) {
+            console.error('Failed to add item to cart:', error);
+        }
     }
-  }
+}
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
+  const categoryDisplayNames = {
+    MAIN_COURSE: "Main Course",
+    DRINK: "Drinks",
+    APPETIZER: "Appetizers",
+    DESSERT: "Desserts",
+  };
+  const categoryOrder = ["APPETIZER", "MAIN_COURSE", "DESSERT", "DRINK"];
+
   return (
       <div className="food-menu">
-        <h1>Food Menu</h1>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        {/* <h1>Food Menu</h1> */}
+        {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
             {categories.map((category, index) => (
                 <Tab label={category} key={index} />
             ))}
           </Tabs>
-        </Box>
+        </Box> */}
+        <div className="categories-sidebar">
+          <ul>
+            {categories.map((category, index) => (
+              <li key={index} onClick={() => handleTabChange(null, index)}>
+                {categoryDisplayNames[category] || category}
+              </li>
+            ))}
+          </ul>
+        </div>
         {categories.map((category, index) => (
             <div ref={sectionRefs.current[index]} key={category}>
-              <h2>{category}</h2>
+              <h2>{categoryDisplayNames[category] || category}</h2>
               <div className="food-list">
                 {foods.filter(food => food.category === category).map(food => (
                     <div className="food-item" key={food.foodId}>
@@ -182,8 +207,8 @@ const FoodPage = () => {
                         <h3>{food.name}</h3>
                         <h3>${food.price}</h3>
                         <p>{food.description}</p>
-                        <p>Quantity: {food.quantity}</p>
-                        <p>Food ID: {food.foodId}</p>
+                        {/* <p>Quantity: {food.quantity}</p>
+                        <p>Food ID: {food.foodId}</p> */}
                       </div>
                       <div>
                         <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>

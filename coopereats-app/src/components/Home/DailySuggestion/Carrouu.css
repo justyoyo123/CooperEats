@@ -1,0 +1,59 @@
+/* Homepage */
+
+.daily-suggestions {
+  width: 80%;
+  margin: auto; /* Adjust top/bottom margin as needed */
+   /* Center align the text */
+  color: #262626; /* Same color as .explore-menu h1 */
+  font-weight: 550; /* Same font weight as .explore-menu h1 */
+  gap: 20px;
+  flex-direction: column;
+  display: flex;
+  margin-bottom: 1em;
+  font-size: 2em;
+}
+  
+  .carousel-image {
+    width: 100%;       /* Ensure it covers the full width of its container */
+    max-height: 200px; /* Adjust based on your needs */
+    object-fit: cover; 
+  }
+  
+  .carousel-title {
+    margin-top: 5em;
+    color: var(--text-color);
+    font-size: 3em;
+    text-align: center;
+  }
+
+  .carousel-container {
+    margin: auto;
+    padding: 10px 0; /* Adjust as necessary */
+  }
+  
+  
+  .container{
+    padding-inline: 15vw;
+    color: white;
+    font-weight: 300;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+  }
+
+  /* .explore-menu{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.explore-menu h1{
+    color: #262626;
+    font-weight: 500;
+} */
+  

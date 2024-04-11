@@ -20,11 +20,15 @@ import AdminOrdersPage from './components/Admin/AdminOrdersPage';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import HomePage from './components/Home/HomePage';
 import { CssVarsProvider } from '@mui/joy/styles';
+import Footer from './components/Footer/Footer';
+import AboutUsPage from './components/AboutUs/AboutUsPage';
 
 function App() {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  localStorage.setItem('totalSales', '0');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), async (firebaseUser) => {
@@ -62,30 +66,23 @@ function App() {
     <CssVarsProvider>
       <Router>
         <div className="App">
+          <Header user={user} onSignOut={handleSignOut} />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
+            <Route path="/food" element={<FoodPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/about" element={<AboutUsPage />} />
+            <Route path="/admin/menu" element={<AdminPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/orders" element={<AdminOrdersPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header user={user} onSignOut={handleSignOut} />
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/cart" element={<CartPage />} />
-                    <Route path="/food" element={<FoodPage />} />
-                    <Route path="/payment" element={<PaymentPage />} />
-                    <Route path="/admin/menu" element={<AdminPage />} />
-                    <Route path="/admin/users" element={<AdminUsersPage />} />
-                    <Route path="/admin/orders" element={<AdminOrdersPage />} />
-                    {/* Redirect any other path to HomePage */}
-                    <Route path="*" element={<HomePage />} />
-                  </Routes>
-                </>
-              }
-            />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/cart" element={<CartPage />} />
+            {/* Redirect any other path to HomePage */}
+            <Route path="*" element={<HomePage />} />
           </Routes>
+          <Footer />
         </div>
       </Router>
     </CssVarsProvider>
