@@ -1,6 +1,11 @@
-import react, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom';
 import './App.css';
 import CreateAccountPage from './components/CreateAccount/CreateAccountPage';
 import Header from './components/Header/Header';
@@ -45,72 +50,53 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const handleSignOut = async () => {
     try {
       await signOut(getAuth());
-      // Since useNavigate hook can't be used outside of Router, we need to move or call this function where it can be used properly
-      // navigate('/login');
       console.log('User signed out successfully');
     } catch (error) {
       console.error("Sign out error:", error);
     }
   };
 
-  // const ProtectedRoute = ({ children }) => {
-  //   const navigate = useNavigate();
-  //
-  //   useEffect(() => {
-  //     if (!user) {
-  //       navigate('/login');
-  //     } else if (!isAdmin) {
-  //       navigate('/');
-  //     }
-  //   }, [user, isAdmin, navigate]);
-  //
-  //   return children;
-  // };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const ConditionalHeader = () => {
+    const location = useLocation();
+    const excludedPaths = ['/login', '/create-account', '/profile'];
+    if (excludedPaths.includes(location.pathname)) {
+      return null; // Do not render Header on these paths
+    }
+    return <Header user={user} onSignOut={handleSignOut} />;
+  };
+
 
   return (
+    <styled>
       <Router>
         <div className="App">
-          <Header user={user} onSignOut={handleSignOut} />
+          <ConditionalHeader />
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/create-account" element={<CreateAccountPage />} />
-            <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/food" element={<FoodPage />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/about" element={<AboutUsPage />} />
-            <Route path="/admin/menu" element={
-                <AdminPage />
-            } />
+            <Route path="/admin/menu" element={<AdminPage />} />
             <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route path="/admin/orders" element={<AdminOrdersPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/cart" element={<CartPage />} />
+            {/* Redirect any other path to HomePage */}
+            <Route path="*" element={<HomePage />} />
           </Routes>
           <Footer />
         </div>
       </Router>
-  );
-}
-
-function Home({ user, onSignOut }) {
-  return (
-      <div>
-        {user ? (
-            <>
-              <h2>Welcome to CooperEats, {user.displayName || 'User'}!</h2>
-              <button onClick={onSignOut}>Log Out</button>
-            </>
-        ) : (
-            <h2>Welcome to CooperEats! Please log in.</h2>
-        )}
-      </div>
+    </styled>
   );
 }
 
