@@ -2,12 +2,12 @@
 import Paneer from "./CardImage/paneer.jpg";
 import Gujrati from "./CardImage/gujrati.jpeg";
 
-import beefLasagnaImage from '../../../foodImages/beefRasagna.png';
+import beefLasagnaImage from '../../../foodImages/lasagna.jpg';
 import chocoChipImage from '../../../foodImages/chocoChipM.png';
-import gb from '../../../foodImages/garlicBread.png';
-import il from '../../../foodImages/iltea.jpeg';
+import cw from '../../../foodImages/chickenw.jpeg';
+import il from '../../../foodImages/ilemontea.jpeg';
 import sm from '../../../foodImages/smr.jpeg';
-import vsf from '../../../foodImages/vsfry.jpeg'
+import vsf from '../../../foodImages/vsfryt.jpeg'
 
 export const MenuList = [
   {
@@ -28,7 +28,7 @@ export const MenuList = [
     name: "Chicken Wings",
     description:
       "Spicy and savory, served with blue cheese dressing",
-    image: gb,
+    image: cw,
     price: 5.49,
   },
   {
