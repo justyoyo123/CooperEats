@@ -182,7 +182,10 @@ import './CartPage.css';
                     <List>
                         {Object.entries(cart.products).map(([foodId, quantity]) => (
                             <ListItem key={foodId} divider>
-                                <ListItemText primary={`${foodDetails[foodId]?.name}`} secondary={`Total: $${foodDetails[foodId]?.price * quantity}`} />
+                                <ListItemText
+                                primary={`${foodDetails[foodId]?.name}`}
+                                secondary={`Total: $${(foodDetails[foodId]?.price * quantity).toFixed(2)}`}
+                                />
                                 <ListItemSecondaryAction>
                                     <IconButton aria-label="remove one" onClick={() => handleRemoveItemQuantity(foodId)}>
                                         <RemoveIcon />

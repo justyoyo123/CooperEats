@@ -55,7 +55,7 @@
 }
 .categories-sidebar {
   position: fixed;
-  top: 300px; /* Adjust based on your header's height */
+  top: 200px; /* Adjust based on your header's height */
   left: 0;
   width: 250px; /* Adjust the width as needed */
   height: calc(100vh - 60px); /* Adjust based on your header's height */
