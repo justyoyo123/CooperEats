@@ -79,7 +79,6 @@ function Header() {
   useEffect(() => {
     if (userId) {
       fetchCartByUserId();
-      fetchCartQuantity();
     }
   }, [userId]); // Fetch cart when userId changes
 
@@ -92,14 +91,6 @@ function Header() {
       console.error('Failed to fetch cart:', error);
     }
   };
-  const fetchCartQuantity = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/carts/quantity/user/${userId}`);
-    } catch (error) {
-      console.error('Failed to fetch cart quantity:', error);
-      setCartQuantity(0);
-    }
-  }
 
   const handleLogout = () => {
     getAuth().signOut().then(() => navigate('/'));
@@ -112,30 +103,46 @@ function Header() {
     return <AdminHeader />;
   } else {
     return (
-      <header className="header">
-        <Link to="/" className="logo-link">
-          CooperEats
-        </Link>
-        <div className="header-nav">
-          <IconButton onClick={() => navigate('/food')}><RestaurantMenuIcon /></IconButton>
-          <IconButton onClick={() => navigate('/cart')}>
-            <Badge badgeContent={cartQuantity} color="secondary">
-              <ShoppingCartIcon />
-            </Badge>
-          </IconButton>
-          {user ? (
-            <>
-              <IconButton onClick={() => navigate('/profile')}><AccountCircleIcon /></IconButton>
-              <IconButton aria-label="logout" onClick={handleLogout}>
-                <LogoutIcon />
-              </IconButton>
-            </>
-          ) : (
-            <IconButton onClick={() => navigate('/login')}><LoginIcon /></IconButton>
-          )}
-          {isAdmin && <Link to="/admin">Admin</Link>}
-        </div>
-      </header>
+        <header className="header">
+          <div>
+            
+            <Link to="/" className="logo-link">
+              <img src="./images/design/cooperlogo.png" alt="Cooper Union Logo" class="logo-image"/>
+              {/* <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo"/> */}
+              CooperEats
+            </Link>
+          </div>
+          <ul className="header-nav">
+            <li>
+              <IconButton onClick={() => navigate('/food')}><RestaurantMenuIcon /></IconButton>
+            </li>
+            {isAdmin && (
+                <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
+            )}
+            {user ? (
+                <>
+                  <li>
+                    <IconButton onClick={() => navigate('/cart')}>
+                      {/* <Badge badgeContent={cartQuantity} color="secondary">
+                        <ShoppingCartIcon color="action" />
+                      </Badge> */}
+                      <ShoppingCartIcon />
+                    </IconButton>
+                  </li>
+                  <li>
+                    <IconButton onClick={() => navigate('/profile')}><AccountCircleIcon /></IconButton>
+                    {/* <Link to="/profile">Profile</Link> */}
+                  </li>
+                  <li>
+                    <IconButton onClick={() => getAuth().signOut().then(() => navigate('/'))}><LogoutIcon /></IconButton>
+                  </li>
+                </>
+            ) : (
+                <li><IconButton onClick = {() => navigate('/login')}><LoginIcon /></IconButton></li>
+                // <li><Link to="/login">Login</Link></li>
+            )}
+          </ul>
+        </header>
     );
   }
 }

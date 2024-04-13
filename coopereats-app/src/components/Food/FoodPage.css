@@ -54,28 +54,31 @@
   text-align: center;
 }
 .categories-sidebar {
-  position: fixed;
-  top: 200px; /* Adjust based on your header's height */
-  left: 0;
-  width: 250px; /* Adjust the width as needed */
-  height: calc(100vh - 60px); /* Adjust based on your header's height */
-  overflow-y: auto;
-  padding: 20px;
-  box-sizing: border-box;
+  width: 100%; /* Takes full width of the container */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds shadow for a bit of depth */
+  background-color: white; /* Background color */
+  padding: 10px 20px; /* Padding around the items */
+  box-sizing: border-box; /* Makes sure padding doesn't affect the total width */
+  display: flex; /* Makes children (ul) flex items */
+  justify-content: center; /* Centers the ul horizontally */
+  overflow-x: auto; /* Allows horizontal scrolling if too many items */
+  /* position: fixed; */
+  z-index: 1000;
 }
 
 .categories-sidebar ul {
-  list-style: none;
+  display: flex; /* Display list items in a row */
   padding: 0;
   margin: 0;
+  list-style: none; /* Removes bullet points */
 }
 
 .categories-sidebar li {
   cursor: pointer;
-  padding: 20px 0;
-  border-bottom: 1px solid #eee;
+  padding: 10px 20px; /* More padding for touch targets */
+  white-space: nowrap; /* Ensures the text doesn't wrap */
 }
 
 .categories-sidebar li:hover {
-  background-color: #f5f5f5;
+  background-color: #f5f5f5; /* Light grey background on hover */
 }
