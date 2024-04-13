@@ -8,10 +8,10 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 // import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const FoodItemDetailsModal = ({ show, onHide, foodName, details }) => {
+const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
   const [userId, setUserId] = useState(null);
   const [cart, setCart] = useState([]);
-  const [quantities, setQuantities] = useState({});
+  const [quantities, setQuantities] = useState({[foodId]: 1});
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -105,6 +105,12 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details }) => {
           Ingredients: {details.ingredients}<br />
           Allergens: {details.allergens}
         </p>
+        <div>
+          <IconButton onClick={()=>decrementQuantity(foodId)}><RemoveIcon /></IconButton>
+          <span>{quantities[foodId]}</span>
+          <IconButton onClick={()=>incrementQuantity(foodId)}><AddIcon /></IconButton>
+          <Button onClick={() => handleAddToCart(foodId)} startIcon={<AddShoppingCartIcon />}>Add to Cart</Button>
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Close</Button> {/* Use the onHide prop here */}

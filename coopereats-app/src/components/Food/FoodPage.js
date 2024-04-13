@@ -212,7 +212,7 @@ const FoodPage = () => {
                           <p>Food ID: {food.foodId}</p> */}
                         </div>
                         <div>
-                        {food.quantity > 0 ? (
+                        {/* {food.quantity > 0 ? (
                           <>
                             <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
                             <span>{quantities[food.foodId] || 1}</span>
@@ -225,7 +225,7 @@ const FoodPage = () => {
                           <Button variant="outlined" disabled>
                             Sold Out
                           </Button>
-                        )}
+                        )} */}
                           {/* <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
                           <span>{quantities[food.foodId] || 1}</span>
                           <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
@@ -234,7 +234,7 @@ const FoodPage = () => {
                           Add {quantities[food.foodId]||1} to Cart
                         </Button> */}
                       </div>
-                        <FoodItem name={food.name} />
+                        <FoodItem name={food.name} foodId ={food.foodId}/>
                       </div>
                   ))}
                 </div>

@@ -2,23 +2,24 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import FoodItemDetailsModal from './FoodItemDetailsModal';
-import foodDetails from './FoodDetails'; // Assuming you have a separate file for food details data
+import foodDetails from './FoodDetails';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import {IconButton} from '@mui/material';
 
-const FoodItem = ({ name }) => {
+const FoodItem = ({ name, foodId}) => {
   const [modalShow, setModalShow] = useState(false);
   const details = foodDetails[name];
 
   return (
     <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        Details
-      </Button>
+      <IconButton onClick={()=>setModalShow(true)}><AddCircleIcon fontSize='large'/></IconButton>
 
       <FoodItemDetailsModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         foodName={name}
         details={details}
+        foodId={foodId}
       />
     </>
   );
