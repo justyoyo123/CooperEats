@@ -194,51 +194,53 @@ const FoodPage = () => {
             ))}
           </ul>
         </div>
-        {categories.map((category, index) => (
-            <div ref={sectionRefs.current[index]} key={category}>
-              <h2>{categoryDisplayNames[category] || category}</h2>
-              <div className="food-list">
-                {foods.filter(food => food.category === category).map(food => (
-                    <div className="food-item" key={food.foodId}>
-                      <div className='food-image-container'>
-                        <img src={foodImages[food.name] || '../../foodImages/cheesecake.jpeg'} alt={food.name} className="food-image" />
-                      </div>
-                      <div className="food-details">
-                        <h3>{food.name}</h3>
-                        <h3>${food.price}</h3>
-                        <p>{food.description}</p>
-                        {/* <p>Quantity: {food.quantity}</p>
-                        <p>Food ID: {food.foodId}</p> */}
-                      </div>
-                      <div>
-                      {food.quantity > 0 ? (
-                        <>
-                          <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
+        <div className="actual-content">
+          {categories.map((category, index) => (
+              <div ref={sectionRefs.current[index]} key={category}>
+                <h2>{categoryDisplayNames[category] || category}</h2>
+                <div className="food-list">
+                  {foods.filter(food => food.category === category).map(food => (
+                      <div className="food-item" key={food.foodId}>
+                        <div className='food-image-container'>
+                          <img src={foodImages[food.name] || '../../foodImages/cheesecake.jpeg'} alt={food.name} className="food-image" />
+                        </div>
+                        <div className="food-details">
+                          <h3>{food.name}</h3>
+                          <h3>${food.price}</h3>
+                          <p>{food.description}</p>
+                          {/* <p>Quantity: {food.quantity}</p>
+                          <p>Food ID: {food.foodId}</p> */}
+                        </div>
+                        <div>
+                        {food.quantity > 0 ? (
+                          <>
+                            <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
+                            <span>{quantities[food.foodId] || 1}</span>
+                            <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
+                            <Button variant="contained" endIcon={<AddShoppingCartIcon />} onClick={() => handleAddToCart(food.foodId)}>
+                              Add {quantities[food.foodId] || 1} to Cart
+                            </Button>
+                          </>
+                        ) : (
+                          <Button variant="outlined" disabled>
+                            Sold Out
+                          </Button>
+                        )}
+                          {/* <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
                           <span>{quantities[food.foodId] || 1}</span>
                           <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
-                          <Button variant="contained" endIcon={<AddShoppingCartIcon />} onClick={() => handleAddToCart(food.foodId)}>
-                            Add {quantities[food.foodId] || 1} to Cart
-                          </Button>
-                        </>
-                      ) : (
-                        <Button variant="outlined" disabled>
-                          Sold Out
-                        </Button>
-                      )}
-                        {/* <IconButton onClick={() => incrementQuantity(food.foodId)}><AddIcon /></IconButton>
-                        <span>{quantities[food.foodId] || 1}</span>
-                        <IconButton onClick={() => decrementQuantity(food.foodId)}><RemoveIcon /></IconButton>
+                        </div>
+                        <Button variant="contained" endIcon={<AddShoppingCartIcon />} onClick={() => handleAddToCart(food.foodId)}>
+                          Add {quantities[food.foodId]||1} to Cart
+                        </Button> */}
                       </div>
-                      <Button variant="contained" endIcon={<AddShoppingCartIcon />} onClick={() => handleAddToCart(food.foodId)}>
-                        Add {quantities[food.foodId]||1} to Cart
-                      </Button> */}
-                    </div>
-                      <FoodItem name={food.name} />
-                    </div>
-                ))}
+                        <FoodItem name={food.name} />
+                      </div>
+                  ))}
+                </div>
               </div>
-            </div>
-        ))}
+          ))}
+        </div>
         <Snackbar
             open={snackbarOpen}
             autoHideDuration={6000}
