@@ -78,21 +78,23 @@ function App() {
       <Router>
         <div className="App">
           <ConditionalHeader />
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/create-account" element={<CreateAccountPage />} />
-            <Route path="/food" element={<FoodPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/about" element={<AboutUsPage />} />
-            <Route path="/admin/menu" element={<AdminPage />} />
-            <Route path="/admin/users" element={<AdminUsersPage />} />
-            <Route path="/admin/orders" element={<AdminOrdersPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/" element={<HomePage />} />
-            <Route path="/cart" element={<CartPage />} />
-            {/* Redirect any other path to HomePage */}
-            <Route path="*" element={<HomePage />} />
-          </Routes>
+          <div className ="main-content">
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/create-account" element={<CreateAccountPage />} />
+              <Route path="/food" element={<FoodPage />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/about" element={<AboutUsPage />} />
+              <Route path="/admin/menu" element={<AdminPage />} />
+              <Route path="/admin/users" element={<AdminUsersPage />} />
+              <Route path="/admin/orders" element={<AdminOrdersPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/cart" element={<CartPage />} />
+              {/* Redirect any other path to HomePage */}
+              <Route path="*" element={<HomePage />} />
+            </Routes>
+          </div>
           <Footer />
         </div>
       </Router>

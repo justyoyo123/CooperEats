@@ -168,3 +168,6 @@ tr:hover {background-color: #ddd;}
   cursor: pointer;
 }
 
+.main-content {
+  padding-top: 136px; /* Adjust this value based on the height of your header */
+}
