@@ -3,3 +3,21 @@
     align-items: center; /* Vertically center the flex items */
     justify-content: center; /* Horizontally center the flex items */
 }
+.cart-image-container {
+    width: 110px; /* Square dimensions */
+    height: 110px;
+    margin-right: 10px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px; /* Optional: for rounded corners */
+  }
+  
+  .cart-image {
+    /* width: auto; */
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover; /* This will ensure that your images cover the area and are cropped if necessary */
+  }

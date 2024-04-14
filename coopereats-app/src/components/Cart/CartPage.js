@@ -8,6 +8,33 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import './CartPage.css';
+import garlicBreadSticksImage from '../../foodImages/garlicBread.png';
+import chickenWingsImage from '../../foodImages/chickenw.jpeg';
+import stuffedMushroomImage from '../../foodImages/smr.jpeg';
+import grilledSalmonImage from '../../foodImages/grilledSalmon.png';
+import beefRasagnaImage from '../../foodImages/beefRasagna.png';
+import vstirFryImage from '../../foodImages/vsfryt.jpeg';
+import dChocolateImage from '../../foodImages/dChocolate.png';
+import chocoChipImage from '../../foodImages/chocoChip.png';
+import miniChocoChipImage from '../../foodImages/miniChocoChip.png';
+import icedLemonImage from '../../foodImages/iltea.jpeg';
+import mangoSmoothieImage from '../../foodImages/mangoS.png';
+import chocoChipMImage from '../../foodImages/chocoChipM.png';
+
+const foodImages = {
+    "1" : garlicBreadSticksImage,
+    "2": chickenWingsImage,
+    "3": stuffedMushroomImage,
+    "4": grilledSalmonImage,
+    "5":beefRasagnaImage,
+    "6": vstirFryImage,
+    "7": dChocolateImage,
+    "8": chocoChipImage,
+    "9": miniChocoChipImage,
+    "10": icedLemonImage,
+    "11": mangoSmoothieImage,
+    "12": chocoChipMImage,
+  };
 
   const CartPage = () => {
     const navigate = useNavigate();
@@ -171,7 +198,7 @@ import './CartPage.css';
     }
 
     return (
-        <Card sx={{ maxWidth: 600, margin: '20px auto' }}>
+        <Card sx={{ maxWidth: 650, margin: '20px auto' }}>
             <CardContent>
                 <Typography variant="h5" component="div" gutterBottom>
                     Your Shopping Cart
@@ -182,6 +209,9 @@ import './CartPage.css';
                     <List>
                         {Object.entries(cart.products).map(([foodId, quantity]) => (
                             <ListItem key={foodId} divider>
+                                <div className='cart-image-container'>
+                                <img src={foodImages[foodId] || '../../foodImages/chickenw.jpeg'} className="cart-image" />
+                                </div>
                                 <ListItemText
                                 primary={`${foodDetails[foodId]?.name}`}
                                 secondary={`Total: $${(foodDetails[foodId]?.price * quantity).toFixed(2)}`}
@@ -209,7 +239,7 @@ import './CartPage.css';
                 <Button variant="contained" color="primary" onClick={goToCheckout} sx={{ mt: 2 }}>
                     Proceed to Checkout
                 </Button>
-                <Button variant="outlined" color="secondary" onClick={handleClearCart} sx={{ mt: 2 }}>
+                <Button variant="outlined" color="primary" onClick={handleClearCart} sx={{ mt: 2 }}>
                     Clear Cart
                 </Button>
             </CardContent>
