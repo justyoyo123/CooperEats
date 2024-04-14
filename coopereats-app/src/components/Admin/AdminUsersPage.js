@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton} from '@mui/material';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    IconButton,
+    Typography
+} from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function AdminUsersPage() {
@@ -30,10 +40,13 @@ function AdminUsersPage() {
     };
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} elevation={0} sx={{ maxWidth: '90%', margin: 'auto', overflowX: 'auto', elevation: 0, border: 'none'}}>
+            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'black' }}>
+                Users
+            </Typography>
             <Table aria-label="simple table">
                 <TableHead>
-                    <TableRow>
+                    <TableRow sx={{ '& th': { fontWeight: 'bold', backgroundColor: 'primary.dark', color: 'common.white' } }}>
                         <TableCell>User ID</TableCell>
                         <TableCell align="right">Name</TableCell>
                         <TableCell align="right">Email</TableCell>
@@ -44,7 +57,7 @@ function AdminUsersPage() {
                 <TableBody>
                     {users.map((user) => (
                         <TableRow key={user.userId}>
-                            <TableCell component="th" scope="row">
+                            <TableCell component="th" scope="row" style={{ color: 'white' }}>
                                 {user.userId}
                             </TableCell>
                             <TableCell align="right">{user.name}</TableCell>

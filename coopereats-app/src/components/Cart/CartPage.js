@@ -131,27 +131,60 @@ const foodImages = {
         }
     };
 
-    const handleAddItemQuantity = async (foodId) => {
-        const updatedProducts = { ...cart.products };
-        let curr_quantity;
-        if (updatedProducts[foodId] !== undefined) {
-            curr_quantity = updatedProducts[foodId]
-            updatedProducts[foodId] += 1; // Increment the item quantity by 1
+    // const handleAddItemQuantity = async (foodId) => {
+    //     const updatedProducts = { ...cart.products };
+    //     let curr_quantity;
+    //     if (updatedProducts[foodId] !== undefined) {
+    //         curr_quantity = updatedProducts[foodId]
+    //         updatedProducts[foodId] += 1; // Increment the item quantity by 1
+    //
+    //         // Make the API call to update the item quantity in the backend
+    //         try {
+    //             const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
+    //                 foodId,
+    //                 quantity: updatedProducts[foodId] - curr_quantity,
+    //             });
+    //
+    //             const updatedCart = response.data;
+    //             setCart(updatedCart);
+    //         } catch (error) {
+    //             console.error('Failed to add item quantity:', error);
+    //         }
+    //     }
+    // };
+      const handleAddItemQuantity = async (foodId) => {
+          // Fetch current available stock from the server
+          try {
+              const stockResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+              const availableQuantity = stockResponse.data.quantity;
 
-            // Make the API call to update the item quantity in the backend
-            try {
-                const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
-                    foodId,
-                    quantity: updatedProducts[foodId] - curr_quantity,
-                });
+              const updatedProducts = { ...cart.products };
+              let curr_quantity = updatedProducts[foodId] || 0; // Set to 0 if undefined
 
-                const updatedCart = response.data;
-                setCart(updatedCart);
-            } catch (error) {
-                console.error('Failed to add item quantity:', error);
-            }
-        }
-    };
+              if (curr_quantity + 1 > availableQuantity) {
+                  // Handle the case where the desired addition exceeds the available stock
+                  console.error('Cannot add more items than available in stock');
+                  alert('You cannot add more of this item, as it exceeds the available stock.');
+              } else {
+                  updatedProducts[foodId] = curr_quantity + 1; // Increment the item quantity by 1
+
+                  // Make the API call to update the item quantity in the backend
+                  try {
+                      const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
+                          foodId,
+                          quantity: updatedProducts[foodId] - curr_quantity,
+                      });
+
+                      const updatedCart = response.data;
+                      setCart(updatedCart);
+                  } catch (error) {
+                      console.error('Failed to add item quantity:', error);
+                  }
+              }
+          } catch (error) {
+              console.error('Failed to fetch available stock:', error);
+          }
+      };
 
     const handleRemoveItemQuantity = async (foodId) => {
         const updatedProducts = { ...cart.products };

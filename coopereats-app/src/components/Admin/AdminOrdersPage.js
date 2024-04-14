@@ -90,10 +90,9 @@ function AdminOrdersPage() {
         fetchOrders();
     }, []);
 
-
     return (
-        <TableContainer component={Paper} sx={{ maxWidth: '90%', margin: 'auto', overflowX: 'auto' }}>
-            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'primary.main' }}>
+        <TableContainer component={Paper} elevation={0} sx={{ maxWidth: '90%', margin: 'auto', overflowX: 'auto', border: 'none' }}>
+            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'black' }}>
                 Orders
             </Typography>
             <Typography variant="h5" gutterBottom component="div" sx={{ textAlign: 'center', mt: 2 }}>
@@ -109,13 +108,13 @@ function AdminOrdersPage() {
                         <TableCell>Pickup Time</TableCell>
                         <TableCell>Total Price</TableCell>
                         <TableCell>Payment Status</TableCell>
-                        <TableCell>Fulfillment</TableCell>
+                        <TableCell>Fulfillment Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {orders.map((order, index) => (
-                        <TableRow key={order.orderId} sx={{ '&:nth-of-type(odd)': { backgroundColor: 'action.hover' } }}>
-                            <TableCell component="th" scope="row">
+                        <TableRow key={order.orderId} sx={{ '&:nth-of-type(odd)': { backgroundColor: 'white' } }}>
+                            <TableCell component="th" scope="row" style={{ color: 'white' }}>
                                 {order.orderId}
                             </TableCell>
                             {/*<TableCell>{order.user ? order.user.email : 'N/A'}</TableCell>*/}

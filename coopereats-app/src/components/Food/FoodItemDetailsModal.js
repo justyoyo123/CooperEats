@@ -57,8 +57,29 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
     }
   };
   // Function to increment quantity
-  const incrementQuantity = (foodId) => {
-    setQuantities(prev => ({ ...prev, [foodId]: (prev[foodId] || 0) + 1 }));
+  // const incrementQuantity = (foodId) => {
+  //   setQuantities(prev => ({ ...prev, [foodId]: (prev[foodId] || 0) + 1 }));
+  // };
+
+  const incrementQuantity = async (foodId) => {
+    try {
+      const stockResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+      const availableQuantity = stockResponse.data.quantity;
+
+      setQuantities(prev => {
+        const currentQuantity = prev[foodId] || 0;
+
+        if (currentQuantity + 1 > availableQuantity) {
+          console.error('Cannot add more items than available in stock');
+          alert('You cannot add more of this item, as it exceeds the available stock.');
+          return { ...prev }; // Return the previous state without changes
+        } else {
+          return { ...prev, [foodId]: currentQuantity + 1 };
+        }
+      });
+    } catch (error) {
+      console.error('Failed to fetch available stock:', error);
+    }
   };
 
   // Function to decrement quantity
