@@ -83,7 +83,10 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
             console.error('Failed to add item to cart:', error);
         }
     }
-}
+  }
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <Modal
@@ -115,6 +118,12 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
       <Modal.Footer>
         <Button onClick={onHide}>Close</Button> {/* Use the onHide prop here */}
       </Modal.Footer>
+      <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+            message={snackbarMessage}
+      />
     </Modal>
   );
 };
