@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import { Tabs, Tab, Box, Button, IconButton, Snackbar } from '@mui/material';
+import { Tabs, Tab, Box, Button, IconButton, Snackbar, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -208,8 +208,6 @@ const FoodPage = () => {
                           <h3>{food.name}</h3>
                           <h3>${food.price}</h3>
                           <p>{food.description}</p>
-                          {/* <p>Quantity: {food.quantity}</p>
-                          <p>Food ID: {food.foodId}</p> */}
                         </div>
                         <div>
                         {/* {food.quantity > 0 ? (
@@ -234,7 +232,13 @@ const FoodPage = () => {
                           Add {quantities[food.foodId]||1} to Cart
                         </Button> */}
                       </div>
-                        <FoodItem name={food.name} foodId ={food.foodId}/>
+                      {food.quantity > 0 ? (
+                        <FoodItem name={food.name} foodId={food.foodId} />
+                      ) : (
+                        <Typography variant="h6" style={{ color: 'red', fontWeight: 'bold', textAlign: 'center' }}>
+                          Sold Out
+                        </Typography>
+                      )}
                       </div>
                   ))}
                 </div>

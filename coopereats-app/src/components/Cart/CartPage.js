@@ -192,9 +192,12 @@ const foodImages = {
 
     if (!cart) {
         return (
-            <Typography variant="h4" component="div" style={{ fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
+            <>
+            <CartTop/>
+            <Typography variant="h4" component="div" style={{animation: 'fadeIn 2s', fontWeight: 'bold', textAlign: 'center', marginTop: '40px' }}>
                 Your Cart is Empty!
             </Typography>
+            </>
         );
     }
 
