@@ -20,6 +20,7 @@ import miniChocoChipImage from '../../foodImages/miniChocoChip.png';
 import icedLemonImage from '../../foodImages/iltea.jpeg';
 import mangoSmoothieImage from '../../foodImages/mangoS.png';
 import chocoChipMImage from '../../foodImages/chocoChipM.png';
+import CartTop from './CartTop';
 
 const foodImages = {
     "1" : garlicBreadSticksImage,
@@ -198,11 +199,13 @@ const foodImages = {
     }
 
     return (
+        <>
+        <CartTop/>
         <Card sx={{ maxWidth: 650, margin: '20px auto' }}>
             <CardContent>
-                <Typography variant="h5" component="div" gutterBottom>
+                {/* <Typography variant="h5" component="div" gutterBottom>
                     Your Shopping Cart
-                </Typography>
+                </Typography> */}
                 {cart.products && Object.keys(cart.products).length === 0 ? (
                     <Typography>Your cart is empty</Typography>
                 ) : (
@@ -236,14 +239,17 @@ const foodImages = {
                 <Typography variant="h6" component="div" gutterBottom>
                     Total Price: ${cart.totalPrice.toFixed(2)}
                 </Typography>
-                <Button variant="contained" color="primary" onClick={goToCheckout} sx={{ mt: 2 }}>
+                {/* <Button variant="contained" color="primary" onClick={goToCheckout} sx={{ mt: 2 }}>
                     Proceed to Checkout
                 </Button>
                 <Button variant="outlined" color="primary" onClick={handleClearCart} sx={{ mt: 2 }}>
                     Clear Cart
-                </Button>
+                </Button>  */}
+                <button className="button" onClick={goToCheckout}>Proceed to Checkout</button>
+                <button className="button" onClick={handleClearCart}>Clear Cart</button> 
             </CardContent>
         </Card>
+        </>
     );
   }
 

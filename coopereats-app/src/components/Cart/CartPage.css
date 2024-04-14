@@ -1,3 +1,25 @@
+.button {
+  border: none;
+  color: #747474;  
+  font-weight: 500;
+  padding: 0.7vw 1vw;
+  background-color: white;
+  font-size: max(1vw, 13px); /* Responsive */
+  border-radius: 30px;
+  cursor: pointer; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+  transition: all 0.3s ease; 
+  margin-right: 10px;
+  margin-top: 3px;
+}
+
+.button:hover, .button:focus {
+  color: white;
+  background-color: #747474; /* Dark gray background on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+  outline: none; 
+}
+
 .action-container {
     display: flex; /* Use Flexbox */
     align-items: center; /* Vertically center the flex items */
@@ -21,3 +43,45 @@
     min-height: 100%;
     object-fit: cover; /* This will ensure that your images cover the area and are cropped if necessary */
   }
+
+  .cart-top {
+    height: 19vw;
+    width: 60%;
+    margin: 30px auto;
+    background: url('../../foodImages/shoppingcart3.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    border-radius: 13px;
+    overflow: hidden;
+}
+
+.cart-top-contents{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 1.5vw;
+    max-width: 50%;
+    bottom: 10%;
+    left: 8vw;
+    margin-left: 0px;
+}
+
+.cart-top-contents h2{
+    font-weight: 450;
+    color: white;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
+    font-size: max(3.2vw,20px);
+
+}
+
+.cart-top-contents button{
+    border: none;
+    color: #747474;
+    font-weight: 500;
+    padding: 0.9vw 1.5vw;
+    background-color: white;
+    font-size: max(1vw,13px);
+    border-radius: 30px;
+    text-shadow: 0.1px 0.1px 0.1px rgba(0, 0, 0, 0.3);
+}
