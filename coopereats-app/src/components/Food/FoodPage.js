@@ -5,14 +5,14 @@ import { Tabs, Tab, Box, Button, IconButton, Snackbar, Typography } from '@mui/m
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import garlicBreadSticksImage from '../../foodImages/garlicBread.png';
+import garlicBreadSticksImage from '../../foodImages/garlicBS.jpeg';
 import chickenWingsImage from '../../foodImages/chickenWing.png';
 import stuffedMushroomImage from '../../foodImages/smr.jpeg';
 import grilledSalmonImage from '../../foodImages/grilledSalmon.png';
 import beefRasagnaImage from '../../foodImages/beefRasagna.png';
 import vstirFryImage from '../../foodImages/vsfry.jpeg';
 import dChocolateImage from '../../foodImages/dChocolate.png';
-import chocoChipImage from '../../foodImages/chocoChip.png';
+import chocoChipImage from '../../foodImages/cchipmuffin2.jpeg';
 import miniChocoChipImage from '../../foodImages/miniChocoChip.png';
 import icedLemonImage from '../../foodImages/iltea.jpeg';
 import mangoSmoothieImage from '../../foodImages/mangoS.png';

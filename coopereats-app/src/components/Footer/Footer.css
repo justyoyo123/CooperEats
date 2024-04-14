@@ -21,7 +21,6 @@
     margin-left: 0px;
     margin-bottom: 5px;
 }
-
 .footer-content-left, .footer-content-right, .footer-content-center {
     flex-direction: column;
     align-items: start;
@@ -50,3 +49,7 @@
     background-color: grey;
     border: none;
 }
+.footer-modal-description p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
