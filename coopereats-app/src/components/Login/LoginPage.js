@@ -3,16 +3,19 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { IconButton, Typography, Button, FormControl, FormLabel, Input, Stack, Divider, Link, Box } from '@mui/joy';
 import HomeIcon from '@mui/icons-material/Home';
-import GoogleLogin from './GoogleLogin';  // Assuming GoogleLogin is correctly implemented elsewhere
-import useUser from '../../hooks/useUser';  // Importing the useUser hook
+import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp'; // Import visibility icons
+import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp'; // Import visibility icons
+import GoogleLogin from './GoogleLogin';
+import useUser from '../../hooks/useUser';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { setUser, setUserId } = useUser();  // Use the useUser hook
+    const { setUser, setUserId } = useUser();
 
     const logIn = async () => {
         if (!email || !password) {
@@ -23,11 +26,11 @@ const LoginPage = () => {
         try {
             const auth = getAuth();
             const response = await signInWithEmailAndPassword(auth, email, password);
-            setUser(response.user);  // Update user context
-            setUserId(response.user.uid);  // Update user ID context
-            navigate('/');  // Navigate to home/dashboard on success
+            setUser(response.user);
+            setUserId(response.user.uid);
+            navigate('/');
         } catch (e) {
-            setError("Failed to sign in: " + e.message);  // Set error message from Firebase
+            setError("Failed to sign in: " + e.message);
         }
         setIsLoading(false);
     };
@@ -54,7 +57,19 @@ const LoginPage = () => {
                     </FormControl>
                     <FormControl required sx={{ mt: 2 }}>
                         <FormLabel>Password</FormLabel>
-                        <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <Input
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            endDecorator={
+                                <IconButton
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? <VisibilityOffSharpIcon /> : <VisibilitySharpIcon />}
+                                </IconButton>
+                            }
+                        />
                     </FormControl>
                     <Button onClick={logIn} disabled={isLoading} sx={{ mt: 2, width: '100%', maxWidth: '100%' }}>
                         Sign In

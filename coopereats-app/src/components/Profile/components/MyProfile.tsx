@@ -70,6 +70,31 @@ const MyProfile = ({
         }
     };
 
+    const handleGoHome = () => {
+        navigate('/');
+    };
+
+    const formatPhoneNumber = (value: string): string => {
+        if (!value) return value;
+
+        const phoneNumber = value.replace(/[^\d]/g, '');
+        const match = phoneNumber.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+
+        if (match) {
+            const intlCode = match[1] ? '+1 ' : '';
+            return [intlCode, '(', match[2], ') - ', match[3], ' - ', match[4]].join('');
+        }
+
+        return value;
+    };
+
+    const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const inputNumbers = e.target.value.replace(/[^\d]/g, '');
+        const formattedPhoneNumber = formatPhoneNumber(inputNumbers);
+        setEditablePhoneNumber(formattedPhoneNumber);
+    };
+
+
     const handleUpdate = async (updatedInfo: {
         fullName: string;
         phoneNumber: string;
@@ -129,42 +154,6 @@ const MyProfile = ({
         }
     };
 
-
-
-    const handleGoHome = () => {
-        navigate('/');
-    };
-
-    const formatPhoneNumber = (value: string): string => {
-        if (!value) return value;
-
-        const phoneNumber = value.replace(/[^\d]/g, '');
-        const match = phoneNumber.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-
-        if (match) {
-            const intlCode = match[1] ? '+1 ' : '';
-            return [intlCode, '(', match[2], ') - ', match[3], ' - ', match[4]].join('');
-        }
-
-        return value;
-    };
-
-
-    const onPasswordUpdate = async () => {
-        if (newPassword !== confirmNewPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-        await handlePasswordUpdate(currentPassword, newPassword);
-    };
-
-
-    const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const inputNumbers = e.target.value.replace(/[^\d]/g, '');
-        const formattedPhoneNumber = formatPhoneNumber(inputNumbers);
-        setEditablePhoneNumber(formattedPhoneNumber);
-    };
-
     const onUpdateInfo = async () => {
         const updateData = {
             fullName: editableFullName || currentUserInfo.fullName,  // Use edited name or fallback to current
@@ -177,6 +166,8 @@ const MyProfile = ({
         console.log("Updating with info:", updateData);
         await handleUpdate(updateData);
     };
+
+
 
 
     return (
