@@ -12,12 +12,11 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
 import HomeIcon from '@mui/icons-material/Home';
-
+import axios, { AxiosError } from 'axios';
 
 import useUser from '../../../hooks/useUser';
 
 import React, { ChangeEvent, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { updatePassword, getAuth, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
@@ -56,9 +55,19 @@ const MyProfile = ({
     const [deleteConfirmation, setDeleteConfirmation] = useState(false);
     const [error, setError] = useState('');
 
+    const [userInfo, setUserInfo] = useState({
+        fullName: currentUserInfo.fullName,
+        userName: currentUserInfo.userName,
+        phoneNumber: currentUserInfo.phoneNumber,
+        email: currentUserInfo.email,
+        password: '',
+        newPassword: '',
+        confirmNewPassword: ''
+    });
+
+
     const navigate = useNavigate();
 
-    // Function definitions
     const confirmAndDelete = async () => {
         if (!deleteConfirmation) {
             alert('Please confirm deletion.');
@@ -75,84 +84,89 @@ const MyProfile = ({
     };
 
     const formatPhoneNumber = (value: string): string => {
-        if (!value) return value;
-
         const phoneNumber = value.replace(/[^\d]/g, '');
         const match = phoneNumber.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-
         if (match) {
             const intlCode = match[1] ? '+1 ' : '';
             return [intlCode, '(', match[2], ') - ', match[3], ' - ', match[4]].join('');
         }
-
         return value;
     };
 
-    const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const inputNumbers = e.target.value.replace(/[^\d]/g, '');
-        const formattedPhoneNumber = formatPhoneNumber(inputNumbers);
-        setEditablePhoneNumber(formattedPhoneNumber);
+    const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+        setUserInfo(prevState => ({ ...prevState, phoneNumber: formattedPhoneNumber }));
     };
 
 
-    const handleUpdate = async (updatedInfo: {
+    const handleUpdate = async (updateData: {
         fullName: string;
         phoneNumber: string;
         userName: string;
         email: string;
         password: string;
     }) => {
+        console.log("handleUpdate called with:", updateData);
         try {
-            const response = await axios.put(`${BACKEND_URL}/${userId}`, updatedInfo);
+            const response = await axios.put(`${BACKEND_URL}/${userId}`, updateData);
             if (response.status === 200) {
                 alert('Profile updated successfully!');
-                // Update local state or perform other actions on success
+                setUserInfo(prevState => ({ ...prevState, ...updateData, newPassword: '', confirmNewPassword: '' }));
             } else {
-                throw new Error(`Failed to update profile: ${response.statusText}`);
+                throw new Error('Failed to update profile');
             }
-        } catch (error: any) {
-            setError(error.response?.data?.message || 'An error occurred during the update.');
-            alert(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                alert(error.message);  // Safe because all Error objects have a message property
+                if (axios.isAxiosError(error)) {
+                    setError(error.response?.data?.message || 'An error occurred during the update.');
+                } else {
+                    setError('An error occurred that is not handled by axios');
+                }
+            } else {
+                setError('An unexpected error occurred');
+            }
         }
     };
 
+
     const updateUserInfoAndPassword = async () => {
+        console.log("Attempting to update user info and password...");
+
         if (newPassword !== confirmNewPassword) {
+            console.error("Passwords do not match.");
             setError('Passwords do not match.');
             return;
         }
+
+        // Update user info state to include the new password right before updating
+        setUserInfo(prevState => ({
+            ...prevState,
+            password: newPassword
+        }));
 
         const updateData = {
             fullName: editableFullName || currentUserInfo.fullName,
             phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
             userName: editableUserName || currentUserInfo.userName,
-            email: currentUserInfo.email,  // Email is assumed to be unchanged
-            password: newPassword  // New password from input
+            email: currentUserInfo.email,
+            password: newPassword  // Ensure this is the newly set password
         };
 
+        console.log("Sending update request with data:", updateData);
+
         try {
-            // Update user info in your backend
             const response = await axios.put(`${BACKEND_URL}/${userId}`, updateData);
             if (response.status === 200) {
-                // If backend update is successful, update password in Firebase
-                const auth = getAuth();
-                const user = auth.currentUser;
-                if (user) {
-                    await updatePassword(user, newPassword);
-                    setError('Profile and password updated successfully.');
-                    setNewPassword('');
-                    setConfirmNewPassword('');
-                    setCurrentPassword('');
-                } else {
-                    setError('No user logged in.');
-                }
+                await handleFirebasePasswordUpdate();
             } else {
-                throw new Error(`Failed to update profile: ${response.statusText}`);
+                throw new Error('Failed to update profile');
             }
         } catch (error) {
-            console.error('Update failed:', error);
+            processError(error);
         }
     };
+
 
     const onUpdateInfo = async () => {
         const updateData = {
@@ -160,7 +174,7 @@ const MyProfile = ({
             phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
             userName: editableUserName || currentUserInfo.userName,
             email: currentUserInfo.email,
-            password: currentUserInfo.password
+            password: userInfo.password  // Use the most recently updated password from state
         };
 
         console.log("Updating with info:", updateData);
@@ -168,6 +182,35 @@ const MyProfile = ({
     };
 
 
+    const handleFirebasePasswordUpdate = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+            await updatePassword(user, newPassword);
+            setError('Profile and password updated successfully.');
+            // Clear fields to prevent security risk
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmNewPassword('');
+            // Update password in userInfo state to reflect the change globally
+            setUserInfo(prevState => ({
+                ...prevState,
+                password: newPassword
+            }));
+        } else {
+            setError('No user logged in.');
+        }
+    };
+
+    const processError = (error: any) => {
+        if (axios.isAxiosError(error)) {
+            setError(error.response?.data?.message || 'An error occurred during the update.');
+        } else if (error instanceof Error) {
+            setError(error.message);
+        } else {
+            setError('An unexpected error occurred');
+        }
+    };
 
 
     return (
@@ -325,8 +368,8 @@ const MyProfile = ({
                     <Stack
                         spacing={3}
                         direction="column"
-                        alignItems="center" // Align stack items to the center
-                        justifyContent="center" // Center the stack along the cross axis
+                        alignItems="center"
+                        justifyContent="center"
                         sx={{ px: 2, py: 3 }}
                     >
                         {/* Manage Current Password */}
