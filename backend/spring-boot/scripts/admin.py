@@ -83,7 +83,7 @@ def create_food_items(admin_id):
         {"name": "Mango Smoothie", "description": "Fresh mangoes blended with ice and a hint of honey.", "price": 3.49,
          "image": "url_to_mango_smoothie_image", "quantity": 30, "category": "DRINK"},
         {"name": "Choco Chip Muffin Classic", "description": "Classic choco chip muffin, soft and delicious.",
-         "price": 2.59, "image": "url_to_choco_chip_muffin_classic_image", "quantity": 30, "category": "DRINK"}
+         "price": 2.59, "image": "url_to_choco_chip_muffin_classic_image", "quantity": 30, "category": "DESSERT"}
     ]
 
     for food_data in food_items:
