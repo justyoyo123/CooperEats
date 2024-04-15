@@ -83,20 +83,31 @@ const MyProfile = ({
         navigate('/');
     };
 
-    const formatPhoneNumber = (value: string): string => {
-        const phoneNumber = value.replace(/[^\d]/g, '');
-        const match = phoneNumber.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-        if (match) {
-            const intlCode = match[1] ? '+1 ' : '';
-            return [intlCode, '(', match[2], ') - ', match[3], ' - ', match[4]].join('');
-        }
-        return value;
-    };
-
     const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formattedPhoneNumber = formatPhoneNumber(e.target.value);
-        setUserInfo(prevState => ({ ...prevState, phoneNumber: formattedPhoneNumber }));
+        setEditablePhoneNumber(formattedPhoneNumber);  // Update the displayed value
+        setUserInfo(prevState => ({
+            ...prevState,
+            phoneNumber: formattedPhoneNumber  // Update the state for form submission or API calls
+        }));
     };
+
+
+
+    const formatPhoneNumber = (phoneNumber: string): string => {
+        phoneNumber = phoneNumber.replace(/\D/g, '');  // Remove all non-numeric characters
+        phoneNumber = phoneNumber.substring(0, 10);  // Limit to 10 digits
+
+        const match = phoneNumber.match(/^(\d{1,3})(\d{0,3})(\d{0,4})$/);
+        if (match) {
+            const [, areaCode, prefix, lineNum] = match;
+            return `${areaCode ? '(' + areaCode : ''}${areaCode.length === 3 ? ') ' : ''}${prefix}${prefix.length === 3 ? ' - ' : ''}${lineNum}`;
+        }
+        return phoneNumber;
+    };
+
+
+
 
 
     const handleUpdate = async (updateData: {
