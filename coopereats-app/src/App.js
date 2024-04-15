@@ -65,7 +65,7 @@ function App() {
 
   const ConditionalHeader = () => {
     const location = useLocation();
-    const excludedPaths = ['/login', '/create-account', '/profile'];
+    const excludedPaths = [];
     if (excludedPaths.includes(location.pathname)) {
       return null; // Do not render Header on these paths
     }
@@ -78,7 +78,7 @@ function App() {
       <Router>
         <div className="App">
           <ConditionalHeader />
-          <div className ="main-content">
+          <div className="main-content">
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/create-account" element={<CreateAccountPage />} />

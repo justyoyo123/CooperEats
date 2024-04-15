@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { IconButton, Typography, Button, FormControl, FormLabel, Input, Stack, Divider, Link, Box } from '@mui/joy';
-import HomeIcon from '@mui/icons-material/Home';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp'; // Import visibility icons
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp'; // Import visibility icons
 import GoogleLogin from './GoogleLogin';
@@ -36,14 +35,7 @@ const LoginPage = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', overflowX: 'hidden' }}>
-            <Box component="header" sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 3, px: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Box component="img" src="/images/design/TheCooperUnion_logo.png" alt="CooperEats Logo" sx={{ width: 'auto', height: 50 }} />
-                    <Typography level="h3">CooperEats</Typography>
-                </Box>
-                <IconButton aria-label="home" onClick={() => navigate('/')}><HomeIcon /></IconButton>
-            </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', overflowX: 'hidden', mt: 4 }}>
             <Box sx={{ width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
                 <Stack gap={2} sx={{ width: '100%', maxWidth: '400px', my: 4 }}>
                     <Typography component="h1" level="h3">Sign in</Typography>

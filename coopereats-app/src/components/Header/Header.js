@@ -1,94 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { Tabs, Tab, Box, Button, IconButton, Snackbar } from '@mui/material';
-import Badge, { BadgeProps } from '@mui/material/Badge';
+import { IconButton } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from "axios";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import AdminHeader from './AdminHeader';
 
 function Header() {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
-  const [cart, setCart] = useState([]);
-  const [cartQuantity, setCartQuantity] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleCartUpdate = () => {
-      fetchCartByUserId();
-    };
-
-    window.addEventListener('cartUpdated', handleCartUpdate);
-
-    return () => {
-      window.removeEventListener('cartUpdated', handleCartUpdate);
-    };
-  }, []);
-
-  useEffect(() => {
-    const fetchUserId = async (firebaseUid) => {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
-        setUserId(response.data);
-        console.log("Fetched application user ID:", response.data);
-      } catch (error) {
-        console.error("Error fetching application user ID:", error);
-        setUserId(null);
-      }
-    };
-
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setUser(user);
       if (user) {
         fetchUserId(user.uid);
       } else {
         setUserId(null);
+        setIsAdmin(false);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const checkAdmin = async () => {
-      if (userId) {
-        const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
-        setIsAdmin(response.data.role === 'ADMIN');
-      } else {
-        setIsAdmin(false);
-      }
-    };
-
-    checkAdmin();
-  }, [userId]);
-
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (userId) {
-      fetchCartByUserId();
-    }
-  }, [userId]); // Fetch cart when userId changes
-
-  // Function to fetch the cart
-  const fetchCartByUserId = async () => {
+  const fetchUserId = async (firebaseUid) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
-      setCart(response.data);
+      const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`);
+      setUserId(response.data);
+      setIsAdmin(response.data.role === 'ADMIN');
     } catch (error) {
-      console.error('Failed to fetch cart:', error);
+      console.error("Error fetching user data:", error);
+      setUserId(null);
+      setIsAdmin(false);
     }
   };
 
@@ -96,55 +48,32 @@ function Header() {
     getAuth().signOut().then(() => navigate('/'));
   };
 
-
-
-
   if (isAdmin) {
     return <AdminHeader />;
-  } else {
-    return (
-        <header className="header">
-          <div>
-            
-            <Link to="/" className="logo-link">
-              <img src="./images/design/cooperlogo.png" alt="Cooper Union Logo" class="logo-image"/>
-              {/* <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo"/> */}
-              CooperEats
-            </Link>
-          </div>
-          <ul className="header-nav">
-            <li>
-              <IconButton onClick={() => navigate('/food')}><RestaurantMenuIcon /></IconButton>
-            </li>
-            {isAdmin && (
-                <li><Link to="/admin">Admin</Link></li> // Admin link, only visible to admins
-            )}
-            {user ? (
-                <>
-                  <li>
-                    <IconButton onClick={() => navigate('/cart')}>
-                      {/* <Badge badgeContent={cartQuantity} color="secondary">
-                        <ShoppingCartIcon color="action" />
-                      </Badge> */}
-                      <ShoppingCartIcon />
-                    </IconButton>
-                  </li>
-                  <li>
-                    <IconButton onClick={() => navigate('/profile')}><AccountCircleIcon /></IconButton>
-                    {/* <Link to="/profile">Profile</Link> */}
-                  </li>
-                  <li>
-                    <IconButton onClick={() => getAuth().signOut().then(() => navigate('/'))}><LogoutIcon /></IconButton>
-                  </li>
-                </>
-            ) : (
-                <li><IconButton onClick = {() => navigate('/login')}><LoginIcon /></IconButton></li>
-                // <li><Link to="/login">Login</Link></li>
-            )}
-          </ul>
-        </header>
-    );
   }
+
+  return (
+    <header className="header">
+      <Link to="/" className="logo-link">
+        <img src="./images/design/cooperlogo.png" alt="Cooper Union Logo" className="logo-image" />
+        CooperEats
+      </Link>
+      <nav className="header-nav">
+        <IconButton onClick={() => navigate('/food')}><RestaurantMenuIcon /></IconButton>
+        {isAdmin && <Link to="/admin">Admin</Link>}
+        {user ? (
+          <>
+            <IconButton onClick={() => navigate('/cart')}><ShoppingCartIcon /></IconButton>
+            <IconButton onClick={() => navigate('/profile')}><AccountCircleIcon /></IconButton>
+            <IconButton onClick={handleLogout}><LogoutIcon /></IconButton>
+          </>
+        ) : (
+          <IconButton onClick={() => navigate('/login')}><LoginIcon /></IconButton>
+        )}
+        <IconButton onClick={() => navigate('/')}><HomeIcon /></IconButton>
+      </nav>
+    </header>
+  );
 }
 
 export default Header;

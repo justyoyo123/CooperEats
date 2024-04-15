@@ -117,7 +117,6 @@ const MyProfile = ({
         email: string;
         password: string;
     }) => {
-        console.log("handleUpdate called with:", updateData);
         try {
             const response = await axios.put(`${BACKEND_URL}/${userId}`, updateData);
             if (response.status === 200) {
@@ -128,7 +127,7 @@ const MyProfile = ({
             }
         } catch (error: unknown) {
             if (error instanceof Error) {
-                alert(error.message);  // Safe because all Error objects have a message property
+                alert(error.message);
                 if (axios.isAxiosError(error)) {
                     setError(error.response?.data?.message || 'An error occurred during the update.');
                 } else {
@@ -142,8 +141,6 @@ const MyProfile = ({
 
 
     const updateUserInfoAndPassword = async () => {
-        console.log("Attempting to update user info and password...");
-
         if (newPassword !== confirmNewPassword) {
             console.error("Passwords do not match.");
             setError('Passwords do not match.');
@@ -160,18 +157,15 @@ const MyProfile = ({
             phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
             userName: editableUserName || currentUserInfo.userName,
             email: currentUserInfo.email,
-            password: newPassword  // Ensure this is the newly set password
+            password: newPassword
         };
 
-        // Clear the inputs here as well
         setEditableFullName('');
         setEditablePhoneNumber('');
         setEditableUserName('');
         setCurrentPassword('');
         setNewPassword('');
         setConfirmNewPassword('');
-
-        console.log("Sending update request with data:", updateData);
 
         try {
             const response = await axios.put(`${BACKEND_URL}/${userId}`, updateData);
@@ -195,7 +189,6 @@ const MyProfile = ({
             password: userInfo.password
         };
 
-        // Clear the inputs here
         setEditableFullName('');
         setEditablePhoneNumber('');
         setEditableUserName('');
@@ -203,7 +196,6 @@ const MyProfile = ({
         setNewPassword('');
         setConfirmNewPassword('');
 
-        console.log("Updating with info:", updateData);
         await handleUpdate(updateData);
     };
 
@@ -214,11 +206,9 @@ const MyProfile = ({
         if (user) {
             await updatePassword(user, newPassword);
             setError('Profile and password updated successfully.');
-            // Clear fields to prevent security risk
             setCurrentPassword('');
             setNewPassword('');
             setConfirmNewPassword('');
-            // Update password in userInfo state to reflect the change globally
             setUserInfo(prevState => ({
                 ...prevState,
                 password: newPassword
