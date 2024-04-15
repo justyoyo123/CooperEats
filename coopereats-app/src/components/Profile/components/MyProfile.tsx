@@ -231,44 +231,6 @@ const MyProfile = ({
 
     return (
         <Box sx={{ flex: 1, width: '100%' }}>
-            <Box
-                sx={{
-                    position: 'sticky',
-                    top: { sm: -100, md: -110 },
-                    bgcolor: 'background.body',
-                    zIndex: 9995,
-                }}
-            >
-                <Box
-                    component="header"
-                    sx={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        py: 3,
-                        px: 2,
-                    }}
-                >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {/* Logo Image */}
-                        <Box
-                            component="img"
-                            src="/images/design/TheCooperUnion_logo.png"
-                            alt="CooperEats Logo"
-                            sx={{ width: 'auto', height: 50 }}
-                        />
-                        <Typography level="h3">CooperEats</Typography>
-                    </Box>
-                    {/* Home Icon Button */}
-                    <IconButton
-                        aria-label="home"
-                        onClick={handleGoHome}
-                    >
-                        <HomeIcon />
-                    </IconButton>
-                </Box>
-            </Box>
             <Stack
                 spacing={4}
                 sx={{

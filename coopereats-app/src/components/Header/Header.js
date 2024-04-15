@@ -65,12 +65,13 @@ function Header() {
           <>
             <IconButton onClick={() => navigate('/cart')}><ShoppingCartIcon /></IconButton>
             <IconButton onClick={() => navigate('/profile')}><AccountCircleIcon /></IconButton>
+            <IconButton onClick={() => navigate('/')}><HomeIcon /></IconButton>
             <IconButton onClick={handleLogout}><LogoutIcon /></IconButton>
           </>
         ) : (
-          <IconButton onClick={() => navigate('/login')}><LoginIcon /></IconButton>
+          <IconButton onClick={() => navigate('/login')}><AccountCircleIcon /></IconButton>
         )}
-        <IconButton onClick={() => navigate('/')}><HomeIcon /></IconButton>
+
       </nav>
     </header>
   );
