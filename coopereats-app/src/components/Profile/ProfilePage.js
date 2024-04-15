@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, updatePassword, deleteUser as deleteFirebaseUser } from 'firebase/auth';
 import './ProfilePage.css';
 import MyProfile from './components/MyProfile';
+import useUser from '../../hooks/useUser';
 
 const ProfilePage = () => {
   const [currentUserInfo, setCurrentUserInfo] = useState({
@@ -13,7 +14,7 @@ const ProfilePage = () => {
     email: '',
     password: '',
   });
-  const [userId, setUserId] = useState(null);
+  const [currentuserId, setUserId] = useState(null);
   const [editableUserName, setEditableUserName] = useState('');
   const [editablePhoneNumber, setEditablePhoneNumber] = useState('');
   const [editableFullName, setEditableFullName] = useState('');
@@ -22,6 +23,7 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
+  const { user, userId, isLoading } = useUser();
   const navigate = useNavigate();
   const BACKEND_URL = "http://localhost:8080/api/users";
 
@@ -58,35 +60,48 @@ const ProfilePage = () => {
     }
   };
 
+
   const handleUpdate = async () => {
+    console.log("Called from ProfilePage - handleUpdate with editable values:", {
+      userName: editableUserName,
+      phoneNumber: editablePhoneNumber,
+      fullName: editableFullName,
+    });
+
+    console.log("Current user info state before update:", currentUserInfo);
+
     const updatedInfo = {
-      email: currentUserInfo.email,
-      password: currentUserInfo.password,
+      email: currentUserInfo.email,  // Assuming email is not edited in the form
       userName: editableUserName || currentUserInfo.userName,
       phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
       fullName: editableFullName || currentUserInfo.fullName,
+      password: currentUserInfo.password  // Assuming password changes are handled separately
     };
+
+    console.log("Updated Info being sent to the server:", updatedInfo);
 
     try {
       const response = await axios.put(`${BACKEND_URL}/${userId}`, updatedInfo);
+      console.log("Server response:", response);
+
       if (response.status === 200) {
-        setCurrentUserInfo({
-          ...currentUserInfo,
-          ...updatedInfo
-        });
+        setCurrentUserInfo(updatedInfo);  // This will sync the ProfilePage state with the latest updates
         setError('Profile updated successfully.');
-        setEditableUserName('');
-        setEditablePhoneNumber('');
-        setEditableFullName('');
       } else {
-        setError('Failed to update profile.');
+        setError(`Failed to update profile: ${response.statusText}`);
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'Error updating profile.');
+      console.error("Update failed:", error);
+      setError(error.message || 'Error updating profile.');
     }
   };
 
-  const handlePasswordUpdate = async () => {
+
+
+
+
+
+  const handlePasswordUpdate = async (currentPassword, newPassword) => {
     if (newPassword !== confirmNewPassword) {
       setError('New passwords do not match.');
       return;
@@ -101,27 +116,14 @@ const ProfilePage = () => {
 
     try {
       await updatePassword(user, newPassword);
-      // Assuming you want to update other user info in your backend, exclude the password update here
-      const updatedInfo = {
-        userName: currentUserInfo.userName,
-        phoneNumber: currentUserInfo.phoneNumber,
-        fullName: currentUserInfo.fullName,
-        email: currentUserInfo.email,
-        // Do not send the password to your backend
-      };
-      const response = await axios.put(`${BACKEND_URL}/${userId}`, updatedInfo);
-      if (response.status === 200) {
-        setError('Password updated successfully.');
-        // Clear the password fields
-        setNewPassword('');
-        setConfirmNewPassword('');
-      } else {
-        setError('Failed to update user information.');
-      }
+      setError('Password updated successfully.');
+      setNewPassword('');
+      setConfirmNewPassword('');
     } catch (error) {
       setError(error.message || 'Error updating password.');
     }
   };
+
 
 
   const handleDeleteUser = async () => {
@@ -168,6 +170,7 @@ const ProfilePage = () => {
         handlePasswordUpdate={handlePasswordUpdate}
         handleDeleteUser={handleDeleteUser}
       />
+
 
     </div>
   );

@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
@@ -7,21 +9,19 @@ import Input from '@mui/joy/Input';
 import IconButton from '@mui/joy/IconButton';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardOverflow from '@mui/joy/CardOverflow';
-import { ChangeEvent } from 'react';
-
 import PhoneIcon from '@mui/icons-material/Phone';
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
-import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
+import useUser from '../../../hooks/useUser';
 
+// Constants can be defined after imports
+const BACKEND_URL = "http://localhost:8080/api/users";
 
+// Define your component interface right after imports and constants
 interface MyProfileProps {
     currentUserInfo: {
         userName: string;
@@ -31,65 +31,68 @@ interface MyProfileProps {
         password: string;
     };
     userId: string;
-    editableFullName: string;
-    setEditableFullName: React.Dispatch<React.SetStateAction<string>>;
-    editablePhoneNumber: string;
-    setEditablePhoneNumber: React.Dispatch<React.SetStateAction<string>>;
-    editableUserName: string;
-    setEditableUserName: React.Dispatch<React.SetStateAction<string>>;
-    currentPassword: string;
-    setCurrentPassword: React.Dispatch<React.SetStateAction<string>>;
-    newPassword: string;
-    setNewPassword: React.Dispatch<React.SetStateAction<string>>;
-    confirmNewPassword: string;
-    setConfirmNewPassword: React.Dispatch<React.SetStateAction<string>>;
-    handlePasswordUpdate: () => Promise<void>;
-    handleUpdate: () => Promise<void>;
+    handlePasswordUpdate: (currentPassword: string, newPassword: string) => Promise<void>;
     handleDeleteUser: () => Promise<void>;
 }
 
 
-
-export default function MyProfile({
+// Component function definition
+const MyProfile = ({
     currentUserInfo,
     userId,
-    editableFullName,
-    setEditableFullName,
-    editablePhoneNumber,
-    setEditablePhoneNumber,
-    editableUserName,
-    setEditableUserName,
-    currentPassword,
-    setCurrentPassword,
-    newPassword,
-    setNewPassword,
-    confirmNewPassword,
-    setConfirmNewPassword,
-    handleUpdate,
     handlePasswordUpdate,
     handleDeleteUser,
-}: MyProfileProps) {
-
-    const [showCurrentPassword, setShowCurrentPassword] = React.useState(false);
-    const [showNewPassword, setShowNewPassword] = React.useState(false);
-    const [showConfirmNewPassword, setShowConfirmNewPassword] = React.useState(false);
-    const [deleteConfirmation, setDeleteConfirmation] = React.useState(false);
-
+}: MyProfileProps) => {
+    // State definitions
+    const [editableFullName, setEditableFullName] = useState(currentUserInfo.fullName);
+    const [editablePhoneNumber, setEditablePhoneNumber] = useState(currentUserInfo.phoneNumber);
+    const [editableUserName, setEditableUserName] = useState(currentUserInfo.userName);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false); // Ensure state is defined
+    const [error, setError] = useState('');  // State to handle errors
     const navigate = useNavigate();
 
-    const confirmAndDelete = () => {
+    // Function definitions
+    const confirmAndDelete = async () => {
         if (!deleteConfirmation) {
-            alert('Please confirm the deletion by checking the box.');
+            alert('Please confirm deletion.');
             return;
         }
-        if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-            handleDeleteUser();
+        if (window.confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+            await handleDeleteUser();
             navigate('/');
         }
     };
 
+    // Example function to handle profile updates
+    const handleUpdate = async (updatedInfo: {
+        fullName: string;
+        phoneNumber: string;
+        userName: string;
+        email: string;
+        password: string;
+    }) => {
+        try {
+            const response = await axios.put(`${BACKEND_URL}/${userId}`, updatedInfo);
+            if (response.status === 200) {
+                alert('Profile updated successfully!');
+                // Update local state or perform other actions on success
+            } else {
+                throw new Error(`Failed to update profile: ${response.statusText}`);
+            }
+        } catch (error: any) {
+            setError(error.response?.data?.message || 'An error occurred during the update.');
+            alert(error.message);
+        }
+    };
 
-    // Handle home navigation
+
+
     const handleGoHome = () => {
         navigate('/');
     };
@@ -109,10 +112,31 @@ export default function MyProfile({
     };
 
 
+    const onPasswordUpdate = async () => {
+        if (newPassword !== confirmNewPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+        await handlePasswordUpdate(currentPassword, newPassword);
+    };
+
+
     const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
         const inputNumbers = e.target.value.replace(/[^\d]/g, '');
         const formattedPhoneNumber = formatPhoneNumber(inputNumbers);
         setEditablePhoneNumber(formattedPhoneNumber);
+    };
+
+    const onUpdateInfo = async () => {
+        const updateData = {
+            fullName: editableFullName || currentUserInfo.fullName,
+            phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
+            userName: editableUserName || currentUserInfo.userName,
+            email: currentUserInfo.email,
+            password: currentUserInfo.password
+        };
+        console.log("Updating with info:", updateData);
+        await handleUpdate(updateData);
     };
 
 
@@ -215,7 +239,7 @@ export default function MyProfile({
                             <Input
                                 size="md"
                                 value={editableFullName}
-                                onChange={(e) => setEditableFullName(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditableFullName(e.target.value)}
                             />
                         </FormControl>
                     </Stack>
@@ -228,7 +252,7 @@ export default function MyProfile({
                                 size="md"
                                 type="text"
                                 value={editableUserName}
-                                onChange={(e) => setEditableUserName(e.target.value)}
+                                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setEditableUserName(e.target.value)}
                             />
                         </FormControl>
                     </Stack>
@@ -253,6 +277,7 @@ export default function MyProfile({
                             size="sm"
                             variant="outlined"
                             color="neutral"
+                            onClick={onUpdateInfo}
                             sx={{ width: 'auto', maxWidth: 'fit-content' }}
                         >
                             Update
@@ -283,7 +308,7 @@ export default function MyProfile({
                                 size="sm"
                                 type={showCurrentPassword ? 'text' : 'password'}
                                 value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setCurrentPassword(e.target.value)}
                                 endDecorator={
                                     <IconButton
                                         onClick={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -303,7 +328,7 @@ export default function MyProfile({
                                 size="sm"
                                 type={showNewPassword ? 'text' : 'password'}
                                 value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
+                                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNewPassword(e.target.value)}
                                 endDecorator={
                                     <IconButton
                                         onClick={() => setShowNewPassword(!showNewPassword)}
@@ -323,7 +348,7 @@ export default function MyProfile({
                                 size="sm"
                                 type={showConfirmNewPassword ? 'text' : 'password'}
                                 value={confirmNewPassword}
-                                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setConfirmNewPassword(e.target.value)}
                                 endDecorator={
                                     <IconButton
                                         onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
@@ -340,6 +365,7 @@ export default function MyProfile({
                             size="sm"
                             variant="outlined"
                             color="neutral"
+                            onClick={onUpdateInfo}
                             sx={{ width: 'auto', maxWidth: 'fit-content' }}
                         >
                             Update
@@ -388,7 +414,7 @@ export default function MyProfile({
                             <input
                                 type="checkbox"
                                 checked={deleteConfirmation}
-                                onChange={(e) => setDeleteConfirmation(e.target.checked)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDeleteConfirmation(e.target.checked)}
                             />
                             I understand that this action cannot be undone.
                         </label>
@@ -416,3 +442,4 @@ export default function MyProfile({
     );
 }
 
+export default MyProfile;
