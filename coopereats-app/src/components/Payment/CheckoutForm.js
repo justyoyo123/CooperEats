@@ -111,8 +111,13 @@ const CheckoutForm = () => {
         for (const [foodId, quantityOrdered] of Object.entries(cartItems)) {
             try {
                 const foodResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
-                const {quantity: quantityAvailable, name} = foodResponse.data.quantity;
+                // const {quantity: quantityAvailable, name} = foodResponse.data.quantity;
+                const quantityAvailable = foodResponse.data.quantity;
+                const name = foodResponse.data.name;
 
+                console.log('quant avail:', quantityAvailable);
+                console.log('name:', name);
+                console.log('quant ordered:', quantityOrdered);
                 if (quantityOrdered > quantityAvailable) {
                     stockIssues.push({ name, quantityLeft: quantityAvailable });
                 }
@@ -123,7 +128,8 @@ const CheckoutForm = () => {
 
         // If there are stock issues, alert the user and prevent order submission
         if (stockIssues.length > 0) {
-            const message = stockIssues.map(issue => `Only ${issue.quantityLeft} ${issue.name} left.`).join("\n");
+            console.log('Stock Issues Detected:', stockIssues);
+            const message = stockIssues.map(issue => `Only ${issue.quantityLeft} ${issue.name} left. Please remove excess items from your cart.`).join("\n");
             alert(message);
             return; // Prevent further execution
         }
