@@ -139,7 +139,6 @@ const MyProfile = ({
             return;
         }
 
-        // Update user info state to include the new password right before updating
         setUserInfo(prevState => ({
             ...prevState,
             password: newPassword
@@ -152,6 +151,14 @@ const MyProfile = ({
             email: currentUserInfo.email,
             password: newPassword  // Ensure this is the newly set password
         };
+
+        // Clear the inputs here as well
+        setEditableFullName('');
+        setEditablePhoneNumber('');
+        setEditableUserName('');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmNewPassword('');
 
         console.log("Sending update request with data:", updateData);
 
@@ -174,8 +181,16 @@ const MyProfile = ({
             phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
             userName: editableUserName || currentUserInfo.userName,
             email: currentUserInfo.email,
-            password: userInfo.password  // Use the most recently updated password from state
+            password: userInfo.password
         };
+
+        // Clear the inputs here
+        setEditableFullName('');
+        setEditablePhoneNumber('');
+        setEditableUserName('');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmNewPassword('');
 
         console.log("Updating with info:", updateData);
         await handleUpdate(updateData);
