@@ -1,6 +1,3 @@
-import React, { ChangeEvent, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
@@ -11,17 +8,22 @@ import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
-import CardOverflow from '@mui/joy/CardOverflow';
 import PhoneIcon from '@mui/icons-material/Phone';
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
 import HomeIcon from '@mui/icons-material/Home';
+
+
 import useUser from '../../../hooks/useUser';
 
-// Constants can be defined after imports
+import React, { ChangeEvent, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { updatePassword, getAuth, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
+
+
 const BACKEND_URL = "http://localhost:8080/api/users";
 
-// Define your component interface right after imports and constants
 interface MyProfileProps {
     currentUserInfo: {
         userName: string;
@@ -36,14 +38,12 @@ interface MyProfileProps {
 }
 
 
-// Component function definition
 const MyProfile = ({
     currentUserInfo,
     userId,
     handlePasswordUpdate,
     handleDeleteUser,
 }: MyProfileProps) => {
-    // State definitions
     const [editableFullName, setEditableFullName] = useState(currentUserInfo.fullName);
     const [editablePhoneNumber, setEditablePhoneNumber] = useState(currentUserInfo.phoneNumber);
     const [editableUserName, setEditableUserName] = useState(currentUserInfo.userName);
@@ -53,8 +53,9 @@ const MyProfile = ({
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
-    const [deleteConfirmation, setDeleteConfirmation] = useState(false); // Ensure state is defined
-    const [error, setError] = useState('');  // State to handle errors
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+    const [error, setError] = useState('');
+
     const navigate = useNavigate();
 
     // Function definitions
@@ -69,7 +70,6 @@ const MyProfile = ({
         }
     };
 
-    // Example function to handle profile updates
     const handleUpdate = async (updatedInfo: {
         fullName: string;
         phoneNumber: string;
@@ -88,6 +88,44 @@ const MyProfile = ({
         } catch (error: any) {
             setError(error.response?.data?.message || 'An error occurred during the update.');
             alert(error.message);
+        }
+    };
+
+    const updateUserInfoAndPassword = async () => {
+        if (newPassword !== confirmNewPassword) {
+            setError('Passwords do not match.');
+            return;
+        }
+
+        const updateData = {
+            fullName: editableFullName || currentUserInfo.fullName,
+            phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
+            userName: editableUserName || currentUserInfo.userName,
+            email: currentUserInfo.email,  // Email is assumed to be unchanged
+            password: newPassword  // New password from input
+        };
+
+        try {
+            // Update user info in your backend
+            const response = await axios.put(`${BACKEND_URL}/${userId}`, updateData);
+            if (response.status === 200) {
+                // If backend update is successful, update password in Firebase
+                const auth = getAuth();
+                const user = auth.currentUser;
+                if (user) {
+                    await updatePassword(user, newPassword);
+                    setError('Profile and password updated successfully.');
+                    setNewPassword('');
+                    setConfirmNewPassword('');
+                    setCurrentPassword('');
+                } else {
+                    setError('No user logged in.');
+                }
+            } else {
+                throw new Error(`Failed to update profile: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Update failed:', error);
         }
     };
 
@@ -129,16 +167,16 @@ const MyProfile = ({
 
     const onUpdateInfo = async () => {
         const updateData = {
-            fullName: editableFullName || currentUserInfo.fullName,
-            phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
-            userName: editableUserName || currentUserInfo.userName,
-            email: currentUserInfo.email,
-            password: currentUserInfo.password
+            fullName: editableFullName || currentUserInfo.fullName,  // Use edited name or fallback to current
+            phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,  // Use edited phone or fallback to current
+            userName: editableUserName || currentUserInfo.userName,  // Use edited username or fallback to current
+            email: currentUserInfo.email,  // Assuming email is not editable in this form
+            password: currentUserInfo.password  // Assuming password changes are handled separately
         };
+
         console.log("Updating with info:", updateData);
         await handleUpdate(updateData);
     };
-
 
 
     return (
@@ -365,36 +403,12 @@ const MyProfile = ({
                             size="sm"
                             variant="outlined"
                             color="neutral"
-                            onClick={onUpdateInfo}
+                            onClick={updateUserInfoAndPassword}
                             sx={{ width: 'auto', maxWidth: 'fit-content' }}
                         >
                             Update
                         </Button>
                     </CardActions>
-                </Card>
-
-
-
-
-                <Card>
-                    <Box sx={{ mb: 1 }}>
-                        <Typography level="title-md">Wallet</Typography>
-                        <Typography level="body-sm">
-                            Some Description about Payment Method.
-                        </Typography>
-                    </Box>
-                    <Stack spacing={2} sx={{ my: 1 }}>
-                    </Stack>
-                    <CardOverflow sx={{ borderTop: '1px solid', borderColor: 'divider' }}>
-                        <CardActions sx={{ alignSelf: 'flex-end', pt: 2 }}>
-                            <Button
-                                size="sm"
-                                variant="outlined"
-                                color="neutral">
-                                Update
-                            </Button>
-                        </CardActions>
-                    </CardOverflow>
                 </Card>
 
 
