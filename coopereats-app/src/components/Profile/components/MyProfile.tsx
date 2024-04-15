@@ -156,11 +156,11 @@ const MyProfile = ({
 
     const onUpdateInfo = async () => {
         const updateData = {
-            fullName: editableFullName || currentUserInfo.fullName,  // Use edited name or fallback to current
-            phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,  // Use edited phone or fallback to current
-            userName: editableUserName || currentUserInfo.userName,  // Use edited username or fallback to current
-            email: currentUserInfo.email,  // Assuming email is not editable in this form
-            password: currentUserInfo.password  // Assuming password changes are handled separately
+            fullName: editableFullName || currentUserInfo.fullName,
+            phoneNumber: editablePhoneNumber || currentUserInfo.phoneNumber,
+            userName: editableUserName || currentUserInfo.userName,
+            email: currentUserInfo.email,
+            password: currentUserInfo.password
         };
 
         console.log("Updating with info:", updateData);
@@ -315,7 +315,7 @@ const MyProfile = ({
                 </Card>
 
                 {/* Password Section */}
-                <Card sx={{ textAlign: 'center' }}> {/* Add text alignment to the Card */}
+                <Card>
                     <Box sx={{ mb: 1 }}>
                         <Typography level="title-md">Security</Typography>
                         <Typography level="body-sm">
