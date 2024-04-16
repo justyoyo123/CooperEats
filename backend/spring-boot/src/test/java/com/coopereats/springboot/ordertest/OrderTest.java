@@ -22,10 +22,8 @@ public class OrderTest {
 
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private OrderRepository orderRepository;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -72,5 +70,31 @@ public class OrderTest {
         assertThat(savedOrder.getTotalPrice()).isEqualTo(100.0);
         assertThat(savedOrder.getProducts()).containsEntry(1L, 2);
         assertThat(savedOrder.getPaymentStatus()).isEqualTo("PAID");
+    }
+
+    @Test
+    public void testOrderGettersAndSetters() {
+        // Create and configure an Order instance
+        Order order = new Order();
+        order.setOrderId(1L);
+        order.setUser(testUser);
+        LocalDateTime orderDate = LocalDateTime.now();
+        order.setOrderDate(orderDate);
+        LocalDateTime pickupTime = LocalDateTime.now().plusHours(2);
+        order.setPickupTime(pickupTime);
+        order.setTotalPrice(250.0);
+        order.setPaymentStatus("UNPAID");
+        HashMap<Long, Integer> products = new HashMap<>();
+        products.put(2L, 3);
+        order.setProducts(products);
+
+        // Verify all getters and setters
+        assertThat(order.getOrderId()).isEqualTo(1L);
+        assertThat(order.getUser()).isEqualTo(testUser);
+        assertThat(order.getOrderDate()).isEqualTo(orderDate);
+        assertThat(order.getPickupTime()).isEqualTo(pickupTime);
+        assertThat(order.getTotalPrice()).isEqualTo(250.0);
+        assertThat(order.getPaymentStatus()).isEqualTo("UNPAID");
+        assertThat(order.getProducts()).containsEntry(2L, 3);
     }
 }

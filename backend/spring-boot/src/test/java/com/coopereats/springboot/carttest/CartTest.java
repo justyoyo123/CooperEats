@@ -20,10 +20,8 @@ public class CartTest {
 
     @Autowired
     private CartService cartService;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private FoodRepository foodRepository;
 
@@ -83,5 +81,19 @@ public class CartTest {
         assertThat(retrievedCart).isNotNull();
         assertThat(retrievedCart.getUser().getUserId()).isEqualTo(testUser.getUserId());
         assertThat(retrievedCart.getProducts()).hasSize(2).containsEntry(testFood1.getFoodId(), 3).containsEntry(testFood2.getFoodId(), 1);
+    }
+
+    @Test
+    public void testCartGettersAndSetters() {
+        // Create and configure a Cart instance
+        Cart cart = new Cart();
+        cart.setUser(testUser);
+        cart.setTotalPrice(100.0);
+        cart.setPaymentStatus("Pending");
+
+        // Verify all getters and setters
+        assertThat(cart.getUser()).isEqualTo(testUser);
+        assertThat(cart.getTotalPrice()).isEqualTo(100.0);
+        assertThat(cart.getPaymentStatus()).isEqualTo("Pending");
     }
 }

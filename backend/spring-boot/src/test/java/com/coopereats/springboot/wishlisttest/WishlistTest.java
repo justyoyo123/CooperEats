@@ -23,16 +23,12 @@ public class WishlistTest {
 
     @Autowired
     private WishlistService wishlistService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private CartService cartService;
-
     @Autowired
     private FoodRepository foodRepository;
 
@@ -85,5 +81,17 @@ public class WishlistTest {
         Cart cart = cartService.getCartByUser(testUser.getUserId());
         assertThat(cart.getProducts()).containsKey(foodId);
         assertThat(cart.getProducts().get(foodId)).isEqualTo(quantity);
+    }
+
+    @Test
+    public void testWishlistGettersAndSetters() {
+        // Create and configure a Wishlist instance
+        Wishlist wishlist = new Wishlist();
+        wishlist.setWishlistId(123L);
+        wishlist.setUser(testUser);
+
+        // Verify getters and setters
+        assertThat(wishlist.getWishlistId()).isEqualTo(123L);
+        assertThat(wishlist.getUser()).isEqualTo(testUser);
     }
 }
