@@ -19,6 +19,7 @@ import useUser from '../../../hooks/useUser';
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updatePassword, getAuth, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
+import {List, ListItem} from "@mui/material";
 
 
 const BACKEND_URL = "http://localhost:8080/api/users";
@@ -32,6 +33,8 @@ interface MyProfileProps {
         password: string;
     };
     userId: string;
+    orderHistory: any[];
+    foodNames: Record<string, string>;
     handlePasswordUpdate: (currentPassword: string, newPassword: string) => Promise<void>;
     handleDeleteUser: () => Promise<void>;
 }
@@ -41,6 +44,8 @@ const MyProfile = ({
     currentUserInfo,
     userId,
     handlePasswordUpdate,
+    orderHistory,
+    foodNames,
     handleDeleteUser,
 }: MyProfileProps) => {
     const [editableFullName, setEditableFullName] = useState(currentUserInfo.fullName);
@@ -229,6 +234,10 @@ const MyProfile = ({
     };
 
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     return (
         <Box sx={{ flex: 1, width: '100%' }}>
             <Stack
@@ -422,11 +431,48 @@ const MyProfile = ({
                         </Button>
                     </CardActions>
                 </Card>
-
+                {/* Order History Section */}
+                <Card>
+                    <Box sx={{ mb: 1 }}>
+                        <Typography level="title-md">Order History</Typography>
+                        <Typography level="body-sm">
+                            Review your past orders.
+                        </Typography>
+                    </Box>
+                    <List
+                        sx={{
+                            maxHeight: '300px',  // Set a maximum height
+                            overflowY: 'auto',   // Enable scrolling
+                        }}
+                    >
+                        {orderHistory.map((order, index) => (
+                            <ListItem key={index}>
+                                <Typography>
+                                    <strong>Order Number:</strong> {order.orderId} - <strong>Date:</strong> {
+                                    new Date(order.orderDate).toLocaleString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit'
+                                    })
+                                }
+                                    <br/>
+                                    <br/>
+                                    {Object.entries(order.products).map(([foodId, quantity]) => (
+                                        <div key={foodId}>{`${foodNames[foodId] || 'Loading...'}: ${quantity}`}</div>
+                                    ))}
+                                    {/*<strong>Items:</strong> {order.items.map((item: { name: any; }) => item.name).join(', ')}*/}
+                                </Typography>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Card>
 
                 {/* Manage Account */}
                 <Card>
-                    <Box sx={{ mb: 1 }}>
+                    <Box sx={{mb: 1}}>
                         <Typography level="title-md">Manage Account</Typography>
                         <Typography level="body-sm">
                             This action will permanently delete your account and all its data.

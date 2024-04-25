@@ -14,6 +14,7 @@ const ProfilePage = () => {
     email: '',
     password: '',
   });
+  const [orderHistory, setOrderHistory] = useState([]);
   const [currentuserId, setUserId] = useState(null);
   const [editableUserName, setEditableUserName] = useState('');
   const [editablePhoneNumber, setEditablePhoneNumber] = useState('');
@@ -22,10 +23,12 @@ const ProfilePage = () => {
   const [currentPasswordInput, setCurrentPasswordInput] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [foodNames, setFoodNames] = useState({});
 
   const { user, userId, isLoading } = useUser();
   const navigate = useNavigate();
   const BACKEND_URL = "http://localhost:8080/api/users";
+  // const ORDER_HISTORY_URL = `http://localhost:8080/api/foods/user/${userId}`;
 
   useEffect(() => {
     const auth = getAuth();
@@ -39,6 +42,7 @@ const ProfilePage = () => {
 
     return () => unsubscribe();
   }, []);
+
 
   const fetchUserId = async (firebaseUid) => {
     try {
@@ -60,6 +64,43 @@ const ProfilePage = () => {
     }
   };
 
+  useEffect(() => {
+    if (!userId) return;
+    const fetchAllFoodNames = async (allFoodIds) => {
+      const names = {};
+      for (let foodId of allFoodIds) {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+          names[foodId] = response.data.name; // Store the name using foodId as the key
+        } catch (error) {
+          console.error(`Error fetching food name for ID ${foodId}:`, error);
+          names[foodId] = 'Unknown'; // Use a placeholder in case of error
+        }
+      }
+      return names;
+    };
+
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/orders/user/${userId}`);
+        const order = response.data;
+        const allFoodIds = new Set();
+        order.forEach(order => {
+          Object.keys(order.products).forEach(foodId => {
+            allFoodIds.add(foodId);
+          });
+        });
+        const foodNames = await fetchAllFoodNames(allFoodIds);
+        setOrderHistory(response.data);
+        setFoodNames(foodNames);
+      } catch (error) {
+        console.error("Error fetching order history:", error);
+        setError(error.response?.data?.message || 'Error fetching order history.');
+      }
+    };
+
+    fetchOrders();
+  }, [userId]);
 
   const handleUpdate = async () => {
     console.log("Called from ProfilePage - handleUpdate with editable values:", {
@@ -148,31 +189,30 @@ const ProfilePage = () => {
     }
   };
 
-
   return (
-    <div className="profile-container">
-      <MyProfile
-        currentUserInfo={currentUserInfo}
-        userId={userId}
-        editableFullName={editableFullName}
-        setEditableFullName={setEditableFullName}
-        editablePhoneNumber={editablePhoneNumber}
-        setEditablePhoneNumber={setEditablePhoneNumber}
-        editableUserName={editableUserName}
-        setEditableUserName={setEditableUserName}
-        currentPassword={currentPasswordInput}
-        setCurrentPassword={setCurrentPasswordInput}
-        newPassword={newPassword}
-        setNewPassword={setNewPassword}
-        confirmNewPassword={confirmNewPassword}
-        setConfirmNewPassword={setConfirmNewPassword}
-        handleUpdate={handleUpdate}
-        handlePasswordUpdate={handlePasswordUpdate}
-        handleDeleteUser={handleDeleteUser}
-      />
-
-
-    </div>
+      <div className="profile-container">
+        <MyProfile
+            currentUserInfo={currentUserInfo}
+            userId={userId}
+            orderHistory={orderHistory}
+            foodNames={foodNames}
+            editableFullName={editableFullName}
+            setEditableFullName={setEditableFullName}
+            editablePhoneNumber={editablePhoneNumber}
+            setEditablePhoneNumber={setEditablePhoneNumber}
+            editableUserName={editableUserName}
+            setEditableUserName={setEditableUserName}
+            currentPassword={currentPasswordInput}
+            setCurrentPassword={setCurrentPasswordInput}
+            newPassword={newPassword}
+            setNewPassword={setNewPassword}
+            confirmNewPassword={confirmNewPassword}
+            setConfirmNewPassword={setConfirmNewPassword}
+            handleUpdate={handleUpdate}
+            handlePasswordUpdate={handlePasswordUpdate}
+            handleDeleteUser={handleDeleteUser}
+        />
+      </div>
   );
 };
 
