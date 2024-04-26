@@ -25,7 +25,7 @@ export const MenuList = [
     price: 11.49,
   },
   {
-    name: "Choco Chip Muffin Classic",
+    name: "Choco Chip Muffin Deluxe",
     description: "Classic choco chip muffin, soft and delicious",
     detailedDescription: "Our classic choco chip muffin is a treat for the senses with its soft crumb and generous amount of chocolate chips in every bite.",
     ingredients: ["Flour", "Sugar", "Chocolate Chips", "Eggs", "Butter"],
@@ -36,7 +36,7 @@ export const MenuList = [
       carbs: "57g",
     },
     image: chocoChipImage,
-    price: 2.59,
+    price: 2.79,
   },
   {
     name: "Chicken Wings",

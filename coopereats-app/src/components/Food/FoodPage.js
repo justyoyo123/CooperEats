@@ -47,6 +47,7 @@ const FoodPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
+
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
       try {
