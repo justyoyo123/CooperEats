@@ -11,6 +11,7 @@ import vsf from '../../../foodImages/vsfryt.jpeg'
 
 export const MenuList = [
   {
+    foodId: 5,
     name: "Beef Lasagna",
     description: "Layers of pasta, seasoned beef, and cheese",
     detailedDescription: "A hearty Italian dish made with layers of pasta sheets, our special seasoned beef, rich tomato sauce, and a blend of melted cheeses.",
@@ -25,6 +26,7 @@ export const MenuList = [
     price: 11.49,
   },
   {
+    foodId: 7,
     name: "Choco Chip Muffin Deluxe",
     description: "Classic choco chip muffin, soft and delicious",
     detailedDescription: "Our classic choco chip muffin is a treat for the senses with its soft crumb and generous amount of chocolate chips in every bite.",
@@ -39,6 +41,7 @@ export const MenuList = [
     price: 2.79,
   },
   {
+    foodId: 2,
     name: "Chicken Wings",
     description: "Spicy and savory, served with blue cheese dressing",
     detailedDescription: "Perfectly crispy and juicy chicken wings tossed in our signature spicy sauce served with a side of cooling blue cheese dressing.",
@@ -53,6 +56,7 @@ export const MenuList = [
     price: 5.49,
   },
   {
+    foodId: 10,
     name: "Iced Lemon Tea",
     description: "Refreshing lemon tea served chilled with a slice of lemon",
     detailedDescription: "Beat the heat with our refreshing iced lemon tea, freshly brewed and served with a slice of lemon for that extra zing.",
@@ -67,6 +71,7 @@ export const MenuList = [
     price: 1.99,
   },
   {
+    foodId: 3,
     name: "Stuffed Mushrooms",
     description: "Mushrooms filled with herbs and cream cheese",
     detailedDescription: "Succulent mushrooms stuffed with a creamy blend of herbs and cream cheese, baked to perfection.",
@@ -81,6 +86,7 @@ export const MenuList = [
     price: 4.59,
   },
   {
+    foodId: 6,
     name: "Vegetable Stir Fry",
     description: "A mix of fresh vegetables sautéed with soy sauce",
     detailedDescription: "A vibrant dish of sautéed fresh vegetables, seasoned with soy sauce and a hint of garlic, served over steamed rice.",

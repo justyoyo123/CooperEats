@@ -18,6 +18,7 @@
   padding: 25px;
   border-radius: 10px;
   border: 1px solid #bdc3c7;
+  min-height: 1000px;
 }
 
 .modalTitle {

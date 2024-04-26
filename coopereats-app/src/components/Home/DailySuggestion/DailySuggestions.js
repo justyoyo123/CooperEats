@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { MenuList } from "./SuggestiedMenu";
 import Layout from "./Layout";
-import './DailySuggestion.css'
+import './DailySuggestion.css';
 import {
   Box,
   Card,
@@ -10,15 +11,14 @@ import {
   CardMedia,
   Typography,
   Fade,
-  Backdrop
+  Modal,
+  Button, // Make sure Button is imported if not already
 } from "@mui/material";
-import Modal from '@mui/material/Modal';
-import { Margin } from "@mui/icons-material";
-
 
 const DailySuggestion = () => {
   const [open, setOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleOpen = (menu) => {
     setSelectedMenu(menu);
@@ -28,9 +28,15 @@ const DailySuggestion = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleExploreMore = () => {
+    navigate('/food'); // Navigate to the food page
+    handleClose(); // Optionally close the modal after navigation
+  };
+
   return (
     <div className="daily-suggestions-container">
-      <h1 className='cardd'>Daily Suggestions</h1>
+      <h1 className='cardd'>Best Sellers</h1>
       <Layout>
         <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
           {MenuList.map((menu, index) => (
@@ -56,8 +62,6 @@ const DailySuggestion = () => {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
         closeAfterTransition
       >
         <Fade in={open}>
@@ -68,7 +72,7 @@ const DailySuggestion = () => {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 'auto',
-              maxWidth: '600px', 
+              maxWidth: '600px',
               bgcolor: 'background.paper',
               boxShadow: 24,
               p: 4,
@@ -86,12 +90,11 @@ const DailySuggestion = () => {
                 <img
                   src={selectedMenu.image}
                   alt={selectedMenu.name}
-                  sx={{
-                    height: 233,
+                  style={{
+                    height: 330,
                     width: 350,
-                    maxHeight: { xs: 233, md: 167 },
-                    maxWidth: { xs: 350, md: 250 },
-                    Margin: 10
+                    margin: 10,
+                    borderRadius: '8px' // Rounded corners for the image
                   }}
                 />
                 <Typography id="modal-modal-description" sx={{ mt: 2 }} className="modalDescription">
@@ -102,15 +105,23 @@ const DailySuggestion = () => {
                 </Typography>
                 <Typography sx={{ mt: 2 }} className="modalNutritionalInfo">
                   Calories: {selectedMenu.nutritionalInfo.calories}
-                  {/* Add other nutritional info here */}
                 </Typography>
+                <Button
+                color="primary"
+                onClick={handleExploreMore}
+                sx={{
+                  mt: 2,
+                  padding: '6px 12px', // Reduces padding to make the button smaller
+                  fontSize: '0.875rem', // Smaller font size
+                }}
+              >
+                Explore More Food
+              </Button>
               </>
             )}
           </Box>
         </Fade>
       </Modal>
-
-
     </div>
   );
 };
