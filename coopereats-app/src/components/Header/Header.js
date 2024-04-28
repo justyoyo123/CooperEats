@@ -108,7 +108,6 @@ function Header() {
 
           <Link to="/" className="logo-link">
             <img src="./images/design/cooperlogo.png" alt="Cooper Union Logo" class="logo-image" />
-            {/* <img src="./images/design/coopereats_bubble.png" alt="CooperEats Logo"/> */}
             CooperEats
           </Link>
         </div>
