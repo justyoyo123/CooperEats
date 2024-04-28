@@ -20,17 +20,18 @@
 .explore-menu-list{
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 60px;
     text-align: center;
     margin: 0px 0px;
     overflow-x: scroll;
+    justify-content: center;
 }
 
 .explore-menu-list::-webkit-scrollbar{
     display: none;
 }
 .explore-menu-list-item img{
-    width: 7.5vw;
+    width: 9vw;
     min-width: 80px;
     cursor: pointer;
     border-radius: 50%;
