@@ -45,14 +45,13 @@ public class WebSecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); // Allow localhost:3000
+        configuration.setAllowedOrigins(Collections.singletonList("http://frontend:80")); // Allows CORS request from the frontend service
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true); // Necessary if you are handling cookies or basic authentication
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Apply CORS to all routes
-
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

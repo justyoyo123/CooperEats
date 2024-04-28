@@ -6,7 +6,7 @@ const useUser = () => {
     const [user, setUser] = useState(null);
     const [userId, setUserId] = useState(null); // Keep track of userId
     const [isLoading, setIsLoading] = useState(true);
-    const BACKEND_URL = "http://localhost:8080/api/users"; // Backend URL for fetching user details
+    const BACKEND_URL = "http://app:8080/api/users"; // Backend URL for fetching user details
 
     useEffect(() => {
         const auth = getAuth();

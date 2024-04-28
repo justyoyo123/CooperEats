@@ -20,7 +20,7 @@ function AdminOrdersPage() {
 
         // Call API to update the order status in the backend
         try {
-            const response = await axios.put(`http://localhost:8080/api/orders/fulfillOrder/${orderId}`);
+            const response = await axios.put(`http://app:8080/api/orders/fulfillOrder/${orderId}`);
             // You might want to do something with the response here, or check the status code to confirm the update was successful
             console.log('Order fulfillment status updated', response.data);
         } catch (error) {
@@ -38,7 +38,7 @@ function AdminOrdersPage() {
             const names = {};
             for (let foodId of allFoodIds) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+                    const response = await axios.get(`http://app:8080/api/foods/${foodId}`);
                     names[foodId] = response.data.name; // Store the name using foodId as the key
                 } catch (error) {
                     console.error(`Error fetching food name for ID ${foodId}:`, error);
@@ -54,7 +54,7 @@ function AdminOrdersPage() {
                 setTotalSales(parseFloat(savedTotalSales));
             }
             try {
-                const ordersResponse = await axios.get('http://localhost:8080/api/orders/all');
+                const ordersResponse = await axios.get('http://app:8080/api/orders/all');
                 const ordersData = ordersResponse.data;
 
                 const currentTotal = ordersData.reduce((acc, order) => acc + order.totalPrice, 0);

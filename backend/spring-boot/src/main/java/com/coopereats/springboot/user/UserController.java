@@ -11,6 +11,7 @@ import com.coopereats.springboot.paymentinfo.PaymentInfoService;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/users")
 public class UserController {
 

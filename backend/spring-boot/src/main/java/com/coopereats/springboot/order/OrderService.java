@@ -74,6 +74,7 @@ public class OrderService {
 
     // Method to get user's order history by user ID
     public List<Order> getUserOrderHistory(Long userId) {
+        System.out.print("HERE");
         return orderRepository.findByUserUserId(userId);
     }
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/orders")
 public class OrderController {
 
@@ -51,6 +52,7 @@ public class OrderController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
         List<Order> orders = orderService.getUserOrderHistory(userId);
+        System.out.println("Orders: " + orders);
         if (orders.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
