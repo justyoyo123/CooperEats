@@ -37,7 +37,10 @@ function App() {
       setIsLoading(false);
       if (firebaseUser) {
         try {
-          const response = await axios.get(`http://app:8080/api/users/firebase/${firebaseUser.uid}`);
+          const token = user && await user.getIdToken();
+          console.log(token);
+          const headers = token ? {Authorization: `Bearer ${token}`} : {};
+          const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUser.uid}`, {headers});
           setIsAdmin(response.data.role === 'ADMIN');
         } catch (error) {
           console.error("Error fetching user info:", error);

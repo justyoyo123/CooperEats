@@ -40,7 +40,7 @@ const CreateAccountPage = () => {
         password  // This should not be sent to backend for security reasons unless absolutely necessary
       };
 
-      const response = await axios.post('http://app:8080/api/users', backendUser);
+      const response = await axios.post('http://localhost:8080/api/users', backendUser);
       if (response.status === 200) {
         navigate('/');
       } else {

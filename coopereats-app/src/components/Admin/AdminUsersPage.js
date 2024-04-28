@@ -18,7 +18,7 @@ function AdminUsersPage() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://app:8080/api/users');
+            const response = await axios.get('http://localhost:8080/api/users');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -32,7 +32,7 @@ function AdminUsersPage() {
 
     const deleteUser = async (userId) => {
         try {
-            await axios.delete(`http://app:8080/api/users/${userId}`);
+            await axios.delete(`http://localhost:8080/api/users/${userId}`);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting user:', error);

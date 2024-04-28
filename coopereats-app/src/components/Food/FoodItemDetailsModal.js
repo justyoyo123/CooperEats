@@ -18,7 +18,7 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
       try {
-        const response = await axios.get(`http://app:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+        const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
         setUserId(response.data);
         console.log("Fetched application user ID:", response.data);
       } catch (error) {
@@ -50,7 +50,7 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
   // Function to fetch the cart
   const fetchCartByUserId = async () => {
     try {
-      const response = await axios.get(`http://app:8080/api/carts/user/${userId}`);
+      const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
       setCart(response.data);
     } catch (error) {
       console.error('Failed to fetch cart:', error);
@@ -63,7 +63,7 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
 
   const incrementQuantity = async (foodId) => {
     try {
-      const stockResponse = await axios.get(`http://app:8080/api/foods/${foodId}`);
+      const stockResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
       const availableQuantity = stockResponse.data.quantity;
 
       setQuantities(prev => {
@@ -93,7 +93,7 @@ const FoodItemDetailsModal = ({ show, onHide, foodName, details, foodId }) => {
     } else {
         try {
             const quantity = quantities[foodId] || 1;
-            const response = await axios.post(`http://app:8080/api/carts/user/${userId}`, {
+            const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
                 foodId,
                 quantity: quantity,
             });

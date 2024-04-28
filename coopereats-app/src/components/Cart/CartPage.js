@@ -47,7 +47,7 @@ const foodImages = {
     useEffect(() => {
         const fetchUserId = async (firebaseUid) => {
             try {
-                const response = await axios.get(`http://app:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+                const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
                 setUserId(response.data);
                 console.log("Fetched application user ID:", response.data);
             } catch (error) {
@@ -82,7 +82,7 @@ const foodImages = {
     // // Function to fetch the cart
     // const fetchCartByUserId = async () => {
     //     try {
-    //         const response = await axios.get(`http://localhost:8080http://app:8080/api/carts/user/${userId}`);
+    //         const response = await axios.get(`http://localhost:8080http://localhost:8080/api/carts/user/${userId}`);
     //         setCart(response.data);
     //     } catch (error) {
     //         console.error('Failed to fetch cart:', error);
@@ -91,7 +91,7 @@ const foodImages = {
 
     const fetchCartByUserId = async () => {
         try {
-          const response = await axios.get(`http://app:8080/api/carts/user/${userId}`);
+          const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
           setCart(response.data);
     
           // Fetch food details for each item in the cart
@@ -105,7 +105,7 @@ const foodImages = {
 
     const fetchFoodByFoodId = async (foodId) => {
         try {
-          const response = await axios.get(`http://app:8080/api/foods/${foodId}`);
+          const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
           // Store both name and price in foodDetails
           setFoodDetails(prev => ({ ...prev, [foodId]: {name: response.data.name, price: response.data.price} }));
         } catch (error) {
@@ -120,7 +120,7 @@ const foodImages = {
             const quantityBeingRemoved = cart.products[foodId];
 
             // Make the API call to remove the item from the cart by setting its quantity to 0
-            const response = await axios.post(`http://app:8080/api/carts/user/${userId}`, {
+            const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
                 foodId,
                 quantity: -quantityBeingRemoved,
             });
@@ -140,7 +140,7 @@ const foodImages = {
     //
     //         // Make the API call to update the item quantity in the backend
     //         try {
-    //             const response = await axios.post(`http://localhost:8080http://app:8080/api/carts/user/${userId}`, {
+    //             const response = await axios.post(`http://localhost:8080http://localhost:8080/api/carts/user/${userId}`, {
     //                 foodId,
     //                 quantity: updatedProducts[foodId] - curr_quantity,
     //             });
@@ -155,7 +155,7 @@ const foodImages = {
       const handleAddItemQuantity = async (foodId) => {
           // Fetch current available stock from the server
           try {
-              const stockResponse = await axios.get(`http://app:8080/api/foods/${foodId}`);
+              const stockResponse = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
               const availableQuantity = stockResponse.data.quantity;
 
               const updatedProducts = { ...cart.products };
@@ -170,7 +170,7 @@ const foodImages = {
 
                   // Make the API call to update the item quantity in the backend
                   try {
-                      const response = await axios.post(`http://app:8080/api/carts/user/${userId}`, {
+                      const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
                           foodId,
                           quantity: updatedProducts[foodId] - curr_quantity,
                       });
@@ -195,7 +195,7 @@ const foodImages = {
 
             // Make the API call to update the item quantity in the backend
             try {
-                const response = await axios.post(`http://app:8080/api/carts/user/${userId}`, {
+                const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
                     foodId,
                     quantity: updatedProducts[foodId] - curr_quantity,
                 });
@@ -214,7 +214,7 @@ const foodImages = {
         if (!userId) return; // Guard clause if userId is not available
         try {
             // DELETE request to clear the cart
-            const response = await axios.delete(`http://app:8080/api/carts/${userId}`);
+            const response = await axios.delete(`http://localhost:8080/api/carts/${userId}`);
             // Update cart state to reflect the cleared cart
             setCart(response.data);
             console.log("Cart cleared");
