@@ -1,6 +1,6 @@
 .food-menu {
     text-align: center;
-    margin-top: -91px;
+    /* margin-top: -91px; */
 }
 
 .food-list {
@@ -27,10 +27,4 @@
 
 .error {
     color: red;
-}
-
-.logo-image{
-    width: 80px;
-    height: auto;
-    margin-top: -10px;
 }
