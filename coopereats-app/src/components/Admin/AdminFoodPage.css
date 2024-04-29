@@ -1,5 +1,6 @@
 .food-menu {
     text-align: center;
+    margin-top: -91px;
 }
 
 .food-list {
@@ -26,4 +27,19 @@
 
 .error {
     color: red;
+}
+
+.logo-image{
+    width: 80px;
+    height: auto;
+    margin-top: -10px;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: #ffe082;
+    font-family: 'PT Sans';
+    font-size: 45px;
+    font-weight: bold;
+    margin-left: 10px;
 }
