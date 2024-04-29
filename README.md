@@ -46,4 +46,5 @@ At CooperEats, open communication is the bedrock of our team dynamics. We ensure
 CooperEats has been mainly utilizing GitHub Issues and Readme documents to keep record and manage our development process. Test coverage results can also be found in our Github repository.
 
 > 8.04. Improve their understanding of the software and related documents on which they work and of the environment in which they will be used.
+
 Throughout the development process of CooperEats, our team consistently enhanced our understanding of the software and its related documents, as well as the environment in which it would be utilized. We actively engaged in documenting technical specifications and design documents, to make sure everyone is on the same page and is able to recreate the same developing environment.
