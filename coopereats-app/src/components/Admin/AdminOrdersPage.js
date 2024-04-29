@@ -11,6 +11,7 @@ function AdminOrdersPage() {
     const [foodNames, setFoodNames] = useState({});
     const [fulfilledOrders, setFulfilledOrders] = useState({});
     const [totalSales, setTotalSales] = useState(0);
+    const [previousOrders, setPreviousOrders] = useState(new Set());
 
     const handleFulfillmentChange = async (orderId) => {
         setFulfilledOrders((prevFulfilledOrders) => ({
@@ -21,72 +22,58 @@ function AdminOrdersPage() {
         // Call API to update the order status in the backend
         try {
             const response = await axios.put(`http://localhost:8080/api/orders/fulfillOrder/${orderId}`);
-            // You might want to do something with the response here, or check the status code to confirm the update was successful
             console.log('Order fulfillment status updated', response.data);
         } catch (error) {
             console.error('Failed to update order fulfillment status:', error);
-            // Optionally revert the state if the API call failed
             setFulfilledOrders((prevFulfilledOrders) => ({
                 ...prevFulfilledOrders,
                 [orderId]: !prevFulfilledOrders[orderId],
             }));
         }
     };
-
     useEffect(() => {
         const fetchAllFoodNames = async (allFoodIds) => {
             const names = {};
             for (let foodId of allFoodIds) {
                 try {
                     const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
-                    names[foodId] = response.data.name; // Store the name using foodId as the key
+                    names[foodId] = response.data.name;
                 } catch (error) {
                     console.error(`Error fetching food name for ID ${foodId}:`, error);
-                    names[foodId] = 'Unknown'; // Use a placeholder in case of error
+                    names[foodId] = 'Unknown';
                 }
             }
             return names;
         };
 
         const fetchOrders = async () => {
-            const savedTotalSales = localStorage.getItem('totalSales');
-            if (savedTotalSales) {
-                setTotalSales(parseFloat(savedTotalSales));
-            }
             try {
                 const ordersResponse = await axios.get('http://localhost:8080/api/orders/all');
                 const ordersData = ordersResponse.data;
 
                 const currentTotal = ordersData.reduce((acc, order) => acc + order.totalPrice, 0);
+                setTotalSales(currentTotal);
+
                 setOrders(ordersData);
 
-                // Extract all unique foodIds from all orders
                 const allFoodIds = new Set();
                 ordersData.forEach(order => {
-                    Object.keys(order.products).forEach(foodId => {
-                        allFoodIds.add(foodId);
-                    });
+                    Object.keys(order.products).forEach(foodId => allFoodIds.add(foodId));
                 });
 
-                // Fetch food names for all unique foodIds
                 const foodNames = await fetchAllFoodNames(allFoodIds);
 
                 const fulfillmentStatuses = {};
                 for (const order of ordersData) {
                     fulfillmentStatuses[order.orderId] = order.fullfillmentStatus;
                 }
-                const updatedTotalSales = savedTotalSales ? parseFloat(savedTotalSales) + currentTotal : currentTotal;
-                setTotalSales(updatedTotalSales);
-                localStorage.setItem('totalSales', updatedTotalSales.toString());
-                // Update the state with orders, food names, and fulfillment statuses
-                setOrders(ordersData);
+
                 setFoodNames(foodNames);
                 setFulfilledOrders(fulfillmentStatuses);
             } catch (error) {
                 console.error('Error fetching orders:', error);
             }
         };
-
         fetchOrders();
     }, []);
 

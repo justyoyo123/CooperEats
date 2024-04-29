@@ -34,7 +34,7 @@ function AboutUsPage() {
             create joy, and foster community. Whether it's a quick bite or a drink, we're dedicated to providing our users with an exceptional user experience 
             by offering convenient access to a wide variety of menus offered by Frankie'ss Cafe.
             </p> 
-            <h1>Our vision</h1>
+            <h1>Our Vision</h1>
             <p>
             Our vision is to create a world where anyone can enjoy the perfect meal, anytime, anywhere. Looking to the future, we aim to expand our reach,
             continuously improve our services, and introduce new ways to enrich the user experience.
