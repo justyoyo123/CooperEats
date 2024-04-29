@@ -91,7 +91,10 @@ function AdminOrdersPage() {
     }, []);
 
     return (
-        <TableContainer component={Paper} elevation={0} sx={{ maxWidth: '90%', margin: 'auto', overflowX: 'auto', border: 'none' }}>
+        <TableContainer component={Paper} sx={{
+          maxWidth: '90%', margin: 'auto', overflowX: 'auto',
+          boxShadow: '0px 4px 12px rgba(0,0,0,0.15)', borderRadius: '8px'
+        }}>
             <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'black' }}>
                 Orders
             </Typography>
@@ -99,25 +102,23 @@ function AdminOrdersPage() {
                 Total Sales: ${totalSales.toFixed(2)}
             </Typography>
             <Table aria-label="orders table" sx={{ minWidth: 650 }}>
-                <TableHead>
-                    <TableRow sx={{ '& th': { fontWeight: 'bold', backgroundColor: 'primary.dark', color: 'common.white' } }}>
-                        <TableCell>Order ID</TableCell>
-                        {/*<TableCell>User</TableCell>*/}
-                        <TableCell>Products and Quantity</TableCell>
-                        <TableCell>Order Date and Time</TableCell>
-                        <TableCell>Pickup Time</TableCell>
-                        <TableCell>Total Price</TableCell>
-                        <TableCell>Payment Status</TableCell>
-                        <TableCell>Fulfillment Status</TableCell>
-                    </TableRow>
-                </TableHead>
+            <TableHead>
+                <TableRow sx={{ bgcolor: 'primary.dark' }}>
+                    <TableCell sx={{ color: 'common.white', fontWeight: 'bold' }}>Order ID</TableCell>
+                    <TableCell sx={{ color: 'common.white', fontWeight: 'bold' }}>Products and Quantity</TableCell>
+                    <TableCell sx={{ color: 'common.white', fontWeight: 'bold' }}>Order Date and Time</TableCell>
+                    <TableCell sx={{ color: 'common.white', fontWeight: 'bold' }}>Pickup Time</TableCell>
+                    <TableCell sx={{ color: 'common.white', fontWeight: 'bold' }}>Total Price</TableCell>
+                    <TableCell sx={{ color: 'common.white', fontWeight: 'bold' }}>Payment Status</TableCell>
+                    <TableCell sx={{ color: 'common.white', fontWeight: 'bold' }}>Fulfillment Status</TableCell>
+                </TableRow>
+            </TableHead>
                 <TableBody>
                     {orders.map((order, index) => (
                         <TableRow key={order.orderId} sx={{ '&:nth-of-type(odd)': { backgroundColor: 'white' } }}>
                             <TableCell component="th" scope="row" style={{ color: 'white' }}>
                                 {order.orderId}
                             </TableCell>
-                            {/*<TableCell>{order.user ? order.user.email : 'N/A'}</TableCell>*/}
                             <TableCell>
                                 {Object.entries(order.products).map(([foodId, quantity]) => (
                                     <div key={foodId}>{`${foodNames[foodId] || 'Loading...'}: ${quantity}`}</div>
