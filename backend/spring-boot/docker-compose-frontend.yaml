@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: ../../coopereats-app
+    image: coopereatsacr.azurecr.io/coopereats-frontend
+    container_name: coopereats-frontend
+    ports:
+      - 80:80

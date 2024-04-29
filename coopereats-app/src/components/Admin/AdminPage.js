@@ -42,7 +42,7 @@ const AdminPage = () => {
 
     const fetchFoods = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/foods');
+            const response = await axios.get('http://20.88.180.242:8080/api/foods');
             setFoods(response.data);
         } catch (error) {
             console.error('Failed to fetch foods', error);
@@ -82,9 +82,9 @@ const AdminPage = () => {
 
     const handleIncreaseQuantity = async (foodId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+            const response = await axios.get(`http://20.88.180.242:8080/api/foods/${foodId}`);
             let new_quantity = response.data.quantity + 1;
-            await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
+            await axios.post(`http://20.88.180.242:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
             console.log("Increase quantity for", foodId);
             fetchFoods(); // Refetch foods list to update UI
         } catch (error) {
@@ -94,9 +94,9 @@ const AdminPage = () => {
 
     const handleDecreaseQuantity = async (foodId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+            const response = await axios.get(`http://20.88.180.242:8080/api/foods/${foodId}`);
             let new_quantity = response.data.quantity - 1;
-            await axios.post(`http://localhost:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
+            await axios.post(`http://20.88.180.242:8080/api/foods/modifyQuantity/${foodId}`, { quantity: new_quantity });
             console.log("Decrease quantity for", foodId);
             fetchFoods(); // Refetch foods list to update UI
         } catch (error) {
@@ -106,7 +106,7 @@ const AdminPage = () => {
 
     const handleDeleteItem = async (foodId) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/foods/${foodId}`);
+            const response = await axios.delete(`http://20.88.180.242:8080/api/foods/${foodId}`);
             console.log("Deleted food for", foodId);
             fetchFoods(); // Refetch foods list to update UI
         } catch (error) {

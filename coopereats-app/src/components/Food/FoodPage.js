@@ -51,7 +51,7 @@ const FoodPage = () => {
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+        const response = await axios.get(`http://20.88.180.242:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
         setUserId(response.data);
         console.log("Fetched application user ID:", response.data);
       } catch (error) {
@@ -83,7 +83,7 @@ const FoodPage = () => {
   // Function to fetch the cart
   const fetchCartByUserId = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+      const response = await axios.get(`http://20.88.180.242:8080/api/carts/user/${userId}`);
       setCart(response.data);
     } catch (error) {
       console.error('Failed to fetch cart:', error);
@@ -93,7 +93,7 @@ const FoodPage = () => {
   useEffect(() => {
     const fetchFoods = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/foods');
+        const response = await axios.get('http://20.88.180.242:8080/api/foods');
         setFoods(response.data);
         // Assuming the response includes categories or you extract them from foods
         const fetchedCategories = [...new Set(response.data.map(food => food.category))];
@@ -151,7 +151,7 @@ const FoodPage = () => {
     } else {
         try {
             const quantity = quantities[foodId] || 1;
-            const response = await axios.post(`http://localhost:8080/api/carts/user/${userId}`, {
+            const response = await axios.post(`http://20.88.180.242:8080/api/carts/user/${userId}`, {
                 foodId,
                 quantity: quantity,
             });

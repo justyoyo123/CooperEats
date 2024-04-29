@@ -27,8 +27,8 @@ const ProfilePage = () => {
 
   const { user, userId, isLoading } = useUser();
   const navigate = useNavigate();
-  const BACKEND_URL = "http://localhost:8080/api/users";
-  // const ORDER_HISTORY_URL = `http://localhost:8080http://localhost:8080/api/foods/user/${userId}`;
+  const BACKEND_URL = "http://20.88.180.242:8080/api/users";
+  // const ORDER_HISTORY_URL = `http://20.88.180.242:8080/api/foods/user/${userId}`;
 
   useEffect(() => {
     const auth = getAuth();
@@ -70,7 +70,7 @@ const ProfilePage = () => {
       const names = {};
       for (let foodId of allFoodIds) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/foods/${foodId}`);
+          const response = await axios.get(`http://20.88.180.242:8080/api/foods/${foodId}`);
           names[foodId] = response.data.name; // Store the name using foodId as the key
         } catch (error) {
           console.error(`Error fetching food name for ID ${foodId}:`, error);
@@ -82,7 +82,7 @@ const ProfilePage = () => {
 
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/orders/user/${userId}`);
+        const response = await axios.get(`http://20.88.180.242:8080/api/orders/user/${userId}`);
         const order = response.data;
         const allFoodIds = new Set();
         order.forEach(order => {

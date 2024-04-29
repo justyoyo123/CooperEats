@@ -17,7 +17,7 @@ export default function GoogleLogin() {
 
             // Check if user already exists in the backend by their Firebase UID
             try {
-                await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUser.uid}`);
+                await axios.get(`http://20.88.180.242:8080/api/users/firebase/${firebaseUser.uid}`);
 
                 // User exists in the backend, so we can redirect them to the home page
                 navigate('/');
@@ -32,7 +32,7 @@ export default function GoogleLogin() {
                 };
 
                 // Create a new user entry in the backend
-                const createUserResponse = await axios.post("http://localhost:8080/api/users", backendUser);
+                const createUserResponse = await axios.post("http://20.88.180.242:8080/api/users", backendUser);
 
                 if (createUserResponse.status === 200) {
                     console.log('User created in backend:', createUserResponse.data);

@@ -35,7 +35,7 @@ function Header() {
   useEffect(() => {
     const fetchUserId = async (firebaseUid) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
+        const response = await axios.get(`http://20.88.180.242:8080/api/users/firebase/${firebaseUid}`, { params: { firebaseUid } });
         setUserId(response.data);
         console.log("Fetched application user ID:", response.data);
       } catch (error) {
@@ -59,7 +59,7 @@ function Header() {
   useEffect(() => {
     const checkAdmin = async () => {
       if (userId) {
-        const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
+        const response = await axios.get(`http://20.88.180.242:8080/api/users/${userId}`);
         setIsAdmin(response.data.role === 'ADMIN');
       } else {
         setIsAdmin(false);
@@ -85,7 +85,7 @@ function Header() {
   // Function to fetch the cart
   const fetchCartByUserId = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/carts/user/${userId}`);
+      const response = await axios.get(`http://20.88.180.242:8080/api/carts/user/${userId}`);
       setCart(response.data);
     } catch (error) {
       console.error('Failed to fetch cart:', error);
