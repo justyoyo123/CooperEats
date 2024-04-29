@@ -10,9 +10,9 @@ function AdminHeader() {
         <AppBar position="static" elevation={0} style={{ backgroundColor: '#323232' }}>
             <Toolbar>
                 <Typography variant="h6" style={{ marginRight: 'auto' }}>
-                    <Link to="/admin/menu" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <img src="./images/design/TheCooperUnion_logo.png" alt="CooperEats Admin Logo" style={{ maxWidth: "120px", height: "auto" }} />
-                    </Link>
+                <Link to="/admin/menu" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <img src="./images/design/TheCooperUnion_logo.png" alt="CooperEats Admin Logo" style={{ maxWidth: "120px", height: "auto" }} />
+                </Link>
                 </Typography>
                 <Button color="inherit" component={Link} to="/admin/menu">Dashboard</Button>
                 <Button color="inherit" component={Link} to="/admin/users">Users</Button>

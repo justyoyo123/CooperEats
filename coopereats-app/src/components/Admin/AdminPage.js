@@ -5,18 +5,19 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './AdminFoodPage.css';
-import garlicBreadSticksImage from "../../foodImages/garlicBread.png";
+import garlicBreadSticksImage from "../../foodImages/garlicBS.jpeg";
 import chickenWingsImage from "../../foodImages/chickenWing.png";
-import stuffedMushroomImage from "../../foodImages/stuffedMushroom.png";
+import stuffedMushroomImage from "../../foodImages/smr.jpeg";
 import grilledSalmonImage from "../../foodImages/grilledSalmon.png";
 import beefRasagnaImage from "../../foodImages/beefRasagna.png";
-import vstirFryImage from "../../foodImages/vstirFry.png";
+import vstirFryImage from "../../foodImages/vsfry.jpeg";
 import dChocolateImage from "../../foodImages/dChocolate.png";
-import chocoChipImage from "../../foodImages/chocoChip.png";
+import chocoChipImage from "../../foodImages/cchipmuffin2.jpeg";
 import miniChocoChipImage from "../../foodImages/miniChocoChip.png";
-import icedLemonImage from "../../foodImages/icedLemon.png";
+import icedLemonImage from "../../foodImages/iltea.jpeg";
 import mangoSmoothieImage from "../../foodImages/mangoS.png";
 import chocoChipMImage from "../../foodImages/chocoChipM.png";
+import AdminDashTop from './AdminDashTop';
 
 
 const foodImages = {
@@ -115,10 +116,9 @@ const AdminPage = () => {
     };
 
     return (
-        <div className="food-menu">
-            <Typography variant="h3" gutterBottom component="div" sx={{ marginTop: 2, textAlign: 'center' }}>
-                Admin Dashboard
-            </Typography>
+        <>
+        <AdminDashTop/>
+        <div className="admin-food-menu">
             <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: 2 }}>
                 <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
                     {CATEGORIES.map((category, index) => (
@@ -146,8 +146,9 @@ const AdminPage = () => {
                                         <CardMedia
                                             component="img"
                                             sx={{
-                                                height: 140,
+                                                height: 240,
                                                 objectFit: 'cover',
+                                                borderRadius: '6px'
                                             }}
                                             image={foodImages[food.name]}
                                             alt={food.name}
@@ -159,10 +160,10 @@ const AdminPage = () => {
                                             justifyContent: 'space-between',
                                         }}>
                                             <div>
-                                                <Typography gutterBottom variant="h5" component="div">
+                                            <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'light-bold' }}>
                                                     {food.name} - ${food.price}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ minHeight: 100 }}>
+                                                <Typography variant="body2" color="text.secondary" sx={{ minHeight: 80 }}>
                                                     {food.description}
                                                 </Typography>
                                             </div>
@@ -193,6 +194,7 @@ const AdminPage = () => {
                 </Box>
             ))}
         </div>
+        </>
     );
 };
 export default AdminPage;

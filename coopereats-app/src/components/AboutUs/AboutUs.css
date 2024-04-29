@@ -7,9 +7,29 @@
 }
 .about-container p{
     padding-bottom: 2rem;
+    font-size: 20px;
 }
 @media screen and (max-width: 850px){
     .about-container{
         margin: 4rem 6rem;
     }
+}
+
+.team-container {
+    display: flex;
+    justify-content: space-around; 
+    flex-wrap: wrap; 
+}
+
+.team-member {
+    text-align: center; 
+    margin: 20px; 
+}
+
+.team-member-photo {
+    width: 150px; 
+    height: 150px; 
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
 }

@@ -131,8 +131,19 @@ const FoodPage = () => {
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
-    sectionRefs.current[newValue].current.scrollIntoView({ behavior: 'smooth' });
-  };
+    const scrollOptions = {
+        behavior: 'smooth',
+        block: 'start'
+    };
+    const offset = 160; // Change this value
+    const elementPosition = sectionRefs.current[newValue].current.offsetTop;
+    const offsetPosition = elementPosition - offset;
+
+    window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
+};
 
   // Function to increment quantity
   const incrementQuantity = (foodId) => {

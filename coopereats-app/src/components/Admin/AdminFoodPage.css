@@ -1,5 +1,6 @@
-.food-menu {
+.admin-food-menu {
     text-align: center;
+    margin-top: -91px;
 }
 
 .food-list {
@@ -26,4 +27,35 @@
 
 .error {
     color: red;
+}
+
+
+.adminDash-top {
+    height: 19vw;
+    width: 100%;
+    margin: 30px auto;
+    background: url('../../foodImages/adminDash.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 90px;
+    margin-top: -91px;
+}
+
+.adminDash-top-contents{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    width: 100%; 
+    height: 100%; 
+    gap: 1.5vw;
+}
+
+.adminDash-top-contents h2 {
+    font-weight: 650;
+    color: white;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
+    font-size: max(3.2vw, 20px);
 }

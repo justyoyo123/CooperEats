@@ -30,6 +30,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   localStorage.setItem('totalSales', '0');
+  localStorage.setItem('savedOrders', '[]');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), async (firebaseUser) => {

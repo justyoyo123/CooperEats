@@ -1,0 +1,30 @@
+.adminUser-top {
+    height: 19vw;
+    width: 90%;
+    margin: 30px auto;
+    background: url('../../foodImages/users.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    border-radius: 13px;
+    overflow: hidden;
+    margin-bottom: 70px;
+    margin-top: -80px;
+}
+
+.adminUser-top-contents{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    width: 100%; 
+    height: 100%; 
+    gap: 1.5vw;
+}
+
+.adminUser-top-contents h2 {
+    font-weight: 650;
+    color: white;
+    text-shadow: 6px 6px 6px rgba(1, 1, 1, 0.3);
+    font-size: max(3.2vw, 20px);
+}

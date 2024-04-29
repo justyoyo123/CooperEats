@@ -12,6 +12,7 @@ import {
     Typography
 } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
+import AdminUserTop from './AdminUserTop';
 
 function AdminUsersPage() {
     const [users, setUsers] = useState([]);
@@ -40,40 +41,56 @@ function AdminUsersPage() {
     };
 
     return (
-        <TableContainer component={Paper} elevation={0} sx={{ maxWidth: '90%', margin: 'auto', overflowX: 'auto', elevation: 0, border: 'none'}}>
-            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'black' }}>
-                Users
-            </Typography>
-            <Table aria-label="simple table">
-                <TableHead>
-                    <TableRow sx={{ '& th': { fontWeight: 'bold', backgroundColor: 'primary.dark', color: 'common.white' } }}>
-                        <TableCell>User ID</TableCell>
-                        <TableCell align="right">Name</TableCell>
-                        <TableCell align="right">Email</TableCell>
-                        <TableCell align="right">Role</TableCell>
-                        <TableCell align="right">Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={user.userId}>
-                            <TableCell component="th" scope="row" style={{ color: 'white' }}>
-                                {user.userId}
-                            </TableCell>
-                            <TableCell align="right">{user.name}</TableCell>
-                            <TableCell align="right">{user.email}</TableCell>
-                            <TableCell align="right">{user.role}</TableCell>
-                            <TableCell align="right">
-                                <IconButton onClick={() => deleteUser(user.userId)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+        <>
+        <AdminUserTop/>
+        <TableContainer component={Paper} sx={{
+          maxWidth: '90%', margin: 'auto', overflowX: 'auto',
+          boxShadow: '0px 4px 12px rgba(0,0,0,0.15)', borderRadius: '8px', mt: '-40px' 
+        }}>
+          <Table aria-label="customized user table">
+            <TableHead>
+              <TableRow sx={{
+                '& th': {
+                  fontWeight: 'bold',
+                  backgroundColor: '#333',
+                  color: 'common.white',
+                  padding: '16px'
+                }
+              }}>
+                <TableCell>User ID</TableCell>
+                <TableCell align="right">Name</TableCell>
+                <TableCell align="right">Email</TableCell>
+                <TableCell align="right">Role</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user.userId} hover sx={{
+                  transition: 'background-color 0.2s',
+                  '&:hover': { backgroundColor: 'action.hover' }
+                }}>
+                  <TableCell component="th" scope="row" sx={{ backgroundColor: '#333', color: 'white', padding: '16px', fontSize: '1rem', borderRadius: '5px' }}>
+                    {user.userId}
+                  </TableCell>
+                  <TableCell align="right" sx={{ color: 'text.secondary' }}>{user.name}</TableCell>
+                  <TableCell align="right" sx={{ color: 'text.secondary' }}>{user.email}</TableCell>
+                  <TableCell align="right" sx={{ color: 'blue', fontWeight: 'medium' }}>
+                    {user.role}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton onClick={() => deleteUser(user.userId)} color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </TableContainer>
-    );
+        </>
+      );
+      
 }
 
 export default AdminUsersPage;
