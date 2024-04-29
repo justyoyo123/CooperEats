@@ -12,6 +12,7 @@ import {
     Typography
 } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
+import AdminUserTop from './AdminUserTop';
 
 function AdminUsersPage() {
     const [users, setUsers] = useState([]);
@@ -40,21 +41,18 @@ function AdminUsersPage() {
     };
 
     return (
+        <>
+        <AdminUserTop/>
         <TableContainer component={Paper} sx={{
           maxWidth: '90%', margin: 'auto', overflowX: 'auto',
-          boxShadow: '0px 4px 12px rgba(0,0,0,0.15)', borderRadius: '8px'
+          boxShadow: '0px 4px 12px rgba(0,0,0,0.15)', borderRadius: '8px', mt: '-40px' 
         }}>
-          <Typography variant="h4" gutterBottom component="div" sx={{
-            padding: 2, textAlign: 'center', color: 'black'
-          }}>
-            Users
-          </Typography>
           <Table aria-label="customized user table">
             <TableHead>
               <TableRow sx={{
                 '& th': {
                   fontWeight: 'bold',
-                  backgroundColor: 'primary',
+                  backgroundColor: '#333',
                   color: 'common.white',
                   padding: '16px'
                 }
@@ -72,7 +70,7 @@ function AdminUsersPage() {
                   transition: 'background-color 0.2s',
                   '&:hover': { backgroundColor: 'action.hover' }
                 }}>
-                  <TableCell component="th" scope="row" sx={{ color: 'white', padding: '16px' }}>
+                  <TableCell component="th" scope="row" sx={{ backgroundColor: '#333', color: 'white', padding: '16px', fontSize: '1rem', borderRadius: '5px' }}>
                     {user.userId}
                   </TableCell>
                   <TableCell align="right" sx={{ color: 'text.secondary' }}>{user.name}</TableCell>
@@ -90,6 +88,7 @@ function AdminUsersPage() {
             </TableBody>
           </Table>
         </TableContainer>
+        </>
       );
       
 }

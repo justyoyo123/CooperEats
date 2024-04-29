@@ -17,6 +17,7 @@ import miniChocoChipImage from "../../foodImages/miniChocoChip.png";
 import icedLemonImage from "../../foodImages/iltea.jpeg";
 import mangoSmoothieImage from "../../foodImages/mangoS.png";
 import chocoChipMImage from "../../foodImages/chocoChipM.png";
+import AdminDashTop from './AdminDashTop';
 
 
 const foodImages = {
@@ -115,10 +116,9 @@ const AdminPage = () => {
     };
 
     return (
-        <div className="food-menu">
-            <Typography variant="h3" gutterBottom component="div" sx={{ marginTop: 1, textAlign: 'center' }}>
-                Admin Dashboard
-            </Typography>
+        <>
+        <AdminDashTop/>
+        <div className="admin-food-menu">
             <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: 2 }}>
                 <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
                     {CATEGORIES.map((category, index) => (
@@ -194,6 +194,7 @@ const AdminPage = () => {
                 </Box>
             ))}
         </div>
+        </>
     );
 };
 export default AdminPage;

@@ -4,7 +4,7 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper
 import Checkbox from '@mui/material/Checkbox';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import AdminOrderTop from './AdminOrderTop';
 
 function AdminOrdersPage() {
     const [orders, setOrders] = useState([]);
@@ -91,13 +91,12 @@ function AdminOrdersPage() {
     }, []);
 
     return (
+        <>
+        <AdminOrderTop/>
         <TableContainer component={Paper} sx={{
           maxWidth: '90%', margin: 'auto', overflowX: 'auto',
-          boxShadow: '0px 4px 12px rgba(0,0,0,0.15)', borderRadius: '8px'
+          boxShadow: '0px 4px 12px rgba(0,0,0,0.15)', borderRadius: '8px', mt: '-30px' 
         }}>
-            <Typography variant="h4" gutterBottom component="div" sx={{ padding: 2, textAlign: 'center', color: 'black' }}>
-                Orders
-            </Typography>
             <Typography variant="h5" gutterBottom component="div" sx={{ textAlign: 'center', mt: 2 }}>
                 Total Sales: ${totalSales.toFixed(2)}
             </Typography>
@@ -152,6 +151,7 @@ function AdminOrdersPage() {
                 </TableBody>
             </Table>
         </TableContainer>
+        </>
     );
 }
 
