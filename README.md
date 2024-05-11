@@ -1,6 +1,14 @@
 # CooperEats
-This branch contains all the frontend work as well as backend edits off of springboot_user_auth branch.
 
+## ECE366 - Spring 2024
+### Diego Toribio, Justin Koe, Eric Taeyoo Kim, and Hailey Hayoon Chung
+
+## What is CooperEats?
+CooperEats allows the Cooper Union community to order items, including lunch boxes, drinks, and desserts, from the one and only cafeteria in 41 Cooper Square: Frankie's Cafeteria.
+
+As a user, you can check the daily menu, create orders, make payments online, and schedule the pickup time.
+
+As an admin, you can edit the quantity of remaining items, and check received orders through the dashboard.
 
 ## Video Walkthrough
 Check out this video walkthrough of the CooperEats webpage, demonstrating all the features available to users:
