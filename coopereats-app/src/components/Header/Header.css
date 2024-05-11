@@ -1,0 +1,57 @@
+header {
+    background-color: #FFE082; /* Light background */
+    color: #333; /* Dark text for contrast, assuming you want contrast over the white text in the other version */
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+header ul li {
+    margin: 0 15px;
+}
+
+header ul li a {
+    color: #333; /* Dark text on light background for readability */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header ul li a:hover {
+    color: darkcyan; /* Highlight color on hover */
+    text-decoration: underline; /* Combine both versions by adding underline for clear interaction feedback */
+}
+.header-nav {
+    margin-top: 15px; /* Adjust the margin as needed */
+  }
+  
+.logo-image{
+    width: 80px;
+    height: auto;
+    margin-top: -10px;
+}
+
+.logo-link {
+    text-decoration: none; /* Removes the underline from the link */
+    color: #333; /* Sets the text color */
+    font-family: 'PT Sans'; /* Change as per your preference */
+    font-size: 45px; /* Adjusts the size of the font */
+    font-weight: bold; /* Makes the font bold */
+    margin-left: 10px;
+  }
+  

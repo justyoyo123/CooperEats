@@ -1,0 +1,88 @@
+.food-menu {
+  text-align: center;
+}
+
+.food-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.food-item {
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 10px;
+  width: 300px;
+  display: flex; /* Added */
+  flex-direction: column; /* Added */
+  align-items: center; /* Added */
+  text-align: center; /* Ensures text is also centered */
+}
+
+.food-image-container {
+  width: 275px; /* Square dimensions */
+  height: 275px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px; /* Optional: for rounded corners */
+}
+
+.food-image {
+  /* width: auto; */
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover; /* This will ensure that your images cover the area and are cropped if necessary */
+}
+
+.food-details {
+  text-align: left;
+}
+
+.error {
+  color: red;
+}
+
+.food-details h3 {
+  font-size: 24px;
+  text-align: center;
+}
+
+.food-details p{
+  text-align: center;
+}
+.categories-sidebar {
+  width: 100%; /* Takes full width of the container */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds shadow for a bit of depth */
+  background-color: white; /* Background color */
+  padding: 10px 20px; /* Padding around the items */
+  box-sizing: border-box; /* Makes sure padding doesn't affect the total width */
+  display: flex; /* Makes children (ul) flex items */
+  justify-content: center; /* Centers the ul horizontally */
+  overflow-x: auto; /* Allows horizontal scrolling if too many items */
+  position: fixed;
+  z-index: 1000;
+}
+
+.categories-sidebar ul {
+  display: flex; /* Display list items in a row */
+  padding: 0;
+  margin: 0;
+  list-style: none; /* Removes bullet points */
+}
+
+.categories-sidebar li {
+  cursor: pointer;
+  padding: 10px 20px; /* More padding for touch targets */
+  white-space: nowrap; /* Ensures the text doesn't wrap */
+}
+
+.categories-sidebar li:hover {
+  background-color: #f5f5f5; /* Light grey background on hover */
+}
+
+.actual-content{
+  padding-top: 70px;
+}

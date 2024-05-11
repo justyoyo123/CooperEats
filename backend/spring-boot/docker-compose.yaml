@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    container_name: coopereats-db
+    environment:
+      POSTGRES_DB: coopereats
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dbpass
+    ports:
+      - 5432:5432
+
+  app:
+    build: .
+    image: coopereatsacr.azurecr.io/coopereats-app
+    container_name: coopereats-app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/coopereats
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: dbpass
+    ports:
+      - 8080:8080
+
+  frontend:
+    build:
+      context: ../../coopereats-app
+    image: coopereatsacr.azurecr.io/coopereats-frontend
+    container_name: coopereats-frontend
+    ports:
+      - 80:80
+    depends_on:
+      - appd

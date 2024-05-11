@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es5", // Compile down to ES5 for broad browser compatibility
+    "module": "esnext", // Use ES modules
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "checkJs": false, // Set to true if you want TypeScript to check your JS files
+    "jsx": "react-jsx", // Support JSX in .tsx files
+    "outDir": "./dist", // Output directory for compiled files
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true // Ensure each file can be safely transpiled without relying on other imports
+  },
+  "include": [
+    "src/**/*"
+  ], // Adjust this to include your source directories
+  "exclude": [
+    "node_modules",
+    "dist"
+  ] // Exclude directories from the compilation
+}
